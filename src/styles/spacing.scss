@@ -1,0 +1,49 @@
+// Breakpoints
+$desktop-max: 1920px;
+$desktop: 1280px;
+$tablet: 991px;
+$phablet: 800px;
+$mobile: 520px;
+
+// Spacing
+body {
+    /* Radius */
+    --radius-large: 2.5rem;
+    --radius-medium: 1.25rem;
+    --radius-small: 0.625rem;
+    --radius-extra-small: 0.375rem;
+    --radius-circular: 10rem;
+
+    /* Margin & Padding */
+    --page-margin: 3rem;
+    --padding-900: 6rem;
+    --padding-800: 4rem;
+    --padding-500: 1.75rem;
+    --padding-400: 1.5rem;
+    --padding-300: 1.25rem;
+    --padding-200: 0.5rem;
+
+    @media (max-width: $desktop) {
+        --radius-large: 2rem;
+        --page-margin: 2rem;
+    }
+
+    @media (max-width: $tablet) {
+        --radius-large: 1.25rem;
+        --radius-medium: 0.75rem;
+        --radius-small: 0.6rem;
+        --padding-900: 4rem;
+        --padding-800: 3rem;
+        --padding-500: 1.5rem;
+        --padding-400: 1.25rem;
+        --padding-300: 1rem;
+    }
+
+    @media (max-width: $mobile) {
+        --radius-small: 0.5rem;
+        --page-margin: 1.25rem;
+        --padding-500: 1.25rem;
+        --padding-400: 1rem;
+        --padding-200: 0.5rem;
+    }
+}
