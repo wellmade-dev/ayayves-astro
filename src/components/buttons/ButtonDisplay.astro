@@ -1,28 +1,28 @@
 ---
+import StarSVG from "../svgs/StarSVG.astro";
+
 interface Props {
   label: string;
   ariaLabel: string;
   href: string;
-  customProps: string;
 }
 
 const { label, ariaLabel, href } = Astro.props;
 ---
 
 <a class="button--display" aria-label={ariaLabel} href={href}>
-  <div class="star-w" hidden>
-    <img src="../../../public/star.svg" />
-  </div>
-  <div>{label}</div>
   <div class="star-w">
-    <img src="../../../public/star.svg" />
+    <StarSVG width="1rem" />
+  </div>
+  <div class="label">{label}</div>
+  <div class="star-w">
+    <StarSVG width="1rem" />
   </div>
 </a>
 
 <style lang="scss">
   .button--display {
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
+    gap: 1rem;
     border: 1px solid var(--button-glass-outline);
     color: 1px solid var(--text);
     background-color: var(--button-glass-bg);
@@ -43,22 +43,18 @@ const { label, ariaLabel, href } = Astro.props;
     font-weight: 200;
     line-height: 100%;
     cursor: pointer;
-    @include noselect;
 
     &:hover {
       border-color: var(--button-solid-bg);
       background-color: var(--button-glass-hover);
     }
 
-    [label] {
+    .label {
       padding-bottom: 0.05rem;
     }
 
-    svg {
-      width: 1rem;
-    }
-
     .star-w {
+      display: flex;
       width: 3rem;
       aspect-ratio: 1 / 1;
       background-color: var(--button-solid-bg);
@@ -67,9 +63,8 @@ const { label, ariaLabel, href } = Astro.props;
       flex: none;
       justify-content: center;
       align-items: center;
-      display: flex;
 
-      &[hidden] {
+      &:nth-child(1) {
         position: absolute;
         top: auto;
         bottom: auto;

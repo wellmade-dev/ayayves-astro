@@ -1,0 +1,190 @@
+---
+import LogoSVG from "../components/svgs/LogoSVG.astro";
+import NavbarButton from "../components/buttons/nav/NavbarButton.astro";
+import NavbarLink from "../components/buttons/nav/NavbarLink.astro";
+---
+
+<nav class="navigation" id="navigation">
+  <div class="navigation-bar">
+    <a href="/" aria-current="page" class="home-button">
+      <LogoSVG />
+    </a>
+    <div class="navigation-links">
+      <div class="desktop-links" id="nav-desktop-links">
+        <NavbarLink label="Merch" ariaLabel="View merch" href="/shop/" />
+        <NavbarButton
+          label="Contact"
+          ariaLabel="Open contact form"
+          modal="Contact"
+        />
+        <NavbarButton
+          label="Cart"
+          ariaLabel="View your shopping cart"
+          modal="Cart"
+        />
+      </div>
+      <div class="mobile-links">
+        <NavbarButton
+          label="Cart"
+          ariaLabel="View your shopping cart"
+          modal="Cart"
+        />
+      </div>
+      <div class="menu-button" aria-expanded="false">
+        <div class="menu-icon">
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+        <div class="button-label-w">
+          <div class="label">Menu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style lang="scss">
+  .navigation {
+    z-index: 10;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    top: 0;
+
+    &[theme="product"] {
+      .home-button {
+        color: var(--bg);
+
+        @media (max-width: var(--phablet)) {
+          color: inherit;
+        }
+      }
+
+      @media (max-width: var(--phablet)) {
+        .navigation-bar {
+          color: var(--bg);
+
+          .line {
+            background-color: var(--bg) !important;
+          }
+        }
+      }
+    }
+  }
+
+  .navigation-bar {
+    z-index: 11;
+    width: 100%;
+    height: 5rem;
+    padding-right: var(--page-margin);
+    padding-left: var(--page-margin);
+    display: flex;
+    justify-content: space-between;
+    container-type: inline-size;
+    align-items: center;
+    position: relative;
+    transition: 0.5s all;
+
+    .home-button {
+      margin-bottom: -0.1rem;
+      width: 5.5rem;
+    }
+
+    .navigation-links {
+      width: 47.5cqw;
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
+
+      @media (max-width: var(--tablet)) {
+        max-width: unset;
+        width: unset;
+      }
+
+      @media (max-width: var(--phablet)) {
+        gap: 1.25rem;
+      }
+
+      .desktop-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        @media (max-width: var(--phablet)) {
+          display: none;
+        }
+      }
+
+      .mobile-links {
+        display: none;
+        align-items: center;
+
+        @media (max-width: var(--phablet)) {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+    .menu-button {
+      display: flex;
+      padding: 0.75rem;
+      font-size: 0.925rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      align-items: center;
+      cursor: pointer;
+      gap: 1rem;
+      transition: 0.3s all;
+
+      .menu-icon {
+        display: flex;
+        flex-direction: column;
+        gap: 0.325rem;
+        width: 1.75rem;
+        align-items: center;
+        height: 100%;
+        justify-content: center;
+
+        .line {
+          width: 100%;
+          height: 1px;
+          background-color: var(--text);
+        }
+      }
+
+      .label {
+        width: 2.375rem;
+        text-align: center;
+      }
+    }
+  }
+
+  .button-label-w {
+    overflow: hidden;
+    position: relative;
+
+    .label {
+      padding: 0.25rem 0;
+      height: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { initLinkGroups } from "../scripts/animations.js";
+  document.addEventListener("DOMContentLoaded", () => {
+    const navLinksWrapper = document.querySelector(".navigation-links");
+
+    if (navLinksWrapper) {
+      initLinkGroups(navLinksWrapper, ".navigation-link", {
+        dim: true,
+        dimOpacity: 0.5,
+        dimDuration: 0.2,
+        dimEase: "none",
+        ticker: true,
+        translateX: false,
+      });
+    }
+  });
+</script>

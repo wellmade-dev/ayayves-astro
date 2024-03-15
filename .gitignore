@@ -25,3 +25,8 @@ wp/
 
 #vs code
 .vscode/
+
+#fonts
+/public/fonts
+
+.gitignore

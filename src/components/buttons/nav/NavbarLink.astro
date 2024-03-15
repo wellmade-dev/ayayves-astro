@@ -1,0 +1,29 @@
+---
+interface Props {
+  label: string;
+  ariaLabel: string;
+  href: string;
+}
+
+const { label, ariaLabel, href } = Astro.props;
+---
+
+<a class="navigation-link" href={href} aria-label={ariaLabel}>
+  <div class="label">{label}</div>
+</a>
+
+<style>
+  .navigation-link {
+    font-size: 0.925rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+
+    .label {
+      padding: 0.25rem 0.75rem;
+      pointer-events: none;
+    }
+  }
+</style>
