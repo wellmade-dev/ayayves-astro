@@ -1,16 +1,48 @@
 ---
+const WORDPRESS_API_URL = import.meta.env.WORDPRESS_API_URL;
 
+async function fetchNavImages(mediaIDs) {
+  const promises = mediaIDs.map(async (mediaID) => {
+    const response = await fetch(`${WORDPRESS_API_URL}media/${mediaID}`);
+    const data = await response.json();
+
+    // Extract the sizes objects
+    const sizes = data.media_details.sizes;
+
+    const srcset = Object.keys(sizes)
+      .map((key) => {
+        const size = sizes[key];
+        return `${size.source_url} ${size.width}w`;
+      })
+      .join(", ");
+
+    return {
+      src: data.source_url,
+      alt: data.alt_text ? data.alt_text : "",
+      srcset: srcset,
+    };
+  });
+  return Promise.all(promises);
+}
+
+let images = await fetchNavImages([160, 158]);
 ---
 
 <div class="navigation-menu">
   <div class="menu-content">
     <div class="image-col">
-      <div class="img-w">
-        <img sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px" />
-      </div>
-      <div class="img-w">
-        <img sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px" />
-      </div>
+      {
+        images.map((image) => (
+          <div class="img-w">
+            <img
+              src={image.src}
+              {...(image.alt ? { alt: image.alt } : {})}
+              srcset={image.srcset}
+              sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
+            />
+          </div>
+        ))
+      }
     </div>
     <div class="links-col">
       <div class="primary-links-w">
@@ -102,8 +134,7 @@
     bottom: 0;
     background-color: var(--bg-dark);
     padding-top: var(--nav-height);
-    clip-path: inset(0 0 100% 0);
-    display: none;
+    /* clip-path: inset(0 0 100% 0); */
     z-index: 10;
 
     .menu-content {

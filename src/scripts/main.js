@@ -42,6 +42,7 @@ function throttle(func, limit) {
     };
 }
 
+// On Resize Function
 let windowWidth = window.innerWidth;
 
 function onResize(passedFunction) {
@@ -54,3 +55,13 @@ function onResize(passedFunction) {
 
 window.addEventListener('resize', throttle(() => onResize(initMarquees), 250));
 
+// Toggle Page Scroll
+export function togglePageScroll(enable) {
+  if (enable) {
+    document.body.style.overflow = '';
+    lenis.start();
+  } else {
+    document.body.style.overflow = 'hidden';
+    lenis.stop();
+  }
+}
