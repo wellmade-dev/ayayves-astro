@@ -1,7 +1,9 @@
-@use 'fonts';
+@use 'vars' as *;
 @use 'spacing';
+@use 'fonts';
 @use 'themes';
 @use 'normalize';
+
 
 // Headings
 .heading-900 {
@@ -11,7 +13,7 @@
     line-height: 95%;
     letter-spacing: -0.02em;
 
-    @media (max-width: var(--tablet)) {
+    @media (max-width: $tablet) {
         font-size: min(14em, 5.25rem);
     }
 }
@@ -21,7 +23,7 @@
     font-weight: 400;
     line-height: 100%;
 
-    @media (max-width: var(--tablet)) {
+    @media (max-width: $tablet) {
         font-size: clamp(2.6rem, 11em, 4.25rem);
     }
 }
@@ -33,11 +35,11 @@
     line-height: 100%;
     letter-spacing: -0.02em;
 
-    @media (max-width: var(--tablet)) {
+    @media (max-width: $tablet) {
         font-size: 3.25rem;
     }
 
-    @media (max-width: var(--phablet)) {
+    @media (max-width: $phablet) {
         font-size: 2.75rem;
     }
 }
@@ -49,7 +51,7 @@
     line-height: 100%;
     letter-spacing: -0.02em;
 
-    @media (max-width: var(--mobile)) {
+    @media (max-width: $mobile) {
         font-size: clamp(1.5rem, 5.5em, 2rem);
     }
 }
@@ -114,7 +116,7 @@ body {
     background-color: var(--bg-dark);
     min-height: 100vh;
 
-    @media (max-width: var(--mobile)) {
+    @media (max-width: $mobile) {
         min-height: 100lvh;
     }
 }

@@ -74,3 +74,48 @@ const { label, ariaLabel, href } = Astro.props;
     }
   }
 </style>
+
+<script>
+  import gsap from "gsap";
+
+  let buttonsGlass = document.querySelectorAll(
+    ".button--display:not(.tertiary)"
+  );
+
+  const animateButton = (buttonGlass, moveStar, moveText, duration, ease) => {
+    gsap.to(buttonGlass.querySelectorAll(".star-w"), {
+      x: moveStar,
+      duration: duration,
+      ease: ease,
+    });
+    gsap.to(buttonGlass.querySelector(".label"), {
+      x: moveText,
+      duration: duration,
+      ease: ease,
+    });
+  };
+
+  buttonsGlass.forEach((buttonGlass) => {
+    buttonGlass.addEventListener("mouseenter", (event) => {
+      let starElement = buttonGlass.querySelector(".star-w");
+      let starWidth = (starElement as HTMLElement)?.offsetWidth;
+      let borderWidth = parseInt(
+        window.getComputedStyle(buttonGlass).outlineWidth,
+        10
+      );
+      let paddingRight = parseInt(
+        window.getComputedStyle(buttonGlass).paddingRight,
+        10
+      );
+
+      let moveStar = starWidth + borderWidth + paddingRight;
+      let moveText = starWidth - paddingRight * 2;
+
+      animateButton(buttonGlass, moveStar, moveText, 0.3, "power4");
+    });
+
+    buttonGlass.addEventListener("mouseleave", () => {
+      animateButton(buttonGlass, 0, 0, 0.4, "power2");
+    });
+  });
+</script>

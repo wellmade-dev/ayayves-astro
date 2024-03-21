@@ -1,42 +1,19 @@
 ---
-const WORDPRESS_API_URL = import.meta.env.WORDPRESS_API_URL;
-
-async function fetchNavImages(mediaIDs) {
-  const promises = mediaIDs.map(async (mediaID) => {
-    const response = await fetch(`${WORDPRESS_API_URL}media/${mediaID}`);
-    const data = await response.json();
-
-    // Extract the sizes objects
-    const sizes = data.media_details.sizes;
-
-    const srcset = Object.keys(sizes)
-      .map((key) => {
-        const size = sizes[key];
-        return `${size.source_url} ${size.width}w`;
-      })
-      .join(", ");
-
-    return {
-      src: data.source_url,
-      alt: data.alt_text ? data.alt_text : "",
-      srcset: srcset,
-    };
-  });
-  return Promise.all(promises);
-}
-
-let images = await fetchNavImages([160, 158]);
+import { fetchImageFromID } from "../../scripts/wp-api.js";
+import { Image } from "astro:assets";
+let images = await fetchImageFromID([160, 158]);
 ---
 
-<div class="navigation-menu">
+<div class="navigation-menu" id="navigation-menu">
   <div class="menu-content">
     <div class="image-col">
       {
         images.map((image) => (
           <div class="img-w">
-            <img
+            <Image
+              inferSize
               src={image.src}
-              {...(image.alt ? { alt: image.alt } : {})}
+              {...(image.alt ? { alt: image.alt } : { alt: "" })}
               srcset={image.srcset}
               sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
             />
@@ -49,9 +26,11 @@ let images = await fetchNavImages([160, 158]);
         <a class="primary-link" href="/release/">
           <div class="label">Catalogue</div>
         </a>
-        <a class="primary-link" aria-role="button"
-          ><div class="label">Contact</div>
-        </a>
+        <button class="primary-link" aria-label="Contact" data-modal="Contact">
+          <span>
+            <div class="label">Contact</div>
+          </span>
+        </button>
         <a class="primary-link" href="/shop/">
           <div class="label">Merch</div>
         </a>
@@ -61,69 +40,62 @@ let images = await fetchNavImages([160, 158]);
           class="secondary-link"
           href="https://open.spotify.com/artist/2Mgm4AwTZRFzZV0Dc3MI3n?si=bEQN7ainTkqpXOlfGLoHBA"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'Spotify', 'ayayves' ); ?-->
-          </div></a
         >
+          <div class="label">Spotify</div>
+        </a>
         <a
           class="secondary-link"
           href="https://www.instagram.com/ayayvesmusic/"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'Instagram', 'ayayves' ); ?-->
-          </div></a
-        ><a
+        >
+          <div class="label">Instagram</div>
+        </a>
+        <a
           class="secondary-link"
           href="https://music.apple.com/au/artist/aya-yves/1502547272"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'Apple Music', 'ayayves' ); ?-->
-          </div></a
         >
+          <div class="label">Apple Music</div>
+        </a>
         <a
           class="secondary-link"
           href="https://www.facebook.com/ayayvesmusic/"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'Facebook', 'ayayves' ); ?-->
-          </div></a
-        ><a
+        >
+          <div class="label">Facebook</div>
+        </a>
+        <a
           class="secondary-link"
           href="https://www.abc.net.au/triplejunearthed/artist/aya-yves/"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'Unearthed', 'ayayves' ); ?-->
-          </div></a
         >
+          <div class="label">Unearthed</div>
+        </a>
         <a
           class="secondary-link"
           href="https://www.tiktok.com/@ayayvesmusic"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'TikTok', 'ayayves' ); ?-->
-          </div></a
-        ><a
+        >
+          <div class="label">TikTok</div>
+        </a>
+        <a
           class="secondary-link"
           href="https://www.youtube.com/ayayves"
           target="_blank"
-          ><div class="label">
-            <!--?php _e( 'YouTube', 'ayayves' ); ?-->
-          </div></a
         >
+          <div class="label">YouTube</div>
+        </a>
       </div>
     </div>
   </div>
   <div class="menu-footer">
-    <div class="p2">
-      <!--?php _e( 'Aya Yves 2024', 'ayayves' ); ?-->
-    </div>
-    <div class="p2">
-      <!--?php _e( 'Site by Wellmade', 'ayayves' ); ?-->
-    </div>
+    <div class="p2">Aya Yve 2024</div>
+    <div class="p2">Site by Wellmade</div>
   </div>
 </div>
 
 <style lang="scss">
+  @use "../../styles/vars" as *;
   .navigation-menu {
     display: flex;
     position: fixed;
@@ -133,8 +105,8 @@ let images = await fetchNavImages([160, 158]);
     right: 0;
     bottom: 0;
     background-color: var(--bg-dark);
-    padding-top: var(--nav-height);
-    /* clip-path: inset(0 0 100% 0); */
+    padding-top: calc($navheight - 0.5rem);
+    clip-path: inset(0 0 100% 0);
     z-index: 10;
 
     .menu-content {
@@ -145,11 +117,11 @@ let images = await fetchNavImages([160, 158]);
       padding: 0 var(--page-margin);
       flex-grow: 1;
 
-      @media (max-width: var(--tablet)) {
+      @media (max-width: $tablet) {
         gap: clamp(4rem, 7.5vw, 6rem);
       }
 
-      @media (max-width: var(--phablet)) {
+      @media (max-width: $phablet) {
         justify-content: start;
         align-items: start;
         padding-top: 1.25rem;
@@ -167,13 +139,13 @@ let images = await fetchNavImages([160, 158]);
         height: calc(var(--corner-gap) + var(--card-height));
         max-height: calc(100vh - (2 * var(--nav-height)));
 
-        @media (max-width: var(--tablet)) {
+        @media (max-width: $tablet) {
           --corner-gap: 2rem;
-          --card-height: 50vw /* calc(20rem, 25vw, 25rem) */;
+          --card-height: 50vw;
           --card-width: calc(var(--card-height) * 0.725);
         }
 
-        @media (max-width: var(--phablet)) {
+        @media (max-width: $phablet) {
           display: none;
         }
 
@@ -212,7 +184,7 @@ let images = await fetchNavImages([160, 158]);
         padding-bottom: 2rem;
         padding-right: 4rem;
 
-        @media (max-width: var(--tablet)) {
+        @media (max-width: $tablet) {
           gap: 1.5rem;
           padding-right: 3rem;
         }
@@ -225,13 +197,14 @@ let images = await fetchNavImages([160, 158]);
             font-size: 3.5rem;
             cursor: pointer;
             overflow: hidden;
+            text-align: left;
 
             &:nth-child(1),
             &:nth-child(2) {
               padding-bottom: 0.85rem;
             }
 
-            @media (max-width: var(--tablet)) {
+            @media (max-width: $tablet) {
               font-size: 3rem;
             }
 

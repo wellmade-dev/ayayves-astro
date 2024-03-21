@@ -37,7 +37,7 @@ $almostblack-10: rgba(1, 10, 14, .1);
 $almostblack-0: rgba(1, 10, 14, 0);
 
 /* Default Theme */
-:root {
+:root{
     --bg: #{$deepsea};
     --bg-dark: #{$almostblack};
     --highlight: #{$smoke};
@@ -57,17 +57,16 @@ $almostblack-0: rgba(1, 10, 14, 0);
 }
 
 body {
-
     /* Overlay Theme */
-    &[theme=overlay],
-    [theme=overlay] {
+    &[data-theme=overlay],
+    [data-theme=overlay] {
         --card-bg: #{$deepsea-50};
         --divider-partial: #{$barelysage-25};
     }
 
     /* Secondary Theme */
-    &[theme=secondary],
-    [theme=secondary] {
+    &[data-theme=secondary],
+    [data-theme=secondary] {
         --text: #{$okra};
         --text-secondary: #{$okra-75};
         --text-disabled: #{$okra-25};
@@ -78,8 +77,8 @@ body {
     }
 
     /* Light Theme */
-    &[theme=light],
-    [theme=light] {
+    &[data-theme=light],
+    [data-theme=light] {
         --bg: #{$barelysage};
         --text: #{$deepsea};
         --text-secondary: #{$deepsea-75};

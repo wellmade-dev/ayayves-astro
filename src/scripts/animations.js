@@ -51,7 +51,7 @@ function animateLinkGroups(target, isHoveringIn, config) {
 }
 
 // Animate Ticker Label on Button
-function tickerLinkHover(input, newLabel, customDuration, manualLabelReset) {
+export function tickerLinkHover(input, newLabel, customDuration, manualLabelReset) {
   const labelText = input.querySelector(".label");
   const labelWrapper = labelText.parentNode;
   const animationDuration = customDuration || 0.25 ;

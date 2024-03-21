@@ -1,0 +1,38 @@
+---
+
+---
+
+<div class="divider">
+  <div class="divider_fill"></div>
+  <div class="divider_bg"></div>
+</div>
+
+<style>
+  .divider {
+    z-index: 5;
+    height: 1px;
+    position: relative;
+
+    .divider_bg {
+      width: 100%;
+      height: 1px;
+      background-color: var(--divider-partial);
+      position: absolute;
+      top: 0%;
+      bottom: auto;
+      left: 0%;
+      right: 0%;
+    }
+
+    .divider_fill {
+      width: 0%;
+      height: 1px;
+      background-color: var(--divider-full);
+      position: absolute;
+      top: 0%;
+      bottom: auto;
+      left: 0%;
+      right: 0%;
+    }
+  }
+</style>

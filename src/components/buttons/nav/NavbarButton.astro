@@ -22,10 +22,12 @@ const { label, ariaLabel, modal } = Astro.props;
     cursor: pointer;
     overflow: hidden;
     position: relative;
+    will-change: transform;
 
     .label {
       padding: 0.25rem 0.75rem;
       pointer-events: none;
+      will-change: transform;
     }
   }
 </style>

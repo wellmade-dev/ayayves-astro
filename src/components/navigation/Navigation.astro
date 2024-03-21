@@ -1,0 +1,407 @@
+---
+import LogoSVG from "../svgs/LogoSVG.astro";
+import NavbarButton from "../buttons/nav/NavbarButton.astro";
+import NavbarLink from "../buttons/nav/NavbarLink.astro";
+import NavigationMenu from "./NavigationMenu.astro";
+---
+
+<nav class="navigation" id="navigation">
+  <div class="navigation-bar" id="navigation-bar">
+    <a href="/" aria-label="Homepage" aria-current="page" class="home-button">
+      <LogoSVG />
+    </a>
+    <div class="navigation-links" id="navigation-links">
+      <div class="desktop-links" id="nav-desktop-links">
+        <NavbarLink label="Merch" ariaLabel="View merch" href="/shop/" />
+        <NavbarButton
+          label="Contact"
+          ariaLabel="Open contact form"
+          modal="Contact"
+        />
+        <NavbarButton
+          label="Cart"
+          ariaLabel="View your shopping cart"
+          modal="Cart"
+        />
+      </div>
+      <div class="mobile-links" id="nav-mobile-links">
+        <NavbarButton
+          label="Cart"
+          ariaLabel="View your shopping cart"
+          modal="Cart"
+        />
+      </div>
+      <div class="menu-button" id="menu-button" aria-expanded="false">
+        <div class="menu-icon">
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+        <div class="button-label-w">
+          <div class="label">Menu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <NavigationMenu />
+</nav>
+
+<style lang="scss">
+  @use "../../styles/vars" as *;
+  .navigation {
+    z-index: 10;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    top: 0;
+
+    &[theme="product"] {
+      .home-button {
+        color: var(--bg);
+
+        @media (max-width: $phablet) {
+          color: inherit;
+        }
+      }
+
+      @media (max-width: $phablet) {
+        .navigation-bar {
+          color: var(--bg);
+
+          .line {
+            background-color: var(--bg) !important;
+          }
+        }
+      }
+    }
+  }
+
+  .navigation-bar {
+    z-index: 11;
+    width: 100%;
+    height: $navheight;
+    padding-right: var(--page-margin);
+    padding-left: var(--page-margin);
+    display: flex;
+    justify-content: space-between;
+    container-type: inline-size;
+    align-items: center;
+    position: relative;
+    transition: 0.5s all;
+
+    .home-button {
+      margin-bottom: -0.1rem;
+      width: 5.5rem;
+    }
+
+    .navigation-links {
+      width: 47.5cqw;
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
+
+      @media (max-width: $tablet) {
+        max-width: unset;
+        width: unset;
+      }
+
+      @media (max-width: $phablet) {
+        gap: 1.25rem;
+      }
+
+      .desktop-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        @media (max-width: $phablet) {
+          display: none;
+        }
+      }
+
+      .mobile-links {
+        display: none;
+        align-items: center;
+
+        @media (max-width: $phablet) {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+    .menu-button {
+      display: flex;
+      padding: 0.75rem;
+      font-size: 0.925rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      align-items: center;
+      cursor: pointer;
+      gap: 1rem;
+      transition: 0.3s all;
+
+      .menu-icon {
+        display: flex;
+        flex-direction: column;
+        gap: 0.325rem;
+        width: 1.75rem;
+        align-items: center;
+        height: 100%;
+        justify-content: center;
+
+        .line {
+          width: 100%;
+          height: 1px;
+          background-color: var(--text);
+        }
+      }
+
+      .label {
+        width: 2.375rem;
+        text-align: center;
+      }
+    }
+  }
+
+  .button-label-w {
+    overflow: hidden;
+    position: relative;
+
+    .label {
+      padding: 0.25rem 0;
+      height: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { initLinkGroups } from "../../scripts/animations.js";
+  import { tickerLinkHover } from "../../scripts/animations.js";
+  import { togglePageScroll } from "../../scripts/utils.js";
+  import { easingSmall } from "../../scripts/init.js";
+  import { easingLarge } from "../../scripts/init.js";
+
+  // Menu Button Animation
+  const navigation = document.getElementById("navigation");
+  const navigationMenu = document.getElementById("navigation-menu");
+  let navMenuButton;
+  let navLinksWrapper;
+  let navDesktopLinks;
+  let navMobileLinks;
+  let navTheme;
+
+  if (navigation) {
+    navMenuButton = navigation.querySelector(".menu-button");
+    navLinksWrapper = navigation.querySelector(".navigation-links");
+    navDesktopLinks = navigation.querySelector(".desktop-links");
+    navMobileLinks = navigation.querySelector(".mobile-links");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Init ticker animation on NavButtons in Navigation Menu
+    if (navLinksWrapper) {
+      initLinkGroups(navLinksWrapper, ".navigation-link", {
+        dim: true,
+        dimOpacity: 0.5,
+        dimDuration: 0.2,
+        dimEase: "none",
+        ticker: true,
+        translateX: false,
+      });
+    }
+  });
+
+  // Animate menu button
+  function animateMenuButton(isOpening) {
+    const gap = isOpening ? 0 : "0.325rem";
+    const lineWidth = isOpening ? "75%" : "100%";
+    const menuButtonIcon = navMenuButton.querySelector(".menu-icon");
+    const menuIconLineOne = navMenuButton.querySelector(".line:nth-child(1)");
+    const menuIconLineTwo = navMenuButton.querySelector(".line:nth-child(2)");
+
+    gsap.to(menuButtonIcon, {
+      gap,
+      duration: 0.75,
+      ease: easingSmall,
+    });
+    gsap.to([menuIconLineOne, menuIconLineTwo], {
+      duration: 0.75,
+      ease: easingSmall,
+      width: lineWidth,
+      rotation: (index) => (isOpening ? (index === 0 ? 135 : 45) : 0),
+      y: (index) => (isOpening ? (index === 0 ? 0.5 : -0.5) : 0.5),
+    });
+  }
+
+  // Set animated flag
+  let isAnimating = false;
+
+  // Open and close Navigation Menu
+  function toggleNavigationMenu() {
+    if (navigation && navigationMenu && !isAnimating) {
+      let navImageColumn;
+      let navImageBack;
+      let navImageFront;
+      let primaryLinksWrapper;
+      isAnimating = true;
+
+      const isOpening = navMenuButton.getAttribute("aria-expanded") === "false";
+
+      navImageColumn = navigationMenu.querySelector(".image-col");
+      navImageBack = navImageColumn.querySelector(".img-w:nth-child(1)");
+      navImageFront = navImageColumn.querySelector(".img-w:nth-child(2)");
+      primaryLinksWrapper = navigationMenu.querySelector(".primary-links-w");
+      const primaryLinkLabels = primaryLinksWrapper.querySelectorAll(".label");
+      const secondaryLinksWrapper =
+        navigationMenu.querySelector(".secondary-links-w");
+
+      if (isOpening && navigation.hasAttribute("theme")) {
+        navTheme = navigation.getAttribute("theme");
+      }
+
+      if (isOpening) {
+        navigation.setAttribute("theme", "secondary");
+      } else {
+        setTimeout(function () {
+          if (navTheme !== null) {
+            navigation.setAttribute("theme", navTheme);
+          } else {
+            navigation.removeAttribute("theme");
+          }
+        }, 750);
+      }
+
+      // Open GSAP Timeline to manage menu open and close animation
+      const tl = gsap.timeline({
+        onStart: () => {
+          togglePageScroll(isOpening ? false : true);
+          gsap.set(navigationMenu, { display: "flex" });
+          animateMenuButton(isOpening);
+          tickerLinkHover(
+            navMenuButton,
+            isOpening ? "Close" : "Menu",
+            0.4,
+            true
+          );
+          if (isOpening) {
+            gsap.set(navImageFront, { y: "2.5rem" });
+            gsap.set(navImageBack, { y: "4rem" });
+            gsap.set(primaryLinkLabels, { y: "-2rem", autoAlpha: 0 });
+            gsap.set(secondaryLinksWrapper, { autoAlpha: 0, y: "-0.5rem" });
+          }
+        },
+        onComplete: () => {
+          if (isOpening) {
+            document.addEventListener("keydown", onEscapePressNav);
+          } else {
+            document.removeEventListener("keydown", onEscapePressNav);
+            gsap.set(navigationMenu, { display: "none" });
+          }
+          navMenuButton.setAttribute(
+            "aria-expanded",
+            isOpening ? "true" : "false"
+          );
+          isAnimating = false;
+        },
+      });
+
+      // Stagger In/Out Navbar Items
+      tl.to(
+        navDesktopLinks.children,
+        {
+          duration: 0.175,
+          autoAlpha: isOpening ? 0 : 1,
+          y: isOpening ? "-0.5rem" : 0,
+          stagger: isOpening ? 0.15 : -0.15,
+          ease: "power1.out",
+        },
+        0
+      );
+
+      tl.to(
+        navMobileLinks.children,
+        {
+          duration: 0.175,
+          autoAlpha: isOpening ? 0 : 1,
+          y: isOpening ? "-0.5rem" : 0,
+          stagger: isOpening ? 0.15 : -0.15,
+          ease: "power1.out",
+        },
+        0
+      );
+
+      // Open Navigation Menu
+      tl.to(
+        navigationMenu,
+        {
+          clipPath: isOpening ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)",
+          duration: 1,
+          ease: easingLarge,
+        },
+        isOpening ? 0 : 0.2
+      );
+
+      // Reveal Image Cards
+      tl.to(
+        navImageFront,
+        {
+          duration: 1,
+          y: isOpening ? 0 : "2.5rem",
+          ease: isOpening ? "power2.out" : "power2.in",
+        },
+        isOpening ? 0.25 : 0
+      );
+
+      tl.to(
+        navImageBack,
+        {
+          duration: 1,
+          y: isOpening ? 0 : "4rem",
+          ease: isOpening ? "power2.out" : "power2.in",
+        },
+        isOpening ? 0.25 : 0
+      );
+
+      // Stagger Reveal Primary Links
+      tl.to(
+        primaryLinkLabels,
+        {
+          duration: isOpening ? 0.75 : 0.75,
+          y: isOpening ? 0 : "-1rem",
+          stagger: isOpening ? 0.15 : -0.1,
+          autoAlpha: isOpening ? 1 : 0,
+          ease: isOpening ? easingSmall : easingSmall,
+        },
+        isOpening ? 0 : 0.15
+      );
+
+      initLinkGroups(primaryLinksWrapper, ".primary-link", {
+        dim: true,
+        dimOpacity: 0.5,
+        dimDuration: 0.1,
+      });
+
+      // Reveal Secondary Links
+      tl.to(
+        secondaryLinksWrapper,
+        {
+          duration: isOpening ? 0.3 : 0.5,
+          y: isOpening ? 0 : "-0.5rem",
+          autoAlpha: isOpening ? 1 : 0,
+        },
+        isOpening ? 0.5 : 0
+      );
+    }
+  }
+
+  function onEscapePressNav(event) {
+    if (event.key === "Escape") {
+      toggleNavigationMenu();
+    }
+  }
+
+  navMenuButton.addEventListener("click", (event) => {
+    toggleNavigationMenu();
+  });
+</script>

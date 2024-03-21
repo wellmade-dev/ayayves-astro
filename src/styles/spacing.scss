@@ -1,14 +1,7 @@
-// Breakpoints
-:root {
-    --desktop-max: 1920px;
-    --desktop: 1280px;
-    --tablet: 991px;
-    --phablet: 800px;
-    --mobile: 520px;
-}
+@use 'vars' as *;
 
-// Spacing
-body {
+:root {
+    // Spacing
     /* Radius */
     --radius-large: 2.5rem;
     --radius-medium: 1.25rem;
@@ -25,12 +18,12 @@ body {
     --padding-300: 1.25rem;
     --padding-200: 0.5rem;
 
-    @media (max-width: var(--desktop)) {
+    @media (max-width: $desktop) {
         --radius-large: 2rem;
         --page-margin: 2rem;
     }
 
-    @media (max-width: var(--tablet)) {
+    @media (max-width: $tablet) {
         --radius-large: 1.25rem;
         --radius-medium: 0.75rem;
         --radius-small: 0.6rem;
@@ -41,7 +34,7 @@ body {
         --padding-300: 1rem;
     }
 
-    @media (max-width: var(--mobile)) {
+    @media (max-width: $mobile) {
         --radius-small: 0.5rem;
         --page-margin: 1.25rem;
         --padding-500: 1.25rem;
