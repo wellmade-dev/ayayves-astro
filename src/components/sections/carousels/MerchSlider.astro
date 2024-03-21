@@ -1,0 +1,86 @@
+---
+import { fetchData } from "../../../scripts/wp-api"
+
+await fetchData("products") {
+
+}
+
+
+
+---
+<div class="slider swiper">
+                <?php
+                    $hero_merch_query_args = array(
+                        'post_type' => 'product',
+                        'nopaging' => true,
+                        'order' => 'ASC',
+                        'orderby' => 'date'
+                    )
+                ?>
+                <?php
+                    $hero_merch_query_args['meta_query'] = WC()->query->get_meta_query(); 
+                    if( isset( $hero_merch_query_args[ 'orderby' ] ) ) {
+                        switch( $hero_merch_query_args[ 'orderby' ] ) {
+                            case 'price':
+                                $hero_merch_query_args[ 'orderby' ] = 'meta_value_num';
+                                $hero_merch_query_args[ 'meta_key' ] = '_price';
+                                break;
+                            case 'rating':
+                                $hero_merch_query_args[ 'orderby' ] = 'meta_value_num';
+                                $hero_merch_query_args[ 'meta_key' ] = '_wc_average_rating';
+                                break;
+                            case 'total_sales':
+                                $hero_merch_query_args[ 'orderby' ] = 'meta_value_num';
+                                $hero_merch_query_args[ 'meta_key' ] = 'total_sales';
+                                break;
+                            case 'review_count':
+                                $hero_merch_query_args[ 'orderby' ] = 'meta_value_num';
+                                $hero_merch_query_args[ 'meta_key' ] = '_wc_review_count';
+                                break;
+                        }
+                }?>
+                <?php $hero_merch_query = new WP_Query( $hero_merch_query_args ); ?>
+                <?php if ( $hero_merch_query->have_posts() ) : ?>
+                    <div role="list" class="slider-rail swiper-wrapper">
+                        <?php while ( $hero_merch_query->have_posts() ) : $hero_merch_query->the_post(); ?>
+                            <?php global $product, $post; ?>
+                            <div role="listitem" <?php wc_product_class( 'slider-w swiper-slide' , $product ); ?> id="post-<?php the_ID(); ?>">
+                                <div class="merch-card">
+                                    <div class="info-w">
+                                        <div class="desc-w"><a class="title-link" href="<?php echo esc_url( apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product ) ); ?>"><?php wc_get_template( 'loop/title.php' ) ?></a>
+                                            <?php get_template_part ('/partials/components/divider'); ?>
+                                            <div class="meta-w">
+                                                <?php $terms = get_the_terms( get_the_ID(), 'product_cat' ) ?>
+                                                <?php if( !empty( $terms ) ) : ?>
+                                                    <?php foreach( $terms as $term_i => $term ) : ?>
+                                                        <?php if( $term_i == 0 ) : ?>
+                                                            <div class="heading-300" rel="tag" data="category">
+                                                                <?php echo $term->name; ?>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                                <?php wc_get_template( 'loop/short-description.php' ) ?>
+                                            </div>
+                                        </div>
+                                        <a href="<?php echo esc_url( apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product ) ); ?>" class="button--display secondary">
+                                            <div class="star-w" hidden>
+                                                <?php get_template_part( '/partials/svg/star' ); ?>
+                                            </div> <div label>
+                                                <?php _e( 'Shop', 'ayayves' ); ?>
+                                            </div> 
+                                            <div class="star-w">
+                                                <?php get_template_part( '/partials/svg/star' ); ?>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a href="<?php echo esc_url( apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product ) ); ?>" class="img-w"><img loading="lazy" class="img" src="<?php $image_id = get_post_thumbnail_id( $product->get_id() ); echo pull_image($image_id); ?>" decoding="async" sizes='360px'></a>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                        <?php wp_reset_postdata(); ?>
+                    </div>
+                <?php else : ?>
+                    <p><?php _e( 'Sorry, no posts matched your criteria.', 'ayayves' ); ?></p>
+                <?php endif; ?>
+            </div>

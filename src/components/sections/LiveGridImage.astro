@@ -1,0 +1,30 @@
+---
+interface ImageObject {
+  src: string;
+  srcset?: string;
+  alt?: string;
+}
+
+interface Props {
+  image: ImageObject;
+}
+
+const { image } = Astro.props;
+---
+
+<img
+  src={image.src}
+  srcset={image.srcset}
+  alt={image.alt ?? ""}
+  sizes="(min-width: 920px) 35vw, (min-width: 520px) 75vw, 60vw"
+/>
+
+<style lang="scss">
+  img {
+    z-index: 1;
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 1 / 1.33;
+    transform: scale(1.05);
+  }
+</style>

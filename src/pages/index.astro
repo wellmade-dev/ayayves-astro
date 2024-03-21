@@ -1,12 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
+import CarouselSection from "../components/sections/carousels/CarouselSection.astro";
+import LiveGridSection from "../components/sections/LiveGridSection.astro";
 ---
 
 <Layout title="Aya Yves">
   <main>
     <HeroSection>
-      <p>This is some text</p>
+      <CarouselSection title="Support the Art" subtitle="Merch" />
     </HeroSection>
+    <LiveGridSection />
   </main>
 </Layout>

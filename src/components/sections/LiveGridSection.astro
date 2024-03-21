@@ -1,0 +1,166 @@
+---
+import LiveGridImage from "./LiveGridImage.astro";
+import { fetchStrapiData, createImageObject } from "../../scripts/wp-api";
+
+const data = await fetchStrapiData("homepage?populate=*");
+const objects = data.data.attributes;
+
+const imageTopLeft = createImageObject(objects.grid_top_left);
+const imageBottomLeft = createImageObject(objects.grid_bottom_left);
+const imageTopMiddle = createImageObject(objects.grid_top_middle);
+const imageBottomMiddle = createImageObject(objects.grid_bottom_middle);
+const imageTopRight = createImageObject(objects.grid_top_right);
+const imageBottomRight = createImageObject(objects.grid_bottom_right);
+---
+
+<section class="section-scrollgrid">
+  <div class="ribbon-c">
+    <div class="ribbon-w">
+      <div class="ribbon">
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageBottomLeft} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageTopLeft} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageBottomLeft} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageTopLeft} />
+        </div>
+      </div>
+      <div class="ribbon">
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageBottomMiddle} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageTopMiddle} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageBottomMiddle} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageTopMiddle} />
+        </div>
+      </div>
+      <div class="ribbon">
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageBottomRight} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageTopRight} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageBottomRight} />
+        </div>
+        <div class="ribbon_img-w">
+          <LiveGridImage image={imageTopRight} />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "../../styles/vars" as *;
+  .section-scrollgrid {
+    z-index: 1;
+    height: 350vh;
+    background-color: var(--almostblack);
+    margin: -100vh auto;
+    position: relative;
+
+    .ribbon-c {
+      z-index: 1;
+      height: 100vh;
+      max-width: $desktop-max;
+      justify-content: center;
+      align-items: center;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      position: sticky;
+      top: 0;
+
+      .ribbon-w {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        gap: var(--padding-400);
+        flex-direction: row;
+        grid-template-rows: auto;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-columns: 1fr;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        position: absolute;
+        top: 0%;
+        bottom: 0%;
+        left: 0%;
+        right: 0%;
+        overflow: clip;
+
+        .ribbon {
+          z-index: 1;
+          width: 34vw;
+          min-width: 20rem;
+          gap: var(--padding-400);
+          flex-direction: column;
+          flex: none;
+          grid-template-rows: auto auto;
+          grid-template-columns: 1fr;
+          grid-auto-columns: 1fr;
+          justify-content: center;
+          align-items: center;
+          justify-items: center;
+          display: flex;
+
+          @media (max-width: $mobile) {
+            width: 60vw;
+            min-width: unset;
+          }
+        }
+      }
+    }
+  }
+
+  .ribbon_img-w {
+    z-index: 1;
+    width: 100%;
+    border-radius: var(--radius-small);
+    -o-object-fit: cover;
+    object-fit: cover;
+    overflow: clip;
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+
+  function initLiveGrid() {
+    const scrollGrid = document.querySelector(".section-scrollgrid");
+
+    if (scrollGrid) {
+      const ribbonImages = scrollGrid.querySelectorAll("img");
+      const ribbons = scrollGrid.querySelectorAll(".ribbon");
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: scrollGrid,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        })
+        .to(ribbonImages, { scale: "1", ease: "none" }, "start")
+        .fromTo(ribbons[0], { y: "-5%" }, { y: "5%", ease: "none" }, "start")
+        .fromTo(ribbons[1], { y: "10%" }, { y: "0%", ease: "none" }, "start")
+        .fromTo(ribbons[2], { y: "-5%" }, { y: "5%", ease: "none" }, "start");
+    }
+  }
+
+  initLiveGrid();
+</script>

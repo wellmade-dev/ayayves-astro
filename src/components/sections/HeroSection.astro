@@ -111,7 +111,9 @@ const release = createReleaseObject(latestRelease);
       </div>
     </div>
   </div>
-  <slot />
+  <div style="z-index: 5">
+    <slot />
+  </div>
 </section>
 
 <style lang="scss">
@@ -290,19 +292,6 @@ const release = createReleaseObject(latestRelease);
         }
       }
     }
-  }
-
-  .subsection-slider {
-    width: 100%;
-    z-index: 8;
-    max-width: $desktop-max;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--page-margin);
-    padding-right: var(--page-margin);
-    position: relative;
-    overflow: clip;
-    padding-top: 4rem;
   }
 </style>
 

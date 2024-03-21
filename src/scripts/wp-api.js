@@ -1,10 +1,13 @@
 import { decode } from 'html-entities';
 
 const WORDPRESS_API_URL = import.meta.env.WORDPRESS_API_URL;
-const WORDPRESS_ACF_URL = import.meta.env.WORDPRESS_ACF_URL;
+const WORDPRESS_WC_URL = import.meta.env.WORDPRESS_WC_URL;
+const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
+const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
+const STRAPI_URL = import.meta.env.STRAPI_URL;
 
 const username = 'wellmade'; // The username of the user
-const appPassword = 'iX4s KoH2 t6rC XQn2 OsAl GCe2';
+const appPassword = '';
 
 // Base64 encode the username and application password
 const base64Credentials = btoa(`${username}:${appPassword}`);
@@ -31,10 +34,39 @@ export async function fetchData(type) {
     });
   const data = await response.json();
   return data;
+  } else if (type === 'products') {
+    console.log(`${WORDPRESS_WC_URL}${type}/`);
+    const response = await fetch(`${WORDPRESS_WC_URL}${type}/`, {
+      headers: responseHeaders,
+    });
   }
 
   // Store the fetched data in the cache
   dataCache.set(type, data);
+
+  return data;
+}
+
+const strapiHeaders = {
+ "Authorization" : `Bearer ${STRAPI_API_TOKEN}`
+}
+
+
+export async function fetchStrapiData(query) {
+  // Check if the data is already in the cache
+  if (dataCache.has(query)) {
+    return dataCache.get(query);
+  }
+
+  // If not in cache, fetch from the API
+  console.log(`${STRAPI_API_URL}${query}`)
+  const response = await fetch(`${STRAPI_API_URL}${query}`, {
+    headers: strapiHeaders,
+  });
+  const data = await response.json();
+
+  // Store the fetched data in the cache
+  dataCache.set(query, data);
 
   return data;
 }
@@ -78,7 +110,42 @@ export function createSRCSET(sizes) {
   return srcsetComponents.join(", ");
 }
 
+export function createSrcsetFromImage(JSON) {
+  const srcsetComponents = [];
 
+  Object.entries(JSON).forEach(([key, value]) => {
+    if (typeof value === 'object' && value !== null && value.hasOwnProperty('url') && value.hasOwnProperty('width')) {
+      srcsetComponents.push(`${STRAPI_URL}${value.url} ${value.width}w`);
+    } else {
+      console.log(`Couldn't find, error with key: ${key}`);
+    }
+  });
+
+  return srcsetComponents.join(", ");
+}
+
+export function createImageObject(object) {
+  const data = object.data.attributes;
+  const images = data.formats;
+
+  const srcset = createSrcsetFromImage(images);
+
+  let altText;
+
+  if (data.alternativeText) {
+    altText = data.alternativeText;
+  } else {
+    altText = ''
+  };
+
+  const image = {
+    src: STRAPI_URL + data.name,
+    srcset: srcset,
+    alt: altText
+  }
+
+  return image;
+}
 
 export function createReleaseObject(object) {
   const currentDate = new Date();
@@ -110,3 +177,4 @@ export function createReleaseObject(object) {
 
   return release
 }
+

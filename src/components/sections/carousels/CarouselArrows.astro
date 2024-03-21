@@ -1,0 +1,133 @@
+---
+import LongArrowSVG from "../../svgs/LongArrowSVG.astro";
+---
+
+<div class="swiper-arrow-w">
+  <button class="button--arrow swiper-prev">
+    <span class="arrow-w">
+      <div class="arrow"><LongArrowSVG isFlipped={true} /></div>
+      <div class="arrow"><LongArrowSVG isFlipped={true} /></div>
+    </span>
+  </button>
+  <button class="button--arrow swiper-next">
+    <span class="arrow-w">
+      <div class="arrow"><LongArrowSVG isFlipped={false} /></div>
+      <div class="arrow"><LongArrowSVG isFlipped={false} /></div>
+    </span>
+  </button>
+</div>
+
+<style lang="scss">
+  @use "../../../styles/vars" as *;
+
+  .swiper-arrow-w {
+    gap: 0.5rem;
+    display: flex;
+  }
+
+  .button--arrow {
+    border: 1px solid var(--button-glass-outline);
+    background-color: var(--button-glass-bg);
+    border-radius: var(--radius-circular);
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+    display: flex;
+    position: relative;
+    overflow: clip;
+    justify-self: start;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--button-solid-bg);
+      background-color: var(--button-solid-bg);
+      color: var(--button-solid-text);
+    }
+
+    &.is--disabled {
+      opacity: 0.25;
+      cursor: default;
+
+      &:hover {
+        border-color: var(--button-glass-outline);
+        color: var(--text);
+        background-color: rgba(1, 10, 14, 0);
+      }
+    }
+
+    .arrow-w {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .arrow {
+        padding: 0.75rem 1.75rem;
+      }
+    }
+
+    &.swiper-prev {
+      .arrow-w {
+        .arrow:nth-child(1) {
+          right: -100%;
+          position: absolute;
+        }
+      }
+    }
+
+    &.swiper-next {
+      .arrow-w {
+        .arrow:nth-child(2) {
+          left: -100%;
+          position: absolute;
+        }
+      }
+    }
+  }
+
+  .button--arrow-wrap {
+    justify-content: center;
+    align-items: center;
+    padding: 0.35rem 1rem;
+    display: flex;
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+
+  if (!window.initSwiperArrows) {
+    const swiperArrowButtons = document.querySelectorAll(".button--arrow");
+
+    swiperArrowButtons.forEach((element) => {
+      if (element instanceof HTMLElement) {
+        let parentSwiperPrev = element.closest(".swiper-prev");
+        let direction: "left" | "right" = parentSwiperPrev ? "left" : "right";
+        arrowButtonHover(element, direction);
+      }
+    });
+
+    window.initSwiperArrows = true;
+  }
+
+  function arrowButtonHover(arrow: HTMLElement, direction: "left" | "right") {
+    if (!arrow) return;
+
+    arrow.addEventListener("mouseenter", () => {
+      if (!arrow.classList.contains("is--disabled")) {
+        const arrows = arrow.querySelectorAll(".arrow");
+        gsap.to(arrows, {
+          x: direction === "left" ? "-100%" : "100%",
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.set(arrows, { x: "0%" });
+          },
+        });
+      }
+    });
+  }
+</script>

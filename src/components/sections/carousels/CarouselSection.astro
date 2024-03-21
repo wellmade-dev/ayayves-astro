@@ -1,0 +1,92 @@
+---
+import CarouselArrows from "./CarouselArrows.astro";
+interface Props {
+  title: string;
+  subtitle: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<div class="carousel-section">
+  <div class="slider-header">
+    <div class="heading-w">
+      <h2 class="heading-800">{title}</h2>
+      <div class="heading-600 hide-mobile">({subtitle})</div>
+    </div>
+    <div class="desktop-arrows">
+      <CarouselArrows />
+    </div>
+  </div>
+  <slot />
+  <div class="mobile-arrows">
+    <CarouselArrows />
+  </div>
+</div>
+
+<style lang="scss">
+  @use "../../../styles/vars" as *;
+
+  .carousel-section {
+    width: 100%;
+    max-width: $desktop-max;
+    z-index: 8;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--page-margin);
+    padding-right: var(--page-margin);
+    position: relative;
+    overflow: clip;
+    padding-top: 4rem;
+  }
+
+  .slider-header {
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.2s;
+    display: flex;
+
+    @media (max-width: $tablet) {
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: $mobile) {
+      margin-bottom: 1.25rem;
+    }
+
+    .heading-w {
+      gap: 0.75rem;
+      display: flex;
+
+      .heading-600 {
+        margin-top: -0.15rem;
+      }
+
+      @media (max-width: 640px) {
+        .hide-mobile {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .desktop-arrows {
+    display: block;
+    padding-bottom: 0.5rem;
+
+    @media (max-width: $tablet) {
+      display: none;
+    }
+  }
+
+  .mobile-arrows {
+    display: none;
+
+    @media (max-width: $tablet) {
+      display: block;
+    }
+  }
+</style>
