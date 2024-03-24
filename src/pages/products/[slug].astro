@@ -1,5 +1,5 @@
 ---
-import { fetchProducts } from "../../scripts/wp-api";
+import { fetchProducts } from "../../scripts/fetch";
 
 export async function getStaticPaths() {
   const products = await fetchProducts();
@@ -13,3 +13,4 @@ const product = Astro.props;
 ---
 
 <h2>{product.name}</h2>
+../../scripts/fetch

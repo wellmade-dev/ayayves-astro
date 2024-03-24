@@ -1,6 +1,6 @@
 ---
 import LiveGridImage from "../atoms/LiveGridImage.astro";
-import { fetchStrapiData, createImageObject } from "../../scripts/wp-api";
+import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
 
 const data = await fetchStrapiData("homepage?populate=*");
 const objects = data.data.attributes;
@@ -191,3 +191,4 @@ const imageBottomRight = createImageObject(objects.grid_bottom_right);
 
   initLiveGrid();
 </script>
+../../scripts/fetch

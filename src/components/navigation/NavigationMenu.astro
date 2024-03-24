@@ -1,6 +1,6 @@
 ---
 import type { ImageAttributes } from "../../types/strapi-attributes";
-import { fetchStrapiData, createImageObject } from "../../scripts/wp-api";
+import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
 
 const data = await fetchStrapiData(
   "navigation?populate=image_front,image_back"
@@ -266,3 +266,4 @@ console.log(images);
     padding: 0 var(--page-margin) 2.25rem;
   }
 </style>
+../../scripts/fetch

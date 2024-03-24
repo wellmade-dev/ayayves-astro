@@ -1,7 +1,7 @@
 ---
 import "swiper/css";
 import "swiper/css/navigation";
-import { fetchProducts } from "../../../scripts/wp-api";
+import { fetchProducts } from "../../../scripts/fetch";
 
 import ProductCard from "../cards/ProductCard.astro";
 
@@ -63,3 +63,4 @@ const products = await fetchProducts();
     },
   });
 </script>
+../../../scripts/fetch

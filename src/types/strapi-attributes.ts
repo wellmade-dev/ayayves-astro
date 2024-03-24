@@ -35,8 +35,12 @@ export interface CatalogueApiData {
     spotify_link?: string;
     applemusic_link?: string;
     youtube_link: string;
-    cover_image: ImageStrapiApi;
-    key_image: ImageStrapiApi;
+    cover_image: {
+      data: ImageStrapiApi;
+    },
+    key_image: {
+      data: ImageStrapiApi;
+    },
     secondary_images?: {
       data: ImageStrapiApi[];
     },

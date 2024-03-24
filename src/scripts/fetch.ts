@@ -116,13 +116,15 @@ export function createReleaseObject(object: CatalogueApiData) {
     secondaryImages = attributes.secondary_images.data.map(image => createImageObject(image));
   }
 
+  console.log(attributes);
+
   const release = {
     id: object.id,
     title: attributes.title,
     slug: attributes.slug,
     subtitle: attributes.subtitle,
     coverImage: createImageObject(attributes.cover_image),
-    keyImage: createImageObject(attributes.key_image),
+    keyImage: attributes.key_image.data ? createImageObject(attributes.key_image) : null,
     secondaryImages: secondaryImages,
     musicVideo: null,
     releaseType: attributes.release_type,
