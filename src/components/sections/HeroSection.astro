@@ -1,45 +1,34 @@
 ---
 import { Image } from "astro:assets";
+import { fetchCatalogue } from "../../scripts/wp-api";
+import Divider from "../atoms/Divider.astro";
+import ButtonDisplay from "../atoms/buttons/ButtonDisplay.astro";
 
-import { fetchData, createReleaseObject } from "../../scripts/wp-api";
-import Divider from "../../components/Divider.astro";
-import ButtonDisplay from "../../components/buttons/ButtonDisplay.astro";
+async function fetchHeroRelease() {
+  const catalogue = await fetchCatalogue();
 
-async function fetchLatestRelease() {
-  const releases = await fetchData("release");
-
-  const currentDate = new Date();
-
-  const sortedReleases = releases.sort(
-    (a, b) =>
-      new Date(b.acf.release_date).getTime() -
-      new Date(a.acf.release_date).getTime()
-  );
-
-  // Find the first release whose presave date is before today
-  const latestRelease = sortedReleases.find((release) => {
-    const presaveDate = new Date(release.acf.presave_date);
-    return currentDate > presaveDate;
-  });
-
-  return latestRelease;
+  for (const release of catalogue) {
+    if (release.released || release.presaveLive) {
+      return release;
+    }
+  }
+  return null;
 }
 
-const latestRelease = await fetchLatestRelease();
-const release = createReleaseObject(latestRelease);
+const release = await fetchHeroRelease();
 ---
 
 <section class="home section-hero" data-theme="overlay">
   <div class="background-w">
     <div class="bg-tint"></div>
     {
-      release.videoLink ? (
+      release && release.musicVideo ? (
         <div class="bg-content video-w">
           <Image
             inferSize
-            src={release.keyArt.src}
-            srcset={release.keyArt.srcset}
-            alt={release.keyArt.alt}
+            src={release.keyImage.src}
+            srcset={release.keyImage.srcset}
+            alt={release.keyImage.alt}
           />
           <video
             playsinline
@@ -49,68 +38,74 @@ const release = createReleaseObject(latestRelease);
             height="100%"
             preload="auto"
             style="object-fit: cover;"
-            data-src={release.videoLink}
+            data-src={release.musicVideo}
           >
-            <source src={release.videoLink} type="video/mp4" />
+            <source src={release.musicVideo} type="video/mp4" />
           </video>
         </div>
-      ) : release.keyArt ? (
+      ) : release && release.keyImage ? (
         <Image
           inferSize
-          src={release.keyArt.src}
-          srcset={release.keyArt.srcset}
-          alt={release.keyArt.alt}
+          src={release.keyImage.src}
+          srcset={release.keyImage.srcset}
+          alt={release.keyImage.alt}
           class="bg-content"
         />
-      ) : release.coverArt ? (
+      ) : release && release.coverImage ? (
         <Image
           inferSize
-          src={release.coverArt.src}
-          srcset={release.coverArt.srcset}
-          alt={release.coverArt.alt}
+          src={release.coverImage.src}
+          srcset={release.coverImage.srcset}
+          alt={release.coverImage.alt}
           class="bg-content"
         />
-      ) : null
+      ) : (
+        <div style="width: 100%, height: 100%, background-color: black" />
+      )
     }
   </div>
-  <div role="listitem" class="subsection-feature">
-    <div class="feature_grid" release-status>
-      <h2 class="heading-900" data-title>{release.title}</h2>
-      <div class="meta-w">
-        {
-          release.releaseType && (
-            <div data-release-type class="heading-300">
-              {release.releaseType}
+  {
+    release && (
+      <div role="listitem" class="subsection-feature">
+        <div class="feature_grid" release-status>
+          <h2 class="heading-900" data-title>
+            {release?.title}
+          </h2>
+          <div class="meta-w">
+            {release.releaseType && (
+              <div data-release-type class="heading-300">
+                {release.releaseType}
+              </div>
+            )}
+            {release.subtitle && (
+              <div class="p1" data-subtitle>
+                {release.subtitle}
+              </div>
+            )}
+            <div class="p1" data-release-date>
+              {release.released ? "Released " : "Releasing "}
+              {release.releaseDate}
             </div>
-          )
-        }
-        {
-          release.description && (
-            <div class="p1" data-subtitle>
-              {release.description}
-            </div>
-          )
-        }
-        <div class="p1" data-release-date>
-          {release.released ? "Released " : "Releasing "}
-          {release.releaseDate}
+          </div>
+        </div>
+        <Divider />
+        <div class="feature_grid">
+          <ButtonDisplay
+            href={release.slug}
+            label={release.released ? "Listen" : "Pre-Save"}
+            ariaLabel={
+              release.released
+                ? `Listen to ${release?.title}`
+                : `Pre-Save ${release?.title}`
+            }
+          />
+          <div class="p1" data-subtitle style="align-self: center;">
+            Scroll to explore
+          </div>
         </div>
       </div>
-    </div>
-    <Divider />
-    <div class="feature_grid">
-      <ButtonDisplay
-        href={release.link}
-        label={release.released ? "Listen" : "Pre-Save"}
-        ariaLabel={release.released
-          ? `Listen to ${release.title}`
-          : `Pre-Save ${release.title}`}
-      />
-      <div class="p1" data-subtitle style="align-self: center;">
-        Scroll to explore
-      </div>
-    </div>
-  </div>
+    )
+  }
   <div style="z-index: 5">
     <slot />
   </div>

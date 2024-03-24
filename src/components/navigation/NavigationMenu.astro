@@ -1,20 +1,35 @@
 ---
-import { fetchImageFromID } from "../../scripts/wp-api.js";
-import { Image } from "astro:assets";
-let images = await fetchImageFromID([160, 158]);
+import type { ImageAttributes } from "../../types/strapi-attributes";
+import { fetchStrapiData, createImageObject } from "../../scripts/wp-api";
+
+const data = await fetchStrapiData(
+  "navigation?populate=image_front,image_back"
+);
+
+const imageDataArray = [
+  data.data.attributes.image_back,
+  data.data.attributes.image_front,
+];
+
+const images = imageDataArray.map((image) => createImageObject(image));
+
+console.log(images);
+
+/* secondaryImages = attributes.secondary_images.data.map((image) =>
+  createImageObject(image)
+); */
 ---
 
 <div class="navigation-menu" id="navigation-menu">
   <div class="menu-content">
     <div class="image-col">
       {
-        images.map((image) => (
+        images.map((image: ImageAttributes) => (
           <div class="img-w">
-            <Image
-              inferSize
+            <img
               src={image.src}
-              {...(image.alt ? { alt: image.alt } : { alt: "" })}
               srcset={image.srcset}
+              alt={image.alt}
               sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
             />
           </div>

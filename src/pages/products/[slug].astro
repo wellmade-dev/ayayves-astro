@@ -1,34 +1,15 @@
 ---
-import { fetchStrapiData } from "../../scripts/wp-api";
+import { fetchProducts } from "../../scripts/wp-api";
 
 export async function getStaticPaths() {
-  const response = await fetchStrapiData("products?populate=product_image");
-  const products = response.data;
-
+  const products = await fetchProducts();
   return products.map((product) => ({
-    params: { slug: product.attributes.slug },
-    props: product.attributes,
+    params: { slug: product.slug },
+    props: product,
   }));
 }
 
-interface productAttributes {
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  slug: string;
-  collection: string;
-  short_description: string;
-  long_description: string;
-  product_image: object;
-  price: number;
-  markdown_price?: number;
-  inventory_quantity?: number;
-}
-
-const product: productAttributes = Astro.props;
-
-console.log(product);
+const product = Astro.props;
 ---
 
 <h2>{product.name}</h2>

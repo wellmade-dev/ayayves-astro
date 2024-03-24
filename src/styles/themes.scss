@@ -40,6 +40,8 @@
     --almostblack-10: rgba(1, 10, 14, .1);
     --almostblack-0: rgba(1, 10, 14, 0);
 
+    --black-50: rgba(0, 0, 0, 0.5);
+
     /* Default Theme */
     --bg: var(--deepsea);
     --bg-dark: var(--almostblack);
@@ -48,6 +50,7 @@
     --text-secondary: var(--barelysage-75);
     --text-disabled: var(--barelysage-25);
     --card-bg: var(--deepsea);
+    --glass-blur: blur(5px);
     --divider-full: var(--barelysage);
     --divider-demi: var(--barelysage-25);
     --divider-partial: var(--barelysage-10);
@@ -63,7 +66,7 @@ body {
     /* Overlay Theme */
     &[data-theme=overlay],
     [data-theme=overlay] {
-        --card-bg: var(--deepsea-50)
+        --card-bg: var(--black-50);
         --divider-partial: var(--barelysage-25);
     }
 

@@ -1,0 +1,65 @@
+---
+import "swiper/css";
+import "swiper/css/navigation";
+import { fetchProducts } from "../../../scripts/wp-api";
+
+import ProductCard from "../cards/ProductCard.astro";
+
+const products = await fetchProducts();
+---
+
+<div class="slider swiper">
+  <div role="list" class="slider-rail swiper-wrapper">
+    {
+      products.map((product) => (
+        <div class="slider-w swiper-slide">
+          <ProductCard product={product} />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style lang="scss">
+  .slider {
+    overflow: visible;
+
+    .slider-rail {
+      width: auto;
+      margin-right: -1rem;
+
+      .slider-w {
+        width: -moz-min-content;
+        width: min-content;
+        height: unset;
+        margin-right: var(--padding-400);
+      }
+    }
+  }
+
+  .swiper-free-mode > .swiper-wrapper {
+    transition-timing-function: cubic-bezier(0.368, 0.98, 0.415, 0.985);
+  }
+</style>
+
+<script>
+  import { Swiper } from "swiper";
+  import { Navigation } from "swiper/modules";
+
+  new Swiper(".swiper", {
+    modules: [Navigation],
+    slidesPerView: "auto",
+    keyboard: true,
+    speed: 680,
+    followFinger: true,
+    mousewheel: {
+      forceToAxis: true,
+      sensitivity: 1.5,
+    },
+    navigation: {
+      nextEl: ".swiper-next",
+      prevEl: ".swiper-prev",
+      disabledClass: "is--disabled",
+    },
+  });
+</script>

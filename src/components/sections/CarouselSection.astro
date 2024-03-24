@@ -1,5 +1,6 @@
 ---
-import CarouselArrows from "./CarouselArrows.astro";
+import "swiper/css";
+import CarouselArrows from "../atoms/carousels/CarouselArrows.astro";
 interface Props {
   title: string;
   subtitle: string;
@@ -25,7 +26,7 @@ const { title, subtitle } = Astro.props;
 </div>
 
 <style lang="scss">
-  @use "../../../styles/vars" as *;
+  @use "../../styles/vars" as *;
 
   .carousel-section {
     width: 100%;
@@ -49,7 +50,7 @@ const { title, subtitle } = Astro.props;
     transition: background-color 0.2s;
     display: flex;
 
-    @media (max-width: $tablet) {
+    @media (max-width: $phablet) {
       margin-bottom: 1.5rem;
     }
 
@@ -65,7 +66,7 @@ const { title, subtitle } = Astro.props;
         margin-top: -0.15rem;
       }
 
-      @media (max-width: 640px) {
+      @media (max-width: $phablet) {
         .hide-mobile {
           display: none;
         }
@@ -77,15 +78,16 @@ const { title, subtitle } = Astro.props;
     display: block;
     padding-bottom: 0.5rem;
 
-    @media (max-width: $tablet) {
+    @media (max-width: $phablet) {
       display: none;
     }
   }
 
   .mobile-arrows {
     display: none;
+    padding-top: 1.5rem;
 
-    @media (max-width: $tablet) {
+    @media (max-width: $phablet) {
       display: block;
     }
   }

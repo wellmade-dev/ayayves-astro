@@ -1,7 +1,7 @@
 ---
-import LogoSVG from "../svgs/LogoSVG.astro";
-import NavbarButton from "../buttons/nav/NavbarButton.astro";
-import NavbarLink from "../buttons/nav/NavbarLink.astro";
+import LogoSVG from "../../components/atoms/svgs/LogoSVG.astro";
+import NavbarButton from "../../components/atoms/buttons/nav/NavbarButton.astro";
+import NavbarLink from "../../components/atoms/buttons/nav/NavbarLink.astro";
 import NavigationMenu from "./NavigationMenu.astro";
 ---
 
@@ -310,11 +310,12 @@ import NavigationMenu from "./NavigationMenu.astro";
       tl.to(
         navDesktopLinks.children,
         {
-          duration: 0.175,
+          duration: isOpening ? 0.175 : 0.5,
           autoAlpha: isOpening ? 0 : 1,
           y: isOpening ? "-0.5rem" : 0,
-          stagger: isOpening ? 0.15 : -0.15,
-          ease: "power1.out",
+          stagger: isOpening ? 0.15 : 0.2,
+          ease: isOpening ? "power1.out" : "power2.out",
+          delay: isOpening ? 0 : 1.1,
         },
         0
       );

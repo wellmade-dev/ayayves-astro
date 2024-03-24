@@ -1,16 +1,22 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import MerchCard from "../components/cards/MerchCard.astro";
+import TestingLayout from "../layouts/TestingLayout.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import CarouselSection from "../components/sections/CarouselSection.astro";
+import LiveGridSection from "../components/sections/LiveGridSection.astro";
+import ProductSlider from "../components/atoms/carousels/ProductSlider.astro";
 ---
 
-<Layout title="Aya Yves">
+<TestingLayout title="Aya Yves">
   <main>
-    <MerchCard />
+    <HeroSection>
+      <!-- <CarouselSection title="Support the Art" subtitle="Merch">
+        <ProductSlider />
+      </CarouselSection> -->
+    </HeroSection><!--  -->
+    <!-- <LiveGridSection /> -->
   </main>
-</Layout>
+</TestingLayout>
 
-<style>
-  main {
-    padding-top: 200px;
-  }
+<style lang="scss">
+  @use "../styles/vars" as *;
 </style>

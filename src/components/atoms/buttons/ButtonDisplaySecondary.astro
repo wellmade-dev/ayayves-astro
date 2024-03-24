@@ -1,0 +1,78 @@
+---
+import StarSVG from "../svgs/StarSVG.astro";
+
+interface Props {
+  label: string;
+  ariaLabel: string;
+  href: string;
+}
+
+const { label, ariaLabel, href } = Astro.props;
+---
+
+<a class="button--display secondary" aria-label={ariaLabel} href={href}>
+  <div class="star-w">
+    <StarSVG width="0.75rem" />
+  </div>
+  <div class="label">{label}</div>
+  <div class="star-w">
+    <StarSVG width="0.75rem" />
+  </div>
+</a>
+
+<style lang="scss">
+  .button--display.secondary {
+    gap: 0.575rem;
+    border: 1px solid var(--button-glass-outline);
+    color: var(--text);
+    background-color: rgba(1, 10, 14, 0);
+    border-radius: var(--radius-circular);
+    justify-content: center;
+    align-items: center;
+    align-self: flex-start;
+    padding: 0.15rem 0.125rem 0.15rem 0.95rem;
+    transition: all 0.25s;
+    display: flex;
+    position: relative;
+    overflow: clip;
+    transform: translate(0);
+    font-family: var(--neue-montreal);
+    font-size: 0.875rem;
+    font-style: unset;
+
+    &:hover {
+      border-color: var(--button-solid-bg);
+      background-color: var(--button-glass-hover);
+      color: var(--text);
+    }
+
+    .label {
+      padding-bottom: 0.05rem;
+    }
+
+    .star-w {
+      width: 1.75rem;
+      aspect-ratio: 1 / 1;
+      background-color: var(--button-solid-bg);
+      color: var(--button-solid-text);
+      border-radius: var(--radius-circular);
+      flex: none;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+
+      &:nth-child(1) {
+        position: absolute;
+        top: auto;
+        bottom: auto;
+        left: -1.75rem;
+        right: auto;
+      }
+    }
+  }
+</style>
+
+<script>
+  import { initDisplayButtons } from "../../../scripts/animations";
+  initDisplayButtons();
+</script>

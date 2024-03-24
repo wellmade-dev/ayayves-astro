@@ -17,6 +17,7 @@ const { image } = Astro.props;
   srcset={image.srcset}
   alt={image.alt ?? ""}
   sizes="(min-width: 920px) 35vw, (min-width: 520px) 75vw, 60vw"
+  loading="lazy"
 />
 
 <style lang="scss">

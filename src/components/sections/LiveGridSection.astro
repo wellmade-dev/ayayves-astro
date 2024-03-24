@@ -1,5 +1,5 @@
 ---
-import LiveGridImage from "./LiveGridImage.astro";
+import LiveGridImage from "../atoms/LiveGridImage.astro";
 import { fetchStrapiData, createImageObject } from "../../scripts/wp-api";
 
 const data = await fetchStrapiData("homepage?populate=*");
@@ -13,7 +13,7 @@ const imageTopRight = createImageObject(objects.grid_top_right);
 const imageBottomRight = createImageObject(objects.grid_bottom_right);
 ---
 
-<section class="section-scrollgrid">
+<section class="section-scrollgrid hide">
   <div class="ribbon-c">
     <div class="ribbon-w">
       <div class="ribbon">
@@ -70,6 +70,11 @@ const imageBottomRight = createImageObject(objects.grid_bottom_right);
     background-color: var(--almostblack);
     margin: -100vh auto;
     position: relative;
+    transform: translateY(0);
+
+    &.hide {
+      transform: translateY(100vh);
+    }
 
     .ribbon-c {
       z-index: 1;
@@ -138,6 +143,28 @@ const imageBottomRight = createImageObject(objects.grid_bottom_right);
 
 <script>
   import gsap from "gsap";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const scrollGrid = document.querySelector(".section-scrollgrid");
+
+    if (scrollGrid) {
+      const checkScroll = () => {
+        const viewportHeight = window.innerHeight;
+        const thirdViewportHeight = viewportHeight / 3;
+        const scrolledAmount = window.scrollY;
+
+        if (scrolledAmount > thirdViewportHeight) {
+          scrollGrid.classList.remove("hide");
+          window.removeEventListener("scroll", checkScroll);
+        }
+      };
+
+      // Check on initial load
+      checkScroll();
+
+      window.addEventListener("scroll", checkScroll);
+    }
+  });
 
   function initLiveGrid() {
     const scrollGrid = document.querySelector(".section-scrollgrid");
