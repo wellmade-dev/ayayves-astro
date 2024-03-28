@@ -4,9 +4,9 @@ export interface CatalogueAttributes {
   slug: string;
   subtitle: string;
   coverImage: ImageAttributes;
-  keyImage: ImageAttributes;
-  secondaryImages: ImageAttributes[];
-  musicVideo: object;
+  keyImage?: ImageAttributes;
+  secondaryImages?: ImageAttributes[];
+  musicVideo?: object;
   releaseType: string;
   released: boolean;
   releaseDate: string;
@@ -34,7 +34,7 @@ export interface CatalogueApiData {
     presave_link?: string;
     spotify_link?: string;
     applemusic_link?: string;
-    youtube_link: string;
+    youtube_link?: string;
     cover_image: {
       data: ImageStrapiApi;
     },
@@ -44,7 +44,9 @@ export interface CatalogueApiData {
     secondary_images?: {
       data: ImageStrapiApi[];
     },
-    music_video_clip: object;
+    music_video_clip?: {
+      data: VideoStrapiApi
+    }
   }
 }
 
@@ -90,14 +92,6 @@ export interface ImageStrapiApi {
   }
 }
 
-export interface VariantStrapiApi {
-  id: number;
-  variant_name: string;
-  price?: number;
-  markdown_price?: number;
-  inventory_quantity: number;
-}
-
 export interface ImageAttributes {
   src: string;
   srcset: string;
@@ -107,4 +101,44 @@ export interface ImageAttributes {
 export interface StrapiImageFormats {
   url: string;
   width: number;
+}
+
+export interface VideoStrapiApi {
+  id: number;
+  attributes: {
+    url: string;
+    alternativeText?: string;
+  }
+}
+
+export interface VariantStrapiApi {
+  id: number;
+  variant_name: string;
+  price?: number;
+  markdown_price?: number;
+  inventory_quantity: number;
+}
+
+export interface EventAttributes {
+  id: number;
+  city: string;
+  city_indigenous: string;
+  venue: string;
+  date_time: string;
+  expired: boolean;
+  ticket_link: string;
+}
+
+export interface EventApiData {
+  id: number;
+    attributes: {
+      createdAt: string;
+      updatedAt: string;
+      publishedAt: string;
+      city: string;
+      city_indigenous: string;
+      venue: string;
+      date_time: string;
+      ticket_link: string;
+    }
 }

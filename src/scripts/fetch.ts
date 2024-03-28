@@ -1,10 +1,12 @@
 import type {
-  ImageStrapiApi,
   StrapiImageFormats,
   ProductApiData,
   CatalogueApiData,
   ImageAttributes,
+  EventApiData
 } from '../types/strapi-attributes';
+
+import { format } from 'date-fns';
 
 const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
 const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
@@ -64,6 +66,17 @@ export function createSrcset(formats: StrapiImageFormats): string {
   return srcsetComponents.join(", ");
 }
 
+export function createVideoObject(object: any) {
+  const attributes = object.data.attributes;
+
+  const video = {
+    src: STRAPI_URL + attributes.url,
+    alt: attributes.alternativeText ? attributes.alternativeText : '',
+  }
+
+  return video;
+}
+
 export async function fetchProducts() {
   const response = await fetchStrapiData(
   "products?populate=product_image,variant"
@@ -116,7 +129,7 @@ export function createReleaseObject(object: CatalogueApiData) {
     secondaryImages = attributes.secondary_images.data.map(image => createImageObject(image));
   }
 
-  console.log(attributes);
+  const formattedReleaseDate = format(releaseDate, 'EEE d MMM');
 
   const release = {
     id: object.id,
@@ -126,7 +139,7 @@ export function createReleaseObject(object: CatalogueApiData) {
     coverImage: createImageObject(attributes.cover_image),
     keyImage: attributes.key_image.data ? createImageObject(attributes.key_image) : null,
     secondaryImages: secondaryImages,
-    musicVideo: null,
+    musicVideo: attributes.music_video_clip?.data ? createVideoObject(attributes.music_video_clip) : null,
     releaseType: attributes.release_type,
     released: currentDate > releaseDate,
     releaseDate: attributes.release_date,
@@ -141,3 +154,34 @@ export function createReleaseObject(object: CatalogueApiData) {
   return release
 }
 
+
+export async function fetchEvents() {
+  const response = await fetchStrapiData("events?populate=*&sort=date_time:desc");
+  const data: EventApiData[] = response.data
+  const events = data.map(event => createEventObject(event));
+  return events;
+}
+
+export function createEventObject(object: EventApiData) {
+  let expired;
+  const eventDate = new Date(object.attributes.date_time).getTime();
+
+  if (object.attributes.date_time) {
+    const currentDate = new Date().getTime();
+    expired = (currentDate > eventDate);
+  }
+
+  const formattedDate = format(eventDate, 'EEE d MMM');
+
+  const event = {
+    id: object.id,
+    city: object.attributes.city,
+    city_indigenous: object.attributes.city_indigenous,
+    venue: object.attributes.venue,
+    date_time: formattedDate,
+    expired: expired,
+    ticket_link: object.attributes.ticket_link,
+  };
+
+  return event;
+}

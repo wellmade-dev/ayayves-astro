@@ -165,3 +165,92 @@ export function initDisplayButtons() {
     window.initDisplayButtons = true;
   }
 }
+
+export function imageParallax(image, start, end, startPosition, endPosition) {
+	if (image) {
+	  gsap.timeline({
+		scrollTrigger: {
+			trigger: image,
+			start: start,
+			end: end,
+			scrub: true
+		}
+	  })
+		.fromTo(image, { y: startPosition }, { y: endPosition, ease: "none" }, "start")
+	} else {
+		console.log("can't find image")
+	}
+}
+
+export function initMarquee(marquee, speed) {
+    if (!marquee) return null;
+  
+    // Remove existing GSAP animations if any
+    if (marquee.marqueeTimeline) {
+      marquee.marqueeTimeline.kill();
+    }
+
+    let marqueeSplits = marquee.querySelectorAll('.marquee-split');
+    marqueeSplits.forEach((split, index) => {
+      if (index > 0) {
+        split.remove();
+      }
+    });
+
+    const marqueeSplit = marquee.querySelector('.marquee-split');
+    const marqueeBlock = marqueeSplit?.querySelector('.marquee-block');
+    if (!marqueeSplit || !marqueeBlock) return;
+  
+    marqueeSplit.innerHTML = '';
+    marqueeSplit.appendChild(marqueeBlock.cloneNode(true));
+  
+    const marqueeWidth = marquee.offsetWidth;
+    let totalWidth = marqueeBlock.offsetWidth;
+  
+    while (totalWidth < marqueeWidth) {
+      const cloneBlock = marqueeBlock.cloneNode(true);
+      marqueeSplit.appendChild(cloneBlock);
+      totalWidth += cloneBlock.offsetWidth;
+    }
+  
+    const duplicatedMarqueeSplit = marqueeSplit.cloneNode(true);
+    marquee.appendChild(duplicatedMarqueeSplit);
+  
+    marqueeSplits = marquee.querySelectorAll('.marquee-split');
+    gsap.set(marqueeSplits, { x: 0 });
+
+    let marqueeTimeline = gsap.timeline({
+      repeat: -1, 
+      defaults: { ease: "linear" }
+    });
+
+    marqueeSplits.forEach((split) => {
+      marqueeTimeline.to(split, { x: "-100%", duration: speed }, 0);
+    });
+
+    // Store the timeline in the marquee element for later reference
+    marquee.marqueeTimeline = marqueeTimeline;
+
+    return marqueeTimeline;
+}
+
+/*   const marquee = document.querySelector(".header-marquee"),
+			timeline: null,
+			speed: 60
+		},
+		{
+			element: () => document.querySelector(".footer-marquee"),
+			timeline: null,
+			speed: 30
+		},
+		{
+			element: () => document.querySelector(".button--marquee"),
+			timeline: null,
+			speed: 22
+		}, 
+		{
+			element: () => document.querySelector(".archive-marquee"),
+			timeline: null,
+			speed: 120
+		}
+	]; */

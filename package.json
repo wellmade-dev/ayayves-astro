@@ -12,6 +12,7 @@
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "astro": "^4.5.4",
+    "date-fns": "^3.6.0",
     "gsap": "^3.12.5",
     "html-entities": "^2.5.2",
     "lenis": "^0.0.2",

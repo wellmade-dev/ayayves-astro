@@ -1,0 +1,228 @@
+---
+import {
+  fetchStrapiData,
+  fetchEvents,
+  createImageObject,
+} from "../../scripts/fetch";
+
+import type { EventAttributes } from "../../types/strapi-attributes";
+import HeadingMarquee from "../atoms/HeadingMarquee.astro";
+import ButtonDisplayTertiary from "../atoms/buttons/ButtonDisplayTertiary.astro";
+import Divider from "../atoms/Divider.astro";
+
+const dataHomePage = await fetchStrapiData("homepage?populate=*");
+const imageLiveEvent = createImageObject(
+  dataHomePage.data.attributes.live_hero_image
+);
+const eventObjects = await fetchEvents();
+
+const activeEvents = eventObjects.filter(event => !event.expired);
+const inactiveEvents = eventObjects.filter(event => event.expired);
+
+const displayInactiveCount = 6 - activeEvents.length;
+
+const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount))
+
+---
+
+<section class="section-events" data-theme="secondary">
+  <div class="img-w">
+    <img
+      src={imageLiveEvent.src}
+      srcset={imageLiveEvent.srcset}
+      alt={imageLiveEvent.alt}
+      loading="lazy"
+      sizes="95vw"
+    />
+  </div>
+  <div class="heading-w">
+    <HeadingMarquee firstString="See Me " secondString="Live" />
+  </div>
+  <div class="events-w">
+    <div class="events_info-w">
+      {
+        events.map((event) => (
+          <div class="event-item" event-id={event.id}>
+            <div class="event-item-inner">
+              <div class="heading-400">{event.date_time}</div>
+              <div class="heading-500">
+                <span>{event.city}</span>, <span>{event.city_indigenous}</span>
+              </div>
+              {event.expired ? 
+                <ButtonDisplayTertiary label="Sold Out" disabled /> :
+                <ButtonDisplayTertiary label="Tickets" ariaLabel=`Buy tickets for the ${event.city} event on ${event.date_time}` href={event.ticket_link}/>            
+              }
+            </div>
+
+            <Divider />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "../../styles/vars" as *;
+  .section-events {
+  z-index: 5;
+  border-top-left-radius: var(--radius-large);
+  border-top-right-radius: var(--radius-large);
+  background-color: var(--bg-dark);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+  position: sticky;
+  padding-top: var(--padding-800);
+  padding-bottom: var(--padding-800);
+
+  .heading-w {
+    position: relative;
+    margin-left: calc(-1 * var(--page-margin));
+    margin-right: calc(-1 * var(--page-margin));
+  }
+
+  .img-w {
+      flex-grow: 1;
+      border-radius: var(--radius-medium);
+      overflow: clip;
+      width: 100%;
+      height: 70vh;
+      position: relative;
+      margin-bottom: -11vw;
+
+      @media (max-width: $mobile) {
+          aspect-ratio: 1 / 1.4;
+          height: unset;
+      }
+  }
+
+  img {
+      position: absolute;
+      top: auto;
+      bottom: 0%;
+      left: 0%;
+      right: 0%;
+      height: 130%;
+      width: 100%;
+      -o-object-fit: cover;
+      object-fit: cover;
+  }
+
+  .events-w {
+      padding: 1vw var(--page-margin) 1rem;
+      display: flex;
+      justify-items: right;
+      margin: 0 auto;
+      max-width: $desktop-max;
+      justify-content: flex-end;
+
+      @media (max-width: $mobile) {
+          padding: 1vw 0rem 1rem;
+      }
+  }
+
+  .events_info-w {
+      width: 100%;
+      max-width: 40rem;
+      align-self: start;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0.5rem;
+      container-type: inline-size;
+
+      @media (max-width: $tablet) {
+          width: 100%;
+          margin-top: 0;
+          align-self: unset;
+      }
+
+      @media (max-width: $mobile) {
+          padding-left: 0;
+      }
+  }
+}
+
+.event-item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .event-item-inner {
+        display: grid;
+        grid-template-columns: clamp(6.5rem, 7em, 7.5rem) 1fr auto;
+        padding: 2.25rem 0.5rem;
+        gap: 1rem;
+        z-index: 5;
+        position: relative;
+        transition: color 0.4s ease;
+        align-items: center;
+        cursor: default;
+
+        .heading-400 {
+            opacity: 0.8;
+        }
+
+        @container (max-width: 30rem) {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: 0.4rem;
+            padding: 1.75rem 0.5rem;
+
+            .heading-400 {
+                font-size: 1rem;
+            }
+
+            .button--display {
+                margin-top: 0.75rem;
+            }
+        }
+    }
+}
+</style>
+
+<script>
+  import gsap from "gsap";
+  import { imageParallax } from "../../scripts/animations";
+
+  imageParallax(document.querySelector(".section-events img"), "top bottom", "bottom top", "0%", "30%",);
+
+  function showItemHover() {
+    let items = document.querySelectorAll(".event-item");
+    let fadeItems = ".heading-400, .heading-500, a";
+    
+    items.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        // Apply the effect to all target elements in all items
+        items.forEach(i => {
+          gsap.to(i.querySelectorAll(fadeItems), { opacity: 0.4, duration: 0.3 });
+        });
+        // Override the effect for the current item
+        gsap.to(item.querySelectorAll(fadeItems), { opacity: 1, duration: 0.3 });
+        gsap.to(item, { opacity: 1, duration: 0.3 });
+        gsap.to(item.querySelector(".divider_fill"), { 
+          width: "100%", 
+          duration: 0.6, 
+          ease: "power3.out",
+        });
+      });
+      item.addEventListener("mouseleave", () => {
+        gsap.killTweensOf(item.querySelector(".divider_fill"));
+        gsap.to(item.querySelector(".divider_fill"), { 
+          width: "0%", 
+          duration: 0.5, 
+          ease: "power4.out",
+        });
+        if (!Array.from(items).some(el => el.matches(':hover'))) {
+          items.forEach(i => {
+            gsap.to(i.querySelectorAll(fadeItems), { opacity: 1, duration: 0.3 });
+          });
+        }
+      });
+    });
+  }
+
+  showItemHover();
+</script>

@@ -1,0 +1,130 @@
+---
+import StarSVG from "../svgs/StarSVG.astro";
+
+interface Props {
+  label: string;
+  ariaLabel?: string;
+  href?: string;
+  disabled?: boolean;
+}
+
+const { label, ariaLabel, href, disabled } = Astro.props;
+---
+
+{
+  disabled ? (
+    <div class="button--display tertiary disabled" aria-label={ariaLabel}>
+      <div data-label>{label}</div>
+    </div>
+  ) : (
+    <a class="button--display tertiary" aria-label={ariaLabel} href={href}>
+      <div class="star-w left">
+        <StarSVG width="0.75rem" />
+      </div>
+      <div data-label>{label}</div>
+      <div class="star-w right">
+        <StarSVG width="0.75rem" />
+      </div>
+    </a>
+  )
+}
+
+<style lang="scss">
+  .button--display.tertiary {
+    $svg-width: 0.75rem;
+    $gap: 0.5rem;
+    gap: $gap;
+    color: var(--button-solid-text);
+    background-color: var(--button-solid-bg);
+    border-radius: var(--radius-circular);
+    border-width: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    transition: all 0.25s;
+    display: flex;
+    position: relative;
+    overflow: clip;
+    transform: translate(0);
+    font-family: var(--neue-montreal);
+    font-size: 0.875rem;
+    font-style: unset;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    height: 2rem;
+
+    .star-w {
+      height: 100%;
+      flex: none;
+      align-items: center;
+      display: flex;
+      width: $svg-width;
+
+      &.left {
+        position: absolute;
+        top: auto;
+        bottom: auto;
+        left: calc(-0.5 * $svg-width);
+        right: auto;
+        opacity: 0;
+      }
+    }
+
+    &.disabled {
+      background-color: unset;
+      color: var(--text-disabled);
+      border: 1px solid var(--text-disabled);
+      cursor: default;
+    }
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+  let buttonsSolid = document.querySelectorAll(
+    ".button--display.tertiary:not(.disabled)"
+  );
+
+  const animateButton = (
+    buttonSolid: Element,
+    xValue: number,
+    opacityValue: number,
+    duration: number,
+    ease: string
+  ) => {
+    gsap.to(buttonSolid.querySelector(".star-w.right"), {
+      x: xValue,
+      opacity: opacityValue,
+      duration: duration,
+      ease: ease,
+    });
+
+    gsap.to(buttonSolid.querySelector(".star-w.left"), {
+      x: xValue,
+      opacity: 1 - opacityValue, // Inverts the opacity for hidden stars
+      duration: duration,
+      ease: ease,
+    });
+
+    gsap.to(buttonSolid.querySelector("[data-label]"), {
+      x: xValue,
+      duration: duration,
+      ease: ease,
+    });
+  };
+
+  buttonsSolid.forEach((buttonSolid) => {
+    let starWidth = 12;
+    let gap = parseInt(window.getComputedStyle(buttonSolid).gap, 10);
+    let move = starWidth + gap;
+    let duration = 0.3;
+
+    buttonSolid.addEventListener("mouseenter", () => {
+      animateButton(buttonSolid, move, 0, duration, "power4");
+    });
+
+    buttonSolid.addEventListener("mouseleave", () => {
+      animateButton(buttonSolid, 0, 1, duration, "power2");
+    });
+  });
+</script>
