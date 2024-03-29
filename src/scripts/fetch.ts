@@ -77,6 +77,20 @@ export function createVideoObject(object: any) {
   return video;
 }
 
+export async function fetchSingleTypeObject(singleType: string, field?: string) {
+  const data = await fetchStrapiData(`${singleType}?populate=*`)
+  if (field) {
+    const fieldValue = data.data.attributes[field];
+    if (fieldValue.data) { 
+      return fieldValue;
+    } else {
+      return "Data was null, check to see if field has been set."
+    }
+  } else {
+    return data.data.attributes;
+  }
+}
+
 export async function fetchProducts() {
   const response = await fetchStrapiData(
   "products?populate=product_image,variant"

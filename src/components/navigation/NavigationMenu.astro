@@ -12,11 +12,52 @@ const imageDataArray = [
 ];
 
 const images = imageDataArray.map((image) => createImageObject(image));
+
+const streamingLinks = [
+  {
+    name: "Spotify",
+    url: "https://open.spotify.com/artist/2Mgm4AwTZRFzZV0Dc3MI3n?si=bEQN7ainTkqpXOlfGLoHBA",
+  },
+  {
+    name: "Apple Music",
+    url: "https://music.apple.com/au/artist/aya-yves/1502547272",
+  },
+  {
+    name: "Unearthed",
+    url: "https://www.abc.net.au/triplejunearthed/artist/aya-yves/",
+  },
+  {
+    name: "YouTube",
+    url: "https://www.youtube.com/ayayves",
+  },
+];
+
+const socialLinks = [
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/ayayvesmusic/",
+  },
+  {
+    name: "Facebook",
+    url: "https://www.facebook.com/ayayvesmusic/",
+  },
+  {
+    name: "TikTok",
+    url: "https://www.tiktok.com/@ayayvesmusic",
+  },
+];
 ---
 
-<div class="navigation-menu" id="navigation-menu">
+<div
+  class="navigation-menu"
+  id="navigation-menu"
+  aria-labelledby="menu-button"
+  aria-label="Expanded Navigation Menu"
+  aria-modal="true"
+  role="dialog"
+>
   <div class="menu-content">
-    <div class="image-col">
+    <div class="image-col" aria-hidden="true">
       {
         images.map((image: ImageAttributes) => (
           <div class="img-w">
@@ -31,73 +72,58 @@ const images = imageDataArray.map((image) => createImageObject(image));
       }
     </div>
     <div class="links-col">
-      <div class="primary-links-w">
-        <a class="primary-link" href="/release/">
-          <div class="label">Catalogue</div>
-        </a>
-        <button class="primary-link" aria-label="Contact" data-modal="Contact">
-          <span>
-            <div class="label">Contact</div>
-          </span>
-        </button>
-        <a class="primary-link" href="/shop/">
-          <div class="label">Merch</div>
-        </a>
-      </div>
+      <ul class="primary-links-w">
+        <li>
+          <a class="primary-link" href="/release/">
+            <div class="label">Catalogue</div>
+          </a>
+        </li>
+        <li>
+          <button
+            class="primary-link"
+            aria-label="Contact"
+            data-modal="Contact"
+            role="menuitem"
+          >
+            <span>
+              <div class="label">Contact</div>
+            </span>
+          </button>
+        </li>
+        <li>
+          <a class="primary-link" href="/shop/">
+            <div class="label">Merch</div>
+          </a>
+        </li>
+      </ul>
+
       <div class="secondary-links-w">
-        <a
-          class="secondary-link"
-          href="https://open.spotify.com/artist/2Mgm4AwTZRFzZV0Dc3MI3n?si=bEQN7ainTkqpXOlfGLoHBA"
-          target="_blank"
-        >
-          <div class="label">Spotify</div>
-        </a>
-        <a
-          class="secondary-link"
-          href="https://www.instagram.com/ayayvesmusic/"
-          target="_blank"
-        >
-          <div class="label">Instagram</div>
-        </a>
-        <a
-          class="secondary-link"
-          href="https://music.apple.com/au/artist/aya-yves/1502547272"
-          target="_blank"
-        >
-          <div class="label">Apple Music</div>
-        </a>
-        <a
-          class="secondary-link"
-          href="https://www.facebook.com/ayayvesmusic/"
-          target="_blank"
-        >
-          <div class="label">Facebook</div>
-        </a>
-        <a
-          class="secondary-link"
-          href="https://www.abc.net.au/triplejunearthed/artist/aya-yves/"
-          target="_blank"
-        >
-          <div class="label">Unearthed</div>
-        </a>
-        <a
-          class="secondary-link"
-          href="https://www.tiktok.com/@ayayvesmusic"
-          target="_blank"
-        >
-          <div class="label">TikTok</div>
-        </a>
-        <a
-          class="secondary-link"
-          href="https://www.youtube.com/ayayves"
-          target="_blank"
-        >
-          <div class="label">YouTube</div>
-        </a>
+        <ul class="streaming-links-w">
+          {
+            streamingLinks.map((link) => (
+              <li>
+                <a class="secondary-link" href={link.url} target="_blank">
+                  <div class="label">{link.name}</div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="social-links-w">
+          {
+            socialLinks.map((link) => (
+              <li>
+                <a class="secondary-link" href={link.url} target="_blank">
+                  <div class="label">{link.name}</div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   </div>
-  <div class="menu-footer">
+  <div class="menu-footer" aria-hidden="true">
     <div class="p2">Aya Yve 2024</div>
     <div class="p2">Site by Wellmade</div>
   </div>
@@ -230,7 +256,10 @@ const images = imageDataArray.map((image) => createImageObject(image));
           grid-auto-flow: row;
           -moz-column-gap: 4rem;
           column-gap: 4rem;
+        }
 
+        .streaming-links-w,
+        .social-links-w {
           .secondary-link {
             font-size: 1rem;
             letter-spacing: 0.01em;

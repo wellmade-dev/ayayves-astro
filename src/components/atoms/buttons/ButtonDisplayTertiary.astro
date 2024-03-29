@@ -13,7 +13,7 @@ const { label, ariaLabel, href, disabled } = Astro.props;
 
 {
   disabled ? (
-    <div class="button--display tertiary disabled" aria-label={ariaLabel}>
+    <div class="button--display tertiary disabled" aria-disabled="true">
       <div data-label>{label}</div>
     </div>
   ) : (

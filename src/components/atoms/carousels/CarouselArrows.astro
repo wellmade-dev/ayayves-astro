@@ -3,13 +3,19 @@ import LongArrowSVG from "../svgs/LongArrowSVG.astro";
 ---
 
 <div class="swiper-arrow-w">
-  <button class="button--arrow swiper-prev">
+  <button
+    class="button--arrow swiper-prev"
+    aria-label="Previous slide in the carousel"
+  >
     <span class="arrow-w">
       <div class="arrow"><LongArrowSVG isFlipped={true} /></div>
       <div class="arrow"><LongArrowSVG isFlipped={true} /></div>
     </span>
   </button>
-  <button class="button--arrow swiper-next">
+  <button
+    class="button--arrow swiper-next"
+    aria-label="Next slide in the carousel"
+  >
     <span class="arrow-w">
       <div class="arrow"><LongArrowSVG isFlipped={false} /></div>
       <div class="arrow"><LongArrowSVG isFlipped={false} /></div>

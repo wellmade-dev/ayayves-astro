@@ -29,7 +29,7 @@ const ariaLabel = `Learn more about ${product.name}`;
       />
     </div>
   </div>
-  <a class="img-w" href=`/products/${product.slug}`>
+  <a class="img-w" aria-label={ariaLabel} href=`/products/${product.slug}`>
     <img
       class="img"
       src={product.image.src}

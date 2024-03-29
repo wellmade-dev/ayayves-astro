@@ -47,6 +47,7 @@ const release = await fetchHeroRelease();
             height="100%"
             preload="auto"
             style="object-fit: cover;"
+            aria-hidden="true"
             data-src={release.musicVideo}
           >
             <source src={release.musicVideo.src} type="video/mp4" />

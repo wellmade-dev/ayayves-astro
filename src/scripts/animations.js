@@ -1,16 +1,14 @@
 import { gsap } from "gsap";
 
 // Dim Link List Siblings on Hover
-function animateLinkGroups(target, isHoveringIn, config) {
-  if (!target) {
+function animateLinkGroups(targetClass, isHoveringIn, config) {
+  if (!targetClass) {
     return
   };
 
+  const target = targetClass.closest('li');
   const children = Array.from(target.parentNode.children);
-
-  const siblings = children.filter(
-    (sibling) => sibling !== target
-  );
+  const siblings = children.filter(sibling => sibling !== target);
 
   const defaultConfig = {
     dim: false,
@@ -233,24 +231,3 @@ export function initMarquee(marquee, speed) {
 
     return marqueeTimeline;
 }
-
-/*   const marquee = document.querySelector(".header-marquee"),
-			timeline: null,
-			speed: 60
-		},
-		{
-			element: () => document.querySelector(".footer-marquee"),
-			timeline: null,
-			speed: 30
-		},
-		{
-			element: () => document.querySelector(".button--marquee"),
-			timeline: null,
-			speed: 22
-		}, 
-		{
-			element: () => document.querySelector(".archive-marquee"),
-			timeline: null,
-			speed: 120
-		}
-	]; */

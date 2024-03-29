@@ -470,6 +470,13 @@ ul {
     padding-inline-start: unset;
 }
 
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
 /* Disable Arrow Buttons on Number Field */
 input[type=number] {
     -moz-appearance: textfield;

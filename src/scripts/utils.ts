@@ -1,5 +1,5 @@
-function throttle(func, limit) {
-    let inThrottle;
+/* function throttle(func, limit: number) {
+    let inThrottle: boolean | null;
     return function() {
         const args = arguments;
         const context = this;
@@ -11,21 +11,21 @@ function throttle(func, limit) {
     };
 }
 
-/* // On Resize Function
-let windowWidth = window.innerWidth; */
+// On Resize Function
+let windowWidth = window.innerWidth;
 
-export function onResize(passedFunction) {
+export function onResize(passedFunction: () => void): void {
   if (window.innerWidth !== windowWidth) {
       windowWidth = window.innerWidth;
 
     passedFunction();
   }
-}
+} */
 
 /* window.addEventListener('resize', throttle(() => onResize(initMarquees), 250)); */
 
 // Toggle Page Scroll
-export function togglePageScroll(enable) {
+export function togglePageScroll(enable: boolean) {
   if (enable) {
     document.body.style.overflow = '';
   } else {
