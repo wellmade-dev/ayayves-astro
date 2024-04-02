@@ -3,6 +3,12 @@ import LogoSVG from "../../components/atoms/svgs/LogoSVG.astro";
 import NavbarButton from "../../components/atoms/buttons/nav/NavbarButton.astro";
 import NavbarLink from "../../components/atoms/buttons/nav/NavbarLink.astro";
 import NavigationMenu from "./NavigationMenu.astro";
+import { fetchStrapiData } from "../../scripts/fetch";
+
+const data = await fetchStrapiData("navigation?populate=*");
+
+const desktopLinks = data.data.attributes.navbar_links;
+const mobileLinks = data.data.attributes.navbar_links_mobile;
 ---
 
 <nav class="navigation" id="navigation">
@@ -12,32 +18,48 @@ import NavigationMenu from "./NavigationMenu.astro";
     </a>
     <div class="navigation-links">
       <ul class="desktop-links" id="nav-desktop-links">
-        <li>
-          <NavbarLink label="Merch" ariaLabel="View merch" href="/shop/" />
-        </li>
-        <li>
-          <NavbarButton
-            label="Contact"
-            ariaLabel="Open contact form"
-            modal="Contact"
-          />
-        </li>
-        <li>
-          <NavbarButton
-            label="Cart"
-            ariaLabel="View your shopping cart"
-            modal="Cart"
-          />
-        </li>
+        {
+          desktopLinks.map((link: any) => (
+            <li>
+              {link.url && !link.modal && (
+                <NavbarLink
+                  label={link.title}
+                  ariaLabel={link.alt}
+                  href={link.url}
+                />
+              )}
+              {link.modal && (
+                <NavbarButton
+                  label={link.title}
+                  ariaLabel={link.alt}
+                  modal={link.modal_type}
+                />
+              )}
+            </li>
+          ))
+        }
       </ul>
       <ul class="mobile-links" id="nav-mobile-links">
-        <li>
-          <NavbarButton
-            label="Cart"
-            ariaLabel="View your shopping cart"
-            modal="Cart"
-          />
-        </li>
+        {
+          mobileLinks.map((link: any) => (
+            <li>
+              {link.url && !link.modal && (
+                <NavbarLink
+                  label={link.title}
+                  ariaLabel={link.alt}
+                  href={link.url}
+                />
+              )}
+              {link.modal && (
+                <NavbarButton
+                  label={link.title}
+                  ariaLabel={link.alt}
+                  modal={link.modal_type}
+                />
+              )}
+            </li>
+          ))
+        }
       </ul>
       <button
         id="menu-button"
@@ -199,87 +221,51 @@ import NavigationMenu from "./NavigationMenu.astro";
 
 <script>
   import { gsap } from "gsap";
-  import { initLinkGroups } from "../../scripts/animations.js";
-  import { tickerLinkHover } from "../../scripts/animations.js";
+  import { initLinkGroups, tickerLinkHover } from "../../scripts/animations.js";
   import { togglePageScroll } from "../../scripts/utils.ts";
-  import { easingSmall } from "../../scripts/init.js";
-  import { easingLarge } from "../../scripts/init.js";
+  import { easingSmall, easingLarge } from "../../scripts/init.js";
 
   // Menu Variable Declarations
-  const navigation: HTMLElement | null = document.getElementById("navigation");
-  const navigationMenu: HTMLElement | null =
-    document.getElementById("navigation-menu");
+  const navigation = document.getElementById("navigation") as HTMLElement;
+  const navigationMenu = document.getElementById(
+    "navigation-menu"
+  ) as HTMLElement;
 
-  /* Core Navigation Bar */
-  let navLinksWrapper: Element | null = null;
-  let navDesktopLinks: Element | null = null;
-  let navMobileLinks: Element | null = null;
   let navTheme: string | null = null;
-
-  /* Navigation Menu Button */
-  let navMenuButton: Element | null = null;
-  let menuButtonIcon: Element | null = null;
-  let menuIconLineOne: Element | null = null;
-  let menuIconLineTwo: Element | null = null;
-
-  /* Navigation Menu */
-  let navImageColumn: Element | null = null;
-  let navImageBack: Element | null = null;
-  let navImageFront: Element | null = null;
-  let primaryLinksWrapper: Element | null = null;
-  let primaryLinkLabels: NodeListOf<HTMLElement> | null = null;
-  let secondaryLinksWrapper: Element | null = null;
-  let streamingLinksWrapper: Element | null = null;
-  let socialLinksWrapper: Element | null = null;
-
-  // Declaring elements for all variables
-  if (navigation) {
-    navLinksWrapper = navigation.querySelector(".navigation-links");
-    navDesktopLinks = navigation.querySelector(".desktop-links");
-    navMobileLinks = navigation.querySelector(".mobile-links");
-
-    navMenuButton = document.getElementById("menu-button");
-    if (navMenuButton) {
-      menuButtonIcon = navMenuButton.querySelector(".menu-icon");
-      menuIconLineOne = navMenuButton.querySelector(".line:nth-child(1)");
-      menuIconLineTwo = navMenuButton.querySelector(".line:nth-child(2)");
-    } else {
-      console.log("Unable to locate navMenuButton.");
-    }
-
-    if (navigationMenu) {
-      navImageColumn = navigationMenu.querySelector(".image-col");
-
-      if (navImageColumn) {
-        navImageBack = navImageColumn.querySelector(".img-w:nth-child(1)");
-        navImageFront = navImageColumn.querySelector(".img-w:nth-child(2)");
-      } else {
-        console.log("Unable to locate navImageColumn.");
-      }
-
-      primaryLinksWrapper = navigationMenu.querySelector(".primary-links-w");
-
-      if (primaryLinksWrapper) {
-        primaryLinkLabels = primaryLinksWrapper.querySelectorAll(".label");
-      } else {
-        console.log("Unable to locate Primary Links Wrapper");
-      }
-
-      secondaryLinksWrapper =
-        navigationMenu.querySelector(".secondary-links-w");
-
-      if (secondaryLinksWrapper) {
-        streamingLinksWrapper =
-          secondaryLinksWrapper.querySelector(".streaming-links-w");
-        socialLinksWrapper =
-          secondaryLinksWrapper.querySelector(".social-links-w");
-      }
-    } else {
-      console.log("Unable to locate navigationMenu");
-    }
-  } else {
-    console.log("Unable to locate navigation");
-  }
+  let navLinksWrapper = navigation?.querySelector(
+    ".navigation-links"
+  ) as HTMLElement;
+  let navDesktopLinks = navigation?.querySelector(
+    ".desktop-links"
+  ) as HTMLElement;
+  let navMobileLinks = navigation?.querySelector(
+    ".mobile-links"
+  ) as HTMLElement;
+  let navMenuButton = document.getElementById("menu-button") as HTMLElement;
+  let menuButtonIcon: HTMLElement | null = navMenuButton?.querySelector(
+    ".menu-icon"
+  ) as HTMLElement;
+  let menuIconLineOne = navMenuButton?.querySelector(
+    ".line:nth-child(1)"
+  ) as HTMLElement;
+  let menuIconLineTwo = navMenuButton?.querySelector(
+    ".line:nth-child(2)"
+  ) as HTMLElement;
+  let navImageColumn = navigationMenu?.querySelector(
+    ".image-col"
+  ) as HTMLElement;
+  let navImageBack = navImageColumn?.querySelector(
+    ".img-w:nth-child(1)"
+  ) as HTMLElement;
+  let navImageFront = navImageColumn?.querySelector(
+    ".img-w:nth-child(2)"
+  ) as HTMLElement;
+  let primaryLinksWrapper = navigationMenu?.querySelector(".primary-links-w");
+  let primaryLinkLabels = primaryLinksWrapper?.querySelectorAll(
+    ".label"
+  ) as NodeListOf<HTMLElement>;
+  let secondaryLinksWrapper =
+    navigationMenu?.querySelector(".secondary-links-w");
 
   // Init ticker animation on NavButtons in Navigation Menu
   if (navLinksWrapper) {

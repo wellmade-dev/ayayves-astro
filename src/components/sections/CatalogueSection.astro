@@ -5,12 +5,14 @@ import {
   fetchCatalogue,
 } from "../../scripts/fetch";
 
+import ReleaseCard from "../atoms/cards/ReleaseCard.astro";
+
 const image = await fetchSingleTypeObject("homepage", "catalogue_hero_image");
 const backgroundImage = createImageObject(image);
 const catalogue = await fetchCatalogue();
 ---
 
-<section class="section-discography">
+<section class="section-catalogue">
   <div class="sticky-w">
     <div class="image-w">
       <div class="background-img">
@@ -25,11 +27,14 @@ const catalogue = await fetchCatalogue();
       </div>
     </div>
   </div>
-  <div class="discography-w">
+  <div class="catalogue-w">
     {
       catalogue.map((release) => (
         <div class="release-w">
-          <div>{release.title}</div>
+          {" "}
+          <div class="release-card-w">
+            <ReleaseCard release={release} />
+          </div>
         </div>
       ))
     }
@@ -39,7 +44,7 @@ const catalogue = await fetchCatalogue();
 <style lang="scss">
   @use "../../styles/vars" as *;
 
-  .section-discography {
+  .section-catalogue {
     margin: -20vh auto 0;
     width: 100%;
     display: flex;
@@ -114,7 +119,7 @@ const catalogue = await fetchCatalogue();
       }
     }
 
-    .discography-w {
+    .catalogue-w {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
@@ -216,7 +221,7 @@ const catalogue = await fetchCatalogue();
       }
     }
 
-    .release-card {
+    .release-card-w {
       width: 18rem;
       aspect-ratio: 1 / 1.4;
 
@@ -233,3 +238,77 @@ const catalogue = await fetchCatalogue();
     }
   }
 </style>
+
+<script>
+  import gsap from "gsap";
+  import { imageParallax } from "../../scripts/animations";
+
+  function initDiscographySection() {
+    const catalogueSection = document.querySelector(".section-catalogue");
+
+    if (catalogueSection) {
+      const sticky = catalogueSection.querySelector(".sticky-w");
+      const image = catalogueSection.querySelector(".background-img");
+      const tint = catalogueSection.querySelector(".bg-tint");
+      const releaseWrapper = catalogueSection.querySelector(".catalogue-w");
+      const img = image?.querySelector("img");
+      const releaseCards = catalogueSection.querySelectorAll(".release-card");
+
+      console.log(releaseCards);
+
+      // Background Image Window Moves and Expands
+      const sectionTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: sticky,
+          start: "top 20%",
+          end: "bottom bottom",
+          scrub: true,
+        },
+      });
+
+      sectionTimeline
+        .to(
+          image,
+          { width: "100vw", height: "100vh", ease: "power1.inOut" },
+          "start"
+        )
+        .to(image, { borderRadius: 0, ease: "power4.in" }, "start")
+        .fromTo(
+          tint,
+          { opacity: 0 },
+          { opacity: 0.5, ease: "power1.in" },
+          "start"
+        );
+
+      const releaseTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: releaseWrapper,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      if (img) {
+        releaseTimeline.fromTo(img, { y: "0%" }, { y: "-35%" }, "start");
+      }
+
+      // Background Image Parallax
+      imageParallax(img, "top bottom", "center center", "-10%", "0%");
+
+      // Parallax on Release Tile Images
+      releaseCards.forEach((releaseTile) => {
+        console.log("found the image");
+        imageParallax(
+          releaseTile.querySelector("img"),
+          "top bottom",
+          "bottom top",
+          "0%",
+          "-15%"
+        );
+      });
+    }
+  }
+
+  initDiscographySection();
+</script>

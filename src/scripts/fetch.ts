@@ -20,20 +20,27 @@ const strapiHeaders = {
 // Set up dataCache Map
 const dataCache = new Map();
 
-export async function fetchStrapiData(query: string) {
-  // Check if the data is already in the cache
-  if (dataCache.has(query)) {
-    return dataCache.get(query);
+export async function fetchStrapiData(query: string, bypassCache?: boolean) {
+  // If bypassCache is true, wipe the cache
+  if (bypassCache) {
+    dataCache.clear();
+  } else {
+    // Check if the data is already in the cache
+    if (dataCache.has(query)) {
+      return dataCache.get(query);
+    }
   }
 
-  // If not in cache, fetch from the API
+  // If not in cache or bypassCache is true, fetch from the API
   const response = await fetch(`${STRAPI_API_URL}${query}`, {
     headers: strapiHeaders,
   });
   const data = await response.json();
 
-  // Store the fetched data in the cache
-  dataCache.set(query, data);
+  // Store the fetched data in the cache only if bypassCache is not true
+  if (!bypassCache) {
+    dataCache.set(query, data);
+  }
 
   return data;
 }

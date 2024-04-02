@@ -2,9 +2,7 @@
 import type { ImageAttributes } from "../../types/strapi-attributes";
 import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
 
-const data = await fetchStrapiData(
-  "navigation?populate=image_front,image_back"
-);
+const data = await fetchStrapiData("navigation?populate=*", true);
 
 const imageDataArray = [
   data.data.attributes.image_back,
@@ -13,39 +11,9 @@ const imageDataArray = [
 
 const images = imageDataArray.map((image) => createImageObject(image));
 
-const streamingLinks = [
-  {
-    name: "Spotify",
-    url: "https://open.spotify.com/artist/2Mgm4AwTZRFzZV0Dc3MI3n?si=bEQN7ainTkqpXOlfGLoHBA",
-  },
-  {
-    name: "Apple Music",
-    url: "https://music.apple.com/au/artist/aya-yves/1502547272",
-  },
-  {
-    name: "Unearthed",
-    url: "https://www.abc.net.au/triplejunearthed/artist/aya-yves/",
-  },
-  {
-    name: "YouTube",
-    url: "https://www.youtube.com/ayayves",
-  },
-];
-
-const socialLinks = [
-  {
-    name: "Instagram",
-    url: "https://www.instagram.com/ayayvesmusic/",
-  },
-  {
-    name: "Facebook",
-    url: "https://www.facebook.com/ayayvesmusic/",
-  },
-  {
-    name: "TikTok",
-    url: "https://www.tiktok.com/@ayayvesmusic",
-  },
-];
+const siteLinks = data.data.attributes.site_links;
+const streamingLinks = data.data.attributes.stream_links;
+const socialLinks = data.data.attributes.social_links;
 ---
 
 <div
@@ -73,36 +41,36 @@ const socialLinks = [
     </div>
     <div class="links-col">
       <ul class="primary-links-w">
-        <li>
-          <a class="primary-link" href="/release/">
-            <div class="label">Catalogue</div>
-          </a>
-        </li>
-        <li>
-          <button
-            class="primary-link"
-            aria-label="Contact"
-            data-modal="Contact"
-          >
-            <span>
-              <div class="label">Contact</div>
-            </span>
-          </button>
-        </li>
-        <li>
-          <a class="primary-link" href="/shop/">
-            <div class="label">Merch</div>
-          </a>
-        </li>
+        {
+          siteLinks.map((link: any) => (
+            <li>
+              {link.url && !link.modal && (
+                <a class="primary-link" href={link.url}>
+                  <div class="label">{link.title}</div>
+                </a>
+              )}
+              {link.modal && (
+                <button
+                  class="primary-link"
+                  aria-label={link.title}
+                  data-modal={link.modal_type}
+                >
+                  <span>
+                    <div class="label">{link.title}</div>
+                  </span>
+                </button>
+              )}
+            </li>
+          ))
+        }
       </ul>
-
       <div class="secondary-links-w">
         <ul class="streaming-links-w">
           {
-            streamingLinks.map((link) => (
+            streamingLinks.map((link: any) => (
               <li>
                 <a class="secondary-link" href={link.url} target="_blank">
-                  <div class="label">{link.name}</div>
+                  <div class="label">{link.title}</div>
                 </a>
               </li>
             ))
@@ -110,10 +78,10 @@ const socialLinks = [
         </ul>
         <ul class="social-links-w">
           {
-            socialLinks.map((link) => (
+            socialLinks.map((link: any) => (
               <li>
                 <a class="secondary-link" href={link.url} target="_blank">
-                  <div class="label">{link.name}</div>
+                  <div class="label">{link.title}</div>
                 </a>
               </li>
             ))
@@ -126,165 +94,165 @@ const socialLinks = [
     <div class="p2">Aya Yve 2024</div>
     <div class="p2">Site by Wellmade</div>
   </div>
-</div>
 
-<style lang="scss">
-  @use "../../styles/vars" as *;
-  .navigation-menu {
-    display: flex;
-    position: fixed;
-    flex-direction: column;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--bg-dark);
-    padding-top: calc($navheight - 0.5rem);
-    clip-path: inset(0 0 100% 0);
-    z-index: 10;
-
-    .menu-content {
+  <style lang="scss">
+    @use "../../styles/vars" as *;
+    .navigation-menu {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(6rem, 7.5vw, 8rem);
-      padding: 0 var(--page-margin);
-      flex-grow: 1;
+      position: fixed;
+      flex-direction: column;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-dark);
+      padding-top: calc($navheight - 0.5rem);
+      clip-path: inset(0 0 100% 0);
+      z-index: 10;
 
-      @media (max-width: $tablet) {
-        gap: clamp(4rem, 7.5vw, 6rem);
-      }
-
-      @media (max-width: $phablet) {
-        justify-content: start;
-        align-items: start;
-        padding-top: 1.25rem;
-      }
-
-      .image-col {
-        --corner-gap: 3.5rem;
-        --card-height: clamp(25rem, 60vh, 35rem);
-        --card-width: calc(var(--card-height) * 0.725);
+      .menu-content {
         display: flex;
-        position: relative;
-        justify-content: center;
         align-items: center;
-        width: calc(var(--corner-gap) + var(--card-width));
-        height: calc(var(--corner-gap) + var(--card-height));
-        max-height: calc(100vh - (2 * var(--nav-height)));
+        justify-content: center;
+        gap: clamp(6rem, 7.5vw, 8rem);
+        padding: 0 var(--page-margin);
+        flex-grow: 1;
 
         @media (max-width: $tablet) {
-          --corner-gap: 2rem;
-          --card-height: 50vw;
-          --card-width: calc(var(--card-height) * 0.725);
+          gap: clamp(4rem, 7.5vw, 6rem);
         }
 
         @media (max-width: $phablet) {
-          display: none;
+          justify-content: start;
+          align-items: start;
+          padding-top: 1.25rem;
         }
 
-        .img-w {
-          height: 100%;
-          border-radius: var(--radius-small);
-          overflow: hidden;
-          width: var(--card-width);
-          height: var(--card-height);
-          position: absolute;
-          max-height: 100%;
+        .image-col {
+          --corner-gap: 3.5rem;
+          --card-height: clamp(25rem, 60vh, 35rem);
+          --card-width: calc(var(--card-height) * 0.725);
+          display: flex;
+          position: relative;
+          justify-content: center;
+          align-items: center;
+          width: calc(var(--corner-gap) + var(--card-width));
+          height: calc(var(--corner-gap) + var(--card-height));
+          max-height: calc(100vh - (2 * var(--nav-height)));
 
-          &:nth-child(1) {
-            bottom: var(--corner-gap);
-            left: var(--corner-gap);
+          @media (max-width: $tablet) {
+            --corner-gap: 2rem;
+            --card-height: 50vw;
+            --card-width: calc(var(--card-height) * 0.725);
           }
 
-          &:nth-child(2) {
-            bottom: 0;
-            left: 0;
+          @media (max-width: $phablet) {
+            display: none;
           }
 
-          img {
+          .img-w {
             height: 100%;
-            width: 100%;
-            -o-object-fit: cover;
-            object-fit: cover;
+            border-radius: var(--radius-small);
+            overflow: hidden;
+            width: var(--card-width);
+            height: var(--card-height);
+            position: absolute;
+            max-height: 100%;
+
+            &:nth-child(1) {
+              bottom: var(--corner-gap);
+              left: var(--corner-gap);
+            }
+
+            &:nth-child(2) {
+              bottom: 0;
+              left: 0;
+            }
+
+            img {
+              height: 100%;
+              width: 100%;
+              -o-object-fit: cover;
+              object-fit: cover;
+            }
           }
         }
-      }
 
-      .links-col {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        padding-bottom: 2rem;
-        padding-right: 4rem;
-
-        @media (max-width: $tablet) {
-          gap: 1.5rem;
-          padding-right: 3rem;
-        }
-
-        .primary-links-w {
+        .links-col {
           display: flex;
           flex-direction: column;
+          gap: 2rem;
+          padding-bottom: 2rem;
+          padding-right: 4rem;
 
-          .primary-link {
-            font-size: 3.5rem;
-            cursor: pointer;
-            overflow: hidden;
-            text-align: left;
+          @media (max-width: $tablet) {
+            gap: 1.5rem;
+            padding-right: 3rem;
+          }
 
-            &:nth-child(1),
-            &:nth-child(2) {
-              padding-bottom: 0.85rem;
-            }
+          .primary-links-w {
+            display: flex;
+            flex-direction: column;
 
-            @media (max-width: $tablet) {
-              font-size: 3rem;
-            }
+            .primary-link {
+              font-size: 3.5rem;
+              cursor: pointer;
+              overflow: hidden;
+              text-align: left;
 
-            .label {
-              padding-bottom: 0.15rem;
-              pointer-events: none;
+              &:nth-child(1),
+              &:nth-child(2) {
+                padding-bottom: 0.85rem;
+              }
+
+              @media (max-width: $tablet) {
+                font-size: 3rem;
+              }
+
+              .label {
+                padding-bottom: 0.15rem;
+                pointer-events: none;
+              }
             }
           }
-        }
 
-        .secondary-links-w {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-auto-flow: row;
-          -moz-column-gap: 4rem;
-          column-gap: 4rem;
-        }
+          .secondary-links-w {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-flow: row;
+            -moz-column-gap: 4rem;
+            column-gap: 4rem;
+          }
 
-        .streaming-links-w,
-        .social-links-w {
-          .secondary-link {
-            font-size: 1rem;
-            letter-spacing: 0.01em;
-            color: var(--text-secondary);
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            transition: color 0.1s;
+          .streaming-links-w,
+          .social-links-w {
+            .secondary-link {
+              font-size: 1rem;
+              letter-spacing: 0.01em;
+              color: var(--text-secondary);
+              position: relative;
+              cursor: pointer;
+              overflow: hidden;
+              transition: color 0.1s;
 
-            &:hover {
-              color: var(--text);
-            }
+              &:hover {
+                color: var(--text);
+              }
 
-            .label {
-              padding: 0.45rem 0;
-              pointer-events: none;
+              .label {
+                padding: 0.45rem 0;
+                pointer-events: none;
+              }
             }
           }
         }
       }
     }
-  }
 
-  .menu-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 var(--page-margin) 2.25rem;
-  }
-</style>
+    .menu-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 var(--page-margin) 2.25rem;
+    }
+  </style>
+</div>
