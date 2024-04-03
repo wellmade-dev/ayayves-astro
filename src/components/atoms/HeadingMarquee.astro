@@ -4,15 +4,15 @@ interface Props {
   secondString: string;
 }
 
-const { firstString, secondString } = Astro.props;
+const { firstString, secondString } = Astro.props as Props;
 ---
 
 <div class="heading-marquee">
   <div class="marquee-split">
     <div class="flexed marquee-block">
       <h2>
-        <span class="heading-grand">{firstString}</span>
-        <span class="heading-grand serif">{secondString}</span>
+        <span class="heading-grand">{firstString} </span>
+        <span class="heading-grand serif">{secondString} </span>
       </h2>
     </div>
   </div>
@@ -60,5 +60,5 @@ const { firstString, secondString } = Astro.props;
 <script>
   import { initMarquee } from "../../scripts/animations";
   const marquee = document.querySelector(".heading-marquee");
-  initMarquee(marquee, 60);
+  initMarquee(marquee, 90);
 </script>

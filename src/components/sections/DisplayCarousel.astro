@@ -1,0 +1,104 @@
+---
+import HeadingMarquee from "../atoms/HeadingMarquee.astro";
+import ProductSlider from "../atoms/carousels/ProductSlider.astro";
+import CarouselArrows from "../atoms/carousels/CarouselArrows.astro";
+---
+
+<section class="display-carousel-section">
+  <div class="heading-marquee-w">
+    <HeadingMarquee
+      firstString="The Merch Shop"
+      secondString="Support the Art"
+    />
+  </div>
+  <div class="carousel-w">
+    <ProductSlider isDisplayCarousel />
+    <div class="arrow-counter-w">
+      <CarouselArrows />
+      <div hide-mobile="true" class="counter"></div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "../../styles/vars" as *;
+
+  .display-carousel-section {
+    width: 100%;
+    min-height: 100lvh;
+    overflow: clip;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* Padding Bottom is to Visually Center Content */
+    padding-bottom: 11vw;
+
+    @media (max-width: $mobile) {
+      padding-top: $navheight;
+      overflow: clip;
+    }
+
+    .heading-marquee-w {
+      margin-top: 5vw;
+
+      @media (max-width: $mobile) {
+        margin-top: 0;
+        position: sticky;
+        top: 5rem;
+      }
+    }
+
+    .carousel-w {
+      margin-top: -5vw;
+      padding: 0 var(--page-margin);
+
+      @media (max-width: $mobile) {
+        margin-top: -3.5vw;
+      }
+    }
+
+    .arrow-counter-w {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2.5rem;
+
+      .counter {
+        font-size: 1.25rem;
+        letter-spacing: 0;
+        font-family: var(--editorial-old);
+        font-weight: 300;
+        padding-bottom: 0.25rem;
+        width: unset;
+      }
+    }
+
+    &.section-release-archive {
+      .release-slider {
+        margin-top: -5vw;
+        padding: 0 var(--page-margin);
+
+        @media (max-width: $mobile) {
+          margin-top: -3.5vw;
+
+          .slider-rail {
+            flex-direction: column;
+            gap: var(--page-margin);
+            margin-right: 0;
+          }
+
+          .carousel-w {
+            padding-bottom: 0rem;
+            height: unset;
+            width: 100%;
+            padding-right: 0;
+            box-shadow: 0 1rem 6rem 0 rgba(0, 0, 0, 0.25);
+          }
+        }
+      }
+    }
+  }
+</style>

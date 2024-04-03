@@ -54,12 +54,12 @@ export interface ProductAttributes {
   id: number;
   name: string;
   slug: string;
-  collection: string;
+  collection?: string;
   short_description: string;
   long_desription: string;
   price: number;
-  markdown_price: number | null;
-  inventory_quantity: number | null;
+  markdown_price?: number | null;
+  inventory_quantity?: number | null;
   variants: object;
   image: ImageAttributes
 }

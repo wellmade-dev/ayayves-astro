@@ -254,8 +254,6 @@ const catalogue = await fetchCatalogue();
       const img = image?.querySelector("img");
       const releaseCards = catalogueSection.querySelectorAll(".release-card");
 
-      console.log(releaseCards);
-
       // Background Image Window Moves and Expands
       const sectionTimeline = gsap.timeline({
         scrollTrigger: {
@@ -298,7 +296,6 @@ const catalogue = await fetchCatalogue();
 
       // Parallax on Release Tile Images
       releaseCards.forEach((releaseTile) => {
-        console.log("found the image");
         imageParallax(
           releaseTile.querySelector("img"),
           "top bottom",

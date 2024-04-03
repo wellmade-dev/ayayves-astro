@@ -3,11 +3,16 @@ import type { ProductAttributes } from "../../../types/strapi-attributes";
 import Divider from "../Divider.astro";
 import ButtonDisplaySecondary from "../buttons/ButtonDisplaySecondary.astro";
 
-const { product } = Astro.props as { product: ProductAttributes };
+interface Props {
+  product: ProductAttributes;
+  fullWidthOnMobile?: boolean;
+}
+
+const { product, fullWidthOnMobile } = Astro.props as Props;
 const ariaLabel = `Learn more about ${product.name}`;
 ---
 
-<div class="product-card">
+<div class={`product-card ${fullWidthOnMobile ? "full-width" : ""}`}>
   <div class="info-w">
     <div class="desc-w">
       <a class="heading" aria-label={ariaLabel} href=`/products/${product.slug}`
@@ -53,6 +58,7 @@ const ariaLabel = `Learn more about ${product.name}`;
     height: 100%;
     width: 44.5rem;
     backdrop-filter: var(--glass-blur);
+
     @media (max-width: $tablet) {
       width: 40rem;
       padding: 1.5rem;
@@ -66,6 +72,13 @@ const ariaLabel = `Learn more about ${product.name}`;
       width: 80vw;
       max-width: 20rem;
       padding: 1.25rem 1.25rem 1.5rem;
+    }
+
+    @media (max-width: $mobile) {
+      &.full-width {
+        max-width: unset;
+        width: 100%;
+      }
     }
 
     .heading {

@@ -1,5 +1,6 @@
 ---
 import Navigation from "../components/navigation/Navigation.astro";
+import FooterSection from "../components/sections/FooterSection.astro";
 interface Props {
   title: string;
 }
@@ -20,6 +21,7 @@ const { title } = Astro.props;
   <body>
     <Navigation />
     <slot />
+    <FooterSection />
   </body>
   <script>
     import "../scripts/init.js";
