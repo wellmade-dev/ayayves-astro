@@ -1,5 +1,8 @@
 ---
 import { fetchProducts } from "../../scripts/fetch";
+import Layout from "../../layouts/Layout.astro";
+import CarouselSection from "../../components/sections/CarouselSection.astro";
+import ProductSlider from "../../components/atoms/carousels/ProductSlider.astro";
 
 export async function getStaticPaths() {
   const products = await fetchProducts();
@@ -12,4 +15,8 @@ export async function getStaticPaths() {
 const product = Astro.props;
 ---
 
-<h2>{product.name}</h2>
+<Layout title={product.name}>
+  <CarouselSection title="Bundle Me" subtitle="Related">
+    <ProductSlider />
+  </CarouselSection>
+</Layout>

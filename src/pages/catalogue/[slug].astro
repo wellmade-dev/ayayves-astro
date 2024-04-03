@@ -1,5 +1,6 @@
 ---
 import { fetchCatalogue } from "../../scripts/fetch";
+import CatalogueSection from "../../components/sections/CatalogueSection.astro";
 
 export async function getStaticPaths() {
   const catalogue = await fetchCatalogue();
