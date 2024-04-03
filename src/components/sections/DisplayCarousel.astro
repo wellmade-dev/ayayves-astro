@@ -2,17 +2,21 @@
 import HeadingMarquee from "../atoms/HeadingMarquee.astro";
 import ProductSlider from "../atoms/carousels/ProductSlider.astro";
 import CarouselArrows from "../atoms/carousels/CarouselArrows.astro";
+
+interface Props {
+  headingFirst: string;
+  headingSecond: string;
+}
+
+const { headingFirst, headingSecond } = Astro.props;
 ---
 
 <section class="display-carousel-section">
   <div class="heading-marquee-w">
-    <HeadingMarquee
-      firstString="The Merch Shop"
-      secondString="Support the Art"
-    />
+    <HeadingMarquee firstString={headingFirst} secondString={headingSecond} />
   </div>
   <div class="carousel-w">
-    <ProductSlider isDisplayCarousel />
+    <slot />
     <div class="arrow-counter-w">
       <CarouselArrows />
       <div hide-mobile="true" class="counter"></div>

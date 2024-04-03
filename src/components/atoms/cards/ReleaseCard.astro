@@ -3,6 +3,7 @@ import type { CatalogueAttributes } from "../../../types/strapi-attributes";
 import DiagonalArrowSVG from "../svgs/DiagonalArrowSVG.astro";
 
 const { release } = Astro.props as { release: CatalogueAttributes };
+console.log(release);
 const ariaLabel = `Learn more about ${release.title}`;
 ---
 

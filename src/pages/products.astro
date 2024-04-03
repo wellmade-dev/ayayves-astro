@@ -1,10 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import DisplayCarousel from "../components/sections/DisplayCarousel.astro";
+import ProductSlider from "../components/atoms/carousels/ProductSlider.astro";
 ---
 
 <Layout title="The Merch Shop">
   <main>
-    <DisplayCarousel />
+    <DisplayCarousel
+      headingFirst="Support The Art"
+      headingSecond="The Merch Shop"
+    >
+      <ProductSlider isDisplayCarousel />
+    </DisplayCarousel>
   </main>
 </Layout>
