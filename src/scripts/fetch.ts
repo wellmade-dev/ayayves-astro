@@ -59,7 +59,8 @@ export function createImageObject(object: any) {
   const image = {
     src: STRAPI_URL + attributes.url,
     srcset: srcset,
-    alt: altText
+    alt: altText,
+    width: attributes.width
   }
 
   return image;
