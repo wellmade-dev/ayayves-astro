@@ -7,6 +7,7 @@ import {
 } from "../../scripts/fetch";
 
 import ImageWellmade from "../atoms/ImageWellmade.astro";
+import Image from "astro/components/Image.astro";
 import HeadingMarquee from "../atoms/HeadingMarquee.astro";
 import ButtonDisplayTertiary from "../atoms/buttons/ButtonDisplayTertiary.astro";
 import Divider from "../atoms/Divider.astro";
@@ -90,19 +91,21 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
           aspect-ratio: 1 / 1.4;
           height: unset;
       }
+
+      img {
+        position: absolute;
+        top: auto;
+        bottom: 0%;
+        left: 0%;
+        right: 0%;
+        height: 130%;
+        width: 100%;
+        -o-object-fit: cover;
+        object-fit: cover;
+      }
   }
 
-  img {
-      position: absolute;
-      top: auto;
-      bottom: 0%;
-      left: 0%;
-      right: 0%;
-      height: 130%;
-      width: 100%;
-      -o-object-fit: cover;
-      object-fit: cover;
-  }
+
 
   .events-w {
       padding: 1vw var(--page-margin) 1rem;

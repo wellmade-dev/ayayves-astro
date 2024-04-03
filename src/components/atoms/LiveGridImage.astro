@@ -1,31 +1,26 @@
 ---
-interface ImageObject {
-  src: string;
-  srcset?: string;
-  alt?: string;
-}
+import ImageWellmade from "./ImageWellmade.astro";
+import type { ImageAttributes } from "../../types/strapi-attributes";
 
 interface Props {
-  image: ImageObject;
+  image: ImageAttributes;
 }
 
-const { image } = Astro.props;
+const { image, ...attributes } = Astro.props as Props;
 ---
 
-<img
-  src={image.src}
-  srcset={image.srcset}
-  alt={image.alt ?? ""}
+<ImageWellmade
+  image={image}
   sizes="(min-width: 920px) 35vw, (min-width: 520px) 75vw, 60vw"
-  loading="lazy"
+  {...attributes}
 />
 
 <style lang="scss">
   img {
     z-index: 1;
     width: 100%;
+    height: 100%;
     max-width: none;
-    aspect-ratio: 1 / 1.33;
     transform: scale(1.05);
   }
 </style>

@@ -5,6 +5,7 @@ import {
   fetchCatalogue,
 } from "../../scripts/fetch";
 
+import ImageWellmade from "../atoms/ImageWellmade.astro";
 import ReleaseCard from "../atoms/cards/ReleaseCard.astro";
 
 const image = await fetchSingleTypeObject("homepage", "catalogue_hero_image");
@@ -17,13 +18,7 @@ const catalogue = await fetchCatalogue();
     <div class="image-w">
       <div class="background-img">
         <div class="bg-tint"></div>
-        <img
-          src={backgroundImage.src}
-          srcset={backgroundImage.srcset}
-          alt={backgroundImage.alt}
-          loading="lazy"
-          sizes="100vw"
-        />
+        <ImageWellmade image={backgroundImage} sizes="100vw" />
       </div>
     </div>
   </div>

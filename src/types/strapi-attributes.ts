@@ -96,7 +96,6 @@ export interface ImageAttributes {
   src: string;
   srcset: string;
   alt: string;
-  width: number;
 }
 
 export interface StrapiImageFormats {

@@ -1,5 +1,6 @@
 ---
 import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
+import ImageWellmade from "../atoms/ImageWellmade.astro";
 
 const data = await fetchStrapiData("homepage?populate=*");
 const objects = data.data.attributes;
@@ -11,22 +12,10 @@ const imageSecond = createImageObject(objects.doublecard_image_second);
 <section class="section-doublecard">
   <div class="card-w">
     <div class="card">
-      <img
-        src={imageFirst.src}
-        srcset={imageFirst.srcset}
-        alt={imageFirst.alt}
-        loading="lazy"
-        sizes="60vw"
-      />
+      <ImageWellmade image={imageFirst} sizes="60vw" />
     </div>
     <div class="card">
-      <img
-        src={imageSecond.src}
-        srcset={imageSecond.srcset}
-        alt={imageFirst.alt}
-        loading="lazy"
-        sizes="50vw"
-      />
+      <ImageWellmade image={imageSecond} sizes="50vw" />
     </div>
   </div>
 </section>

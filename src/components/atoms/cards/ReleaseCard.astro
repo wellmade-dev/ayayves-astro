@@ -1,9 +1,9 @@
 ---
 import type { CatalogueAttributes } from "../../../types/strapi-attributes";
+import ImageWellmade from "../ImageWellmade.astro";
 import DiagonalArrowSVG from "../svgs/DiagonalArrowSVG.astro";
 
 const { release } = Astro.props as { release: CatalogueAttributes };
-console.log(release);
 const ariaLabel = `Learn more about ${release.title}`;
 ---
 
@@ -14,12 +14,7 @@ const ariaLabel = `Learn more about ${release.title}`;
 >
   <div class="bg-tint"></div>
   <div class="bg-gradient"></div>
-  <img
-    src={release.coverImage.src}
-    srcset={release.coverImage.srcset}
-    alt={release.coverImage.alt}
-    loading="lazy"
-  />
+  <ImageWellmade image={release.coverImage} sizes="360px" />
   <div class="desc-w">
     <div class="heading-300">{release.title}</div>
     <div class="p2">{release.subtitle}</div>

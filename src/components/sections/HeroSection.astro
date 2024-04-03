@@ -25,9 +25,19 @@ const release = await fetchHeroRelease();
       release && release.musicVideo ? (
         <div class="bg-content video-w">
           {release.keyImage ? (
-            <ImageWellmade image={release.keyImage} sizes="100vw" />
+            <ImageWellmade
+              image={release.keyImage}
+              sizes="100vw"
+              class="bg-content"
+              eagerLoading
+            />
           ) : (
-            <ImageWellmade image={release.coverImage} sizes="100vw" />
+            <ImageWellmade
+              image={release.coverImage}
+              sizes="100vw"
+              class="bg-content"
+              eagerLoading
+            />
           )}
           <video
             playsinline
@@ -39,6 +49,7 @@ const release = await fetchHeroRelease();
             style="object-fit: cover;"
             aria-hidden="true"
             data-src={release.musicVideo}
+            class="bg-content"
           >
             <source src={release.musicVideo.src} type="video/mp4" />
           </video>
@@ -48,12 +59,14 @@ const release = await fetchHeroRelease();
           image={release.keyImage}
           sizes="100vw"
           class="bg-content"
+          eagerLoading
         />
       ) : release && release.coverImage ? (
         <ImageWellmade
           image={release.coverImage}
           sizes="100vw"
           class="bg-content"
+          eagerLoading
         />
       ) : (
         <div style="width: 100%, height: 100%, background-color: black" />
@@ -163,6 +176,10 @@ const release = await fetchHeroRelease();
             -o-object-fit: cover;
             object-fit: cover;
             top: 0;
+          }
+
+          &video {
+            z-index: 4;
           }
         }
       }

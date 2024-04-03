@@ -12,8 +12,6 @@ const imageDataArray = [
 
 const images = imageDataArray.map((image) => createImageObject(image));
 
-console.log(images);
-
 const siteLinks = data.data.attributes.site_links;
 const streamingLinks = data.data.attributes.stream_links;
 const socialLinks = data.data.attributes.social_links;
@@ -35,6 +33,7 @@ const socialLinks = data.data.attributes.social_links;
             <ImageWellmade
               image={image}
               sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
+              eagerLoading
             />
           </div>
         ))

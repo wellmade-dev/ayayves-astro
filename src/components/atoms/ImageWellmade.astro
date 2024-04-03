@@ -6,22 +6,25 @@ interface Props {
   image: ImageAttributes;
   sizes: string;
   class?: string;
+  eagerLoading?: boolean;
 }
 
-const { image, sizes, class: className } = Astro.props as Props;
+const {
+  image,
+  sizes,
+  class: className,
+  eagerLoading,
+  ...attributes
+} = Astro.props as Props;
 ---
 
-<!-- Come back to this, it would be better if I was able to just pass in the object, 
-and have this component work the rest out like I do for cards -->
 <Image
   src={image.src}
   alt={image.alt}
-  widths={[240, 540, 720, 1000, 1600, 2000, image.width]}
+  widths={[240, 540, 720, 1000, 1600, 2000]}
   sizes={sizes}
-  loading="lazy"
-  inferSize
-  style="height: 100%"
   class={className ?? ""}
+  loading={eagerLoading ? "eager" : "lazy"}
+  inferSize
+  {...attributes}
 />
-
-<Image
