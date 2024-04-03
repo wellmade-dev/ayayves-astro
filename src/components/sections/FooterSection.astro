@@ -1,5 +1,6 @@
 ---
 import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
+import ImageWellmade from "../atoms/ImageWellmade.astro";
 import StarSVG from "../atoms/svgs/StarSVG.astro";
 
 const data = await fetchStrapiData("footer?populate=*");
@@ -94,10 +95,8 @@ const currentYear = new Date().getFullYear();
       </div>
       <div class="img-w">
         <div class="img-tint"></div>
-        <img
-          src={image.src}
-          srcset={image.srcset}
-          alt={image.alt}
+        <ImageWellmade
+          image={image}
           sizes="(min-width: 920px) 35vw, (min-width: 520px) 75vw, 60vw"
         />
       </div>

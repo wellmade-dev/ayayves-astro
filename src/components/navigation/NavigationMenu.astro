@@ -1,6 +1,6 @@
 ---
 import type { ImageAttributes } from "../../types/strapi-attributes";
-import DynamicImage from "../atoms/DynamicImage.astro";
+import ImageWellmade from "../atoms/ImageWellmade.astro";
 import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
 
 const data = await fetchStrapiData("navigation?populate=*", true);
@@ -32,10 +32,8 @@ const socialLinks = data.data.attributes.social_links;
       {
         images.map((image: ImageAttributes) => (
           <div class="img-w">
-            <DynamicImage
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
+            <ImageWellmade
+              image={image}
               sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
             />
           </div>

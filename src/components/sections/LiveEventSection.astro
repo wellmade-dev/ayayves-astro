@@ -6,13 +6,13 @@ import {
 
 } from "../../scripts/fetch";
 
-import type { EventAttributes } from "../../types/strapi-attributes";
+import ImageWellmade from "../atoms/ImageWellmade.astro";
 import HeadingMarquee from "../atoms/HeadingMarquee.astro";
 import ButtonDisplayTertiary from "../atoms/buttons/ButtonDisplayTertiary.astro";
 import Divider from "../atoms/Divider.astro";
 
 const imageObject = await fetchSingleTypeObject("homepage", "live_hero_image")
-const imageLiveEvent = createImageObject(imageObject);
+const image = createImageObject(imageObject);
 
 const eventObjects = await fetchEvents();
 const activeEvents = eventObjects.filter(event => !event.expired);
@@ -24,11 +24,8 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
 
 <section class="section-events" data-theme="secondary">
   <div class="img-w">
-    <img
-      src={imageLiveEvent.src}
-      srcset={imageLiveEvent.srcset}
-      alt={imageLiveEvent.alt}
-      loading="lazy"
+    <ImageWellmade
+      image={image}
       sizes="95vw"
     />
   </div>

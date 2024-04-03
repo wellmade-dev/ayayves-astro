@@ -1,0 +1,27 @@
+---
+import Image from "astro/components/Image.astro";
+import type { ImageAttributes } from "../../types/strapi-attributes";
+
+interface Props {
+  image: ImageAttributes;
+  sizes: string;
+  class?: string;
+}
+
+const { image, sizes, class: className } = Astro.props as Props;
+---
+
+<!-- Come back to this, it would be better if I was able to just pass in the object, 
+and have this component work the rest out like I do for cards -->
+<Image
+  src={image.src}
+  alt={image.alt}
+  widths={[240, 540, 720, 1000, 1600, 2000, image.width]}
+  sizes={sizes}
+  loading="lazy"
+  inferSize
+  style="height: 100%"
+  class={className ?? ""}
+/>
+
+<Image

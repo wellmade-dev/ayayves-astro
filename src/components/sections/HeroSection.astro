@@ -1,6 +1,6 @@
 ---
-import { Image } from "astro:assets";
 import { fetchCatalogue } from "../../scripts/fetch";
+import ImageWellmade from "../atoms/ImageWellmade.astro";
 import Divider from "../atoms/Divider.astro";
 import ButtonDisplay from "../atoms/buttons/ButtonDisplay.astro";
 
@@ -25,19 +25,9 @@ const release = await fetchHeroRelease();
       release && release.musicVideo ? (
         <div class="bg-content video-w">
           {release.keyImage ? (
-            <Image
-              inferSize
-              src={release.keyImage.src}
-              srcset={release.keyImage.srcset}
-              alt={release.keyImage.alt}
-            />
+            <ImageWellmade image={release.keyImage} sizes="100vw" />
           ) : (
-            <Image
-              inferSize
-              src={release.coverImage.src}
-              srcset={release.coverImage.srcset}
-              alt={release.coverImage.alt}
-            />
+            <ImageWellmade image={release.coverImage} sizes="100vw" />
           )}
           <video
             playsinline
@@ -54,19 +44,15 @@ const release = await fetchHeroRelease();
           </video>
         </div>
       ) : release && release.keyImage ? (
-        <Image
-          inferSize
-          src={release.keyImage.src}
-          srcset={release.keyImage.srcset}
-          alt={release.keyImage.alt}
+        <ImageWellmade
+          image={release.keyImage}
+          sizes="100vw"
           class="bg-content"
         />
       ) : release && release.coverImage ? (
-        <Image
-          inferSize
-          src={release.coverImage.src}
-          srcset={release.coverImage.srcset}
-          alt={release.coverImage.alt}
+        <ImageWellmade
+          image={release.coverImage}
+          sizes="100vw"
           class="bg-content"
         />
       ) : (
