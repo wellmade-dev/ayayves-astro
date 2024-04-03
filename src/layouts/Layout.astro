@@ -20,8 +20,10 @@ const { title } = Astro.props;
   </head>
   <body>
     <Navigation />
-    <slot />
-    <FooterSection />
+    <main>
+      <slot />
+      <FooterSection />
+    </main>
   </body>
   <script>
     import "../scripts/init.js";
