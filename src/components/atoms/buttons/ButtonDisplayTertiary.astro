@@ -8,7 +8,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const { label, ariaLabel, href, disabled } = Astro.props;
+const { label, ariaLabel, href, disabled } = Astro.props as Props;
 ---
 
 {

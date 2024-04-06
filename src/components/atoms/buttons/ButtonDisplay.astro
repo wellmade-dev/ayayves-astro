@@ -7,7 +7,7 @@ interface Props {
   href: string;
 }
 
-const { label, ariaLabel, href } = Astro.props;
+const { label, ariaLabel, href } = Astro.props as Props;
 ---
 
 <a class="button--display" aria-label={ariaLabel} href={href}>

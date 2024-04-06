@@ -20,8 +20,8 @@ const {
 
 <Image
   src={image.src}
+  srcset={image.srcset}
   alt={image.alt}
-  widths={[240, 540, 720, 1000, 1600, 2000]}
   sizes={sizes}
   class={className ?? ""}
   loading={eagerLoading ? "eager" : "lazy"}

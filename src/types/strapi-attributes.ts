@@ -37,17 +37,17 @@ export interface CatalogueApiData {
     youtube_link?: string;
     cover_image: {
       data: ImageStrapiApi;
-    },
+    };
     key_image: {
       data: ImageStrapiApi;
-    },
+    };
     secondary_images?: {
       data: ImageStrapiApi[];
-    },
+    };
     music_video_clip?: {
-      data: VideoStrapiApi
-    }
-  }
+      data: VideoStrapiApi;
+    };
+  };
 }
 
 export interface ProductAttributes {
@@ -61,26 +61,29 @@ export interface ProductAttributes {
   markdown_price?: number | null;
   inventory_quantity?: number | null;
   variants: object;
-  image: ImageAttributes
+  image: ImageAttributes;
 }
 
 export interface ProductApiData {
   id: number;
-    attributes: {
-      createdAt: string;
-      updatedAt: string;
-      publishedAt: string;
-      short_description: string;
-      long_description: string;
-      price: number;
-      markdown_price?: number;
-      inventory_quantity?: number;
-      collection?: string;
-      slug: string;
-      name: string;
-      product_image: ImageStrapiApi;
-      variant: VariantStrapiApi;
-    }
+  attributes: {
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    short_description: string;
+    long_description: string;
+    price: number;
+    markdown_price?: number;
+    current_price: number;
+    original_price?: number;
+    inventory_quantity?: number;
+    sold_out: boolean;
+    collection?: string;
+    slug: string;
+    name: string;
+    product_image: ImageStrapiApi;
+    variant: VariantStrapiApi[];
+  };
 }
 
 export interface ImageStrapiApi {
@@ -89,7 +92,7 @@ export interface ImageStrapiApi {
     url: string;
     alternativeText?: string;
     formats: StrapiImageFormats;
-  }
+  };
 }
 
 export interface ImageAttributes {
@@ -108,12 +111,13 @@ export interface VideoStrapiApi {
   attributes: {
     url: string;
     alternativeText?: string;
-  }
+  };
 }
 
 export interface VariantStrapiApi {
-  id: number;
+  id: string;
   variant_name: string;
+  variant_group: string;
   price?: number;
   markdown_price?: number;
   inventory_quantity: number;
@@ -131,14 +135,14 @@ export interface EventAttributes {
 
 export interface EventApiData {
   id: number;
-    attributes: {
-      createdAt: string;
-      updatedAt: string;
-      publishedAt: string;
-      city: string;
-      city_indigenous: string;
-      venue: string;
-      date_time: string;
-      ticket_link: string;
-    }
+  attributes: {
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    city: string;
+    city_indigenous: string;
+    venue: string;
+    date_time: string;
+    ticket_link: string;
+  };
 }

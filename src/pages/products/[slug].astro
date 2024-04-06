@@ -1,6 +1,11 @@
 ---
-import { fetchProducts } from "../../scripts/fetch";
+import { fetchProducts, groupVariants } from "../../scripts/fetch";
+import type { VariantStrapiApi } from "../../types/strapi-attributes";
 import Layout from "../../layouts/Layout.astro";
+import ImageWellmade from "../../components/atoms/ImageWellmade.astro";
+import Divider from "../../components/atoms/Divider.astro";
+import Accordion from "../../components/atoms/Accordion.astro";
+import ButtonMarquee from "../../components/atoms/buttons/ButtonMarquee.astro";
 import CarouselSection from "../../components/sections/CarouselSection.astro";
 import ProductSlider from "../../components/atoms/carousels/ProductSlider.astro";
 
@@ -13,10 +18,339 @@ export async function getStaticPaths() {
 }
 
 const product = Astro.props;
+const variants = product.variants;
+
+let defaultVariant: VariantStrapiApi;
+if (variants) {
+  for (let i = 0; i < variants.length; i++) {
+    if (variants[i].inventory_quantity > 0) {
+      defaultVariant = variants[i];
+      break;
+    }
+  }
+}
 ---
 
 <Layout title={product.name}>
+  <section class="product-template">
+    <div class="product-gallery">
+      <div class="product-img-w">
+        <ImageWellmade
+          image={product.image}
+          sizes="(min-width: 1100px) 800px, (min-width: 991px) 100vw, 100vw"
+          eagerLoading
+        />
+      </div>
+    </div>
+    <div class="product-detail">
+      <h1 class="heading-700 title">{product.name}</h1>
+      <div class="heading-300 collection">{product.collection}</div>
+      <div class="short-description">
+        <p>{product.short_description}</p>
+      </div>
+      <div class="price heading-300">
+        <div class="amount">${product.current_price}</div>
+        {
+          product.original_price && (
+            <div class="strikeout">${product.original_price}</div>
+          )
+        }
+      </div>
+      {
+        variants && variants.length > 0 && (
+          <div class="variant-w">
+            {variants.map((variant, index) => (
+              <>
+                <input
+                  type="radio"
+                  id={variant.id}
+                  name={variant.variant_group}
+                  value={variant.variant_name}
+                  data-price={variant.price}
+                  disabled={variant.inventory_quantity > 0 ? false : true}
+                  required
+                  checked={defaultVariant.id === variant.id ? true : false}
+                />
+                <label for={variant.id}>{variant.variant_name}</label>
+              </>
+            ))}
+          </div>
+        )
+      }
+      <div class="accordion-group-w">
+        <Divider />
+        <Accordion title="Description" paragraph={product.long_desription} />
+      </div>
+
+      <button
+        class="snipcart-add-item"
+        id="product-atc"
+        data-item-id={product.id}
+        data-item-price={product.current_price}
+        data-item-url=`/${product.slug}`
+        data-item-description={product.short_description}
+        data-item-quantity="1"
+        data-item-name={product.name}
+      >
+        <span>
+          <ButtonMarquee
+            firstString={product.sold_out ? "Out of Stock" : "Add to Cart"}
+            secondString={product.sold_out ? "Limited Drop" : "Bag It"}
+            {...product.sold_out ? { disabled: true } : {}}
+          />
+        </span>
+      </button>
+    </div>
+  </section>
   <CarouselSection title="Bundle Me" subtitle="Related">
     <ProductSlider />
   </CarouselSection>
+  <div style="height: 4rem"></div>
 </Layout>
+
+<style lang="scss">
+  @use "/src/styles/vars" as *;
+  .product-template {
+    display: flex;
+    flex-direction: row;
+
+    @media (max-width: $phablet) {
+      flex-direction: column;
+    }
+
+    .product-gallery {
+      display: flex;
+      flex-grow: 1;
+      background-color: var(--smoke);
+      border-bottom-right-radius: var(--radius-large);
+      overflow: clip;
+      align-items: center;
+      justify-content: center;
+      max-height: calc(100vh - 2rem);
+      position: sticky;
+      top: 0;
+
+      @media (max-width: $phablet) {
+        border-bottom-left-radius: var(--radius-large);
+        position: unset;
+        top: unset;
+      }
+
+      .product-img-w {
+        height: 100%;
+        width: 100%;
+        max-height: 55rem;
+        display: flex;
+        align-items: center;
+
+        img {
+          height: 100%;
+          width: 100%;
+          top: 0;
+          left: auto;
+          right: auto;
+          bottom: auto;
+          -o-object-fit: contain;
+          object-fit: contain;
+        }
+      }
+    }
+
+    .product-detail {
+      width: 25rem;
+      flex-shrink: 0;
+      padding: calc($navheight + 2rem) 0;
+      margin: 0 calc(1.75 * var(--page-margin));
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+
+      @media (max-width: $tablet) {
+        width: clamp(20rem, 40vw, 25rem);
+        margin: calc(1.25 * var(--page-margin));
+      }
+
+      @media (max-width: $phablet) {
+        width: unset;
+        margin: 1rem var(--page-margin) 0;
+        padding: 1rem 0 2rem;
+      }
+
+      .heading-700 {
+        margin-bottom: 0.5em;
+      }
+
+      .collection {
+        margin-bottom: 0.4rem;
+      }
+
+      .short-description {
+        margin-bottom: 1.5rem;
+      }
+
+      .price {
+        display: flex;
+        flex-direction: row;
+        gap: 0.4rem;
+        font-size: 1rem;
+
+        .amount {
+          margin-bottom: 1.75rem;
+        }
+
+        .strikeout {
+          opacity: 0.6;
+          text-decoration: line-through;
+        }
+      }
+
+      .variant-w {
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .quantity {
+        input {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .variant-w {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+
+    &.grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    :disabled + label {
+      border-color: var(--text-disabled);
+      color: var(--text-disabled);
+      pointer-events: none;
+    }
+
+    label {
+      width: 100%;
+      background-color: none;
+      border: 1px solid var(--divider-demi);
+      border-radius: var(--radius-circular);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.875rem;
+      text-align: center !important;
+      letter-spacing: 0.02em;
+      font-weight: 400;
+      transition: all 0.25s;
+
+      &:hover {
+        border-color: var(--text);
+        cursor: pointer;
+      }
+    }
+
+    input[type="radio"]:checked + label {
+      background-color: var(--button-solid-bg);
+      color: var(--button-solid-text);
+    }
+  }
+
+  .snipcart-add-item {
+    // Wrapper for the Add to Cart Button because WooCommerce is stubborn
+    position: relative;
+    margin-top: 2rem;
+    overflow: clip;
+    transition: all 0.25s;
+    border-radius: var(--radius-circular);
+    height: 3rem;
+    transform: translate(0);
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    .button--atc {
+      // WooCommerce Button
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+
+    .atc-foil {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+  }
+</style>
+
+<script>
+  const atcButton = document.getElementById("product-atc");
+  const variants = document.querySelector(".variant-w");
+  const priceWrapper = document.querySelector(".price");
+  const activePrice = priceWrapper?.querySelector(".amount");
+  const strikeoutPrice = priceWrapper?.querySelector(".strikeout");
+
+  if (atcButton && variants && priceWrapper && activePrice) {
+    const activeOptions: any = Array.from(
+      variants.querySelectorAll('input[type="radio"]:enabled')
+    );
+
+    const priceString = atcButton.getAttribute("data-item-price");
+    const defaultPrice: number = priceString ? parseFloat(priceString) : 0;
+    let selectedVariant: any = activeOptions.find(
+      (option: any) => option.checked
+    );
+
+    // When the variant is changed adjust price on button
+    variants.addEventListener("change", function (event) {
+      const target = event.target as Element;
+      const variantPrice = target.getAttribute("data-price");
+
+      if (variantPrice) {
+        const newPrice = target.getAttribute("data-price");
+        activePrice.textContent = String(`$${newPrice}`);
+      } else {
+        activePrice.textContent = String(`$${defaultPrice}`);
+      }
+
+      atcButton.setAttribute(`data-item-custom1-value`, target.value);
+    });
+
+    /* const optionsArray = activeOptions.map((option) => option.value); */
+    const optionsArray = activeOptions.map((option: any) => {
+      // Check if there's a price and it's not 0, to append the price difference
+      if (
+        defaultPrice > 0 &&
+        option.dataset.price &&
+        option.dataset.price !== 0
+      ) {
+        // Format price with + or - sign and fixed to 2 decimal places
+        const priceFormat =
+          (option.dataset.price > defaultPrice ? "+" : "") +
+          (option.dataset.price - defaultPrice);
+        return `${option.value}[${priceFormat}]`;
+      } else {
+        // If there's no price difference, just return the value/name
+        return option.value;
+      }
+    });
+
+    const concatenatedOptions = optionsArray.join("|");
+
+    atcButton.setAttribute(`data-item-custom1-name`, activeOptions[0].name);
+    atcButton.setAttribute(`data-item-custom1-options`, concatenatedOptions);
+    atcButton.setAttribute(`data-item-custom1-value`, selectedVariant?.value);
+  }
+</script>
