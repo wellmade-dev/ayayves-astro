@@ -28,9 +28,3 @@ wp/
 
 #fonts
 /public/fonts
-
-.gitignore
-
-strapi/
-
-src/components/sections/HeroSection-copy.astro

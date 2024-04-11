@@ -4,6 +4,7 @@ import type {
   CatalogueApiData,
   ImageAttributes,
   EventApiData,
+  VariantStrapiApi,
 } from "../types/strapi-attributes";
 
 import { format } from "date-fns";

@@ -1,5 +1,5 @@
 ---
-import { fetchProducts, groupVariants } from "../../scripts/fetch";
+import { fetchProducts } from "../../scripts/fetch";
 import type { VariantStrapiApi } from "../../types/strapi-attributes";
 import Layout from "../../layouts/Layout.astro";
 import ImageWellmade from "../../components/atoms/ImageWellmade.astro";
@@ -315,7 +315,7 @@ if (variants) {
 
     // When the variant is changed adjust price on button
     variants.addEventListener("change", function (event) {
-      const target = event.target as Element;
+      const target = event.target as HTMLElement;
       const variantPrice = target.getAttribute("data-price");
 
       if (variantPrice) {

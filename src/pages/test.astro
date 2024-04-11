@@ -1,22 +1,28 @@
 ---
 import TestingLayout from "../layouts/TestingLayout.astro";
-import HeroSection from "../components/sections/HeroSection.astro";
-import CarouselSection from "../components/sections/CarouselSection.astro";
-import LiveGridSection from "../components/sections/LiveGridSection.astro";
-import ProductSlider from "../components/atoms/carousels/ProductSlider.astro";
-import LiveEventSection from "../components/sections/LiveEventSection.astro";
+import ModalSkeleton from "../components/atoms/modals/ModalSkeleton.astro";
+import ContactModal from "../components/atoms/modals/ContactModal.astro";
+
+const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
 ---
 
 <TestingLayout title="Aya Yves">
-  <HeroSection>
-    <CarouselSection title="Support the Art" subtitle="Merch">
-      <ProductSlider />
-    </CarouselSection>
-  </HeroSection>
-  <LiveGridSection />
-  <LiveEventSection />
+  <main>
+    <button data-modal="contact">Open</button>
+    <ContactModal />
+  </main>
 </TestingLayout>
 
 <style lang="scss">
   @use "../styles/vars" as *;
+
+  main {
+    min-height: 200vh;
+  }
+
+  button {
+    background-color: white;
+    color: black;
+    padding: 1rem;
+  }
 </style>

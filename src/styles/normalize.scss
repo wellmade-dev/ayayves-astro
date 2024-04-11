@@ -459,6 +459,12 @@ button {
     appearance: none;
 }
 
+/* Dialog Reset */
+dialog {
+    padding: 0;
+    border: none !important;
+}
+
 /* List Reset */
 ul {
     display: block;

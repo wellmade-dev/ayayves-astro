@@ -1,0 +1,219 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  type: string;
+}
+
+const { title, subtitle, type } = Astro.props as Props;
+---
+
+<dialog class="modal" data-modal={type}>
+  <div class="modal-inner" data-theme="light">
+    <div class="header">
+      <div class="heading-w">
+        <div class="heading">{title}</div>
+        <div class="p2">{subtitle}</div>
+      </div>
+      <button data-close-modal class="close-button">
+        <svg
+          width="16"
+          height="10"
+          viewBox="0 0 16 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1 0.999997L6.83333 6.83333L8 8L15 0.999997"
+            stroke="#021117"
+            stroke-width="2"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="content">
+      <slot />
+    </div>
+  </div>
+</dialog>
+
+<style lang="scss">
+  @use "../../../styles/vars" as *;
+  .modal {
+    width: 24rem;
+    overflow: clip;
+    border-radius: var(--radius-small);
+    position: fixed;
+    left: auto;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    margin: var(--page-margin);
+
+    @media (max-width: 460px) {
+      width: calc(100% - (2 * var(--page-margin)));
+    }
+
+    &::backdrop {
+      background-color: rgba(0, 0, 0, 0.75);
+    }
+
+    &[open] {
+      animation: reveal-modal 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+      &::backdrop {
+        animation: fade-in 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    }
+
+    &[closing] {
+      animation: dismiss-modal 700ms cubic-bezier(0.54, 0, 0.75, 0.36) forwards;
+
+      &::backdrop {
+        animation: fade-out 700ms cubic-bezier(0.54, 0, 0.75, 0.36) forwards;
+      }
+    }
+
+    @keyframes reveal-modal {
+      0% {
+        transform: translateY(130%);
+      }
+      100% {
+        transform: translateY(0%);
+      }
+    }
+
+    @keyframes dismiss-modal {
+      0% {
+        transform: translateY(0%);
+      }
+      100% {
+        transform: translateY(130%);
+      }
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fade-out {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .modal-inner {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg);
+      padding: 1.5rem 1.5rem 1.75rem;
+    }
+
+    .header {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+
+      .heading-w {
+        display: flex;
+        flex-direction: column;
+        gap: 0.325rem;
+        letter-spacing: -0.02em;
+
+        .heading {
+          font-size: 1.875rem;
+          font-weight: 500 !important;
+        }
+
+        .p2 {
+          color: var(--text-secondary);
+        }
+      }
+
+      button {
+        padding: 0.45rem 0.125rem;
+        opacity: 0.5;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.75;
+        }
+      }
+    }
+
+    .content {
+      .button {
+        margin-top: 0.925rem;
+        height: 2.5rem;
+        width: 100%;
+      }
+
+      .stream-links {
+        display: flex;
+        flex-direction: column;
+        padding-top: 0.25rem;
+
+        .stream-link-w {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .stream-link {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.75rem 0.375rem 0.825rem 0.05rem;
+        }
+
+        .platform-title {
+          font-size: 1.05rem;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  const modals = document.querySelectorAll("dialog");
+
+  function dismissModal(modal: HTMLDialogElement) {
+    modal.setAttribute("closing", "");
+    modal.addEventListener(
+      "animationend",
+      () => {
+        modal.close();
+        modal.removeAttribute("closing");
+      },
+      { once: true }
+    );
+  }
+
+  modals.forEach((modal) => {
+    const closeButton = modal.querySelector(".close-button");
+    closeButton?.addEventListener("click", () => {
+      dismissModal(modal);
+    });
+
+    modal.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      dismissModal(modal);
+    });
+
+    modal.addEventListener("click", (event) => {
+      if ((event.target as Element).nodeName === "DIALOG") {
+        dismissModal(modal);
+      }
+    });
+  });
+</script>
