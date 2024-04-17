@@ -1,4 +1,4 @@
-const PUBLIC_SNIPCART_API_KEY = import.meta.env.SNIPCART_PUBLIC_API_KEY;
+const SNIPCART_API_KEY = import.meta.env.PUBLIC_SNIPCART_API_KEY;
 const encodedKey = btoa(`${SNIPCART_API_KEY}:`);
 const apiHeaders = {
   Authorization: `Basic ${encodedKey}`,
@@ -7,7 +7,7 @@ const apiHeaders = {
 
 export function initSnipcart() {
   window.SnipcartSettings = {
-    publicApiKey: PUBLIC_SNIPCART_API_KEY,
+    publicApiKey: SNIPCART_API_KEY,
     loadStrategy: "on-user-interaction",
   };
 

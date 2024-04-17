@@ -1,38 +1,19 @@
 ---
 import ModalSkeleton from "./ModalSkeleton.astro";
 import FormField from "./FormField.astro";
+import ModalForm from "./ModalForm.astro";
 const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
 
 const title = "Contact";
 const subtitle = "Fill in your details and I'll be in touch.";
+const buttonLabel = "Send Message";
 ---
 
-<ModalSkeleton type="contact" title={title} subtitle={subtitle}>
-  <form
-    class="fields-w"
-    method="POST"
-    action=`${STRAPI_API_URL}contact/send`
-    onSubmit={(event) => {
-      // Prevent default form submission
-      event.preventDefault();
-
-      // Example of how you might handle the form data submission using Fetch API
-      fetch(event.target.action, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: event.target.name.value,
-          email: event.target.email.value,
-          phone: event.target.phone.value,
-          message: event.target.message.value,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error("Error:", error));
-    }}
+<ModalSkeleton type="contact" title={title} subtitle={subtitle} ,>
+  <ModalForm
+    contentType="JSON"
+    actionURL=`${STRAPI_API_URL}contact/send`
+    buttonLabel={buttonLabel}
   >
     <FormField
       type="text"
@@ -40,161 +21,36 @@ const subtitle = "Fill in your details and I'll be in touch.";
       placeholder="First & Last Name *"
       required
     />
+    <FormField type="text" name="business" placeholder="Business Name" />
     <FormField
       type="email"
       name="email"
       placeholder="Email Address *"
       required
     />
-    <FormField type="number" name="phone" placeholder="Phone Number" required />
+    <FormField type="number" name="phone" placeholder="Phone Number" />
     <FormField
       type="textarea"
       name="message"
       placeholder="Message *"
       required
     />
-    <div class="feedback-message"></div>
-    <button type="submit">Send</button>
-  </form>
+  </ModalForm>
 </ModalSkeleton>
 
-<style lang="scss">
-  .fields-w {
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.5rem;
-    gap: 0.75rem;
-
-    button[type="submit"] {
-      border-radius: var(--radius-circular);
-      overflow: clip;
-      background-color: var(--button-solid-bg);
-      color: var(--button-solid-text);
-      border: none;
-      width: 100%;
-      height: 2.5rem;
-      transition: all 0.25s;
-      font-size: 0.875rem;
-      margin-top: 0.875rem;
-      cursor: pointer;
-
-      &:hover {
-        opacity: 0.9;
-      }
-
-      &:disabled {
-        opacity: 0.2;
-        cursor: default;
-
-        &:hover {
-          opacity: 0.2;
-        }
-      }
-    }
-  }
-</style>
-
 <script>
+  // Variable Declarations
   const contactModal: HTMLDialogElement | null = document.querySelector(
-    'dialog[data-modal="contact"'
+    'dialog[data-modal="contact"]'
   );
   const contactButtons = document.querySelectorAll(
     'button[data-modal="contact"]'
   );
 
+  // Add Event Listeners to all Contact Buttons
   contactButtons.forEach((contactButton) => {
     contactButton.addEventListener("click", () => {
       contactModal?.showModal();
     });
   });
-
-  /*   import { initFieldDividers } from "../../../scripts/animations";
-
-  function initContactForm() {
-    const modal = document.querySelector(".modal");
-    const form = modal?.querySelector("form");
-    // Function to add responsive sizing to textarea
-    const textarea = form?.querySelector("textarea");
-    const fieldWrapper = form?.querySelector(".fields-wrap");
-    const feedbackMessage = form?.querySelector(".feedback-message");
-    const submitButton = form?.querySelector('button[type="submit"]');
-
-    textarea.addEventListener("input", autoExpand);
-
-    function autoExpand() {
-      // Reset the height to shrink if text is deleted
-      this.style.height = "0.9rem";
-
-      // Set the height to the scroll height to expand as needed
-      this.style.height = this.scrollHeight + "px";
-    }
-
-    initFieldDividers(modal);
-
-    let contactFormErrorCount = 0; // Error count for this specific form
-
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      var formData = new FormData(form);
-      formData.append("action", "hf_form_submit");
-
-      var baseURL = window.location.origin;
-      var ajaxURL = baseURL + "/wp-admin/admin-ajax.php";
-
-      var testError = forceFormError(formData.get("EMAIL"));
-      if (testError) {
-        ajaxURL = testError;
-      }
-
-      jQuery.ajax({
-        url: ajaxURL,
-        type: "POST",
-        data: formData,
-        processData: false, // Necessary for FormData
-        contentType: false, // Necessary for FormData
-        success: function (response) {
-          successMessage =
-            "Message sent successfully! I’ll be in touch with you as soon as possible.";
-          displayModalMessage(successMessage, "success");
-          console.log("Form submitted successfully:", response);
-          clearForm(modal);
-          setTimeout(hideModal, 7500);
-        },
-        error: function (error) {
-          contactFormErrorCount = handleFormError(error, contactFormErrorCount);
-        },
-      });
-    });
-  }
-
-  function formValidation(form) {
-    const submit = form.querySelector('button[type="submit"]');
-    submit.disabled = true;
-
-    const validateForm = () => {
-      let isValid = true;
-
-      form
-        .querySelectorAll(
-          "input[required], select[required], textarea[required]"
-        )
-        .forEach((input) => {
-          if (!input.value.trim()) {
-            isValid = false;
-          }
-        });
-
-      // Enable or disable the submit button based on the form validity
-      submit.disabled = !isValid;
-    };
-
-    // Trigger validation whenever there's an input in the form fields
-    form.addEventListener("input", validateForm);
-
-    // Perform initial validation
-    validateForm();
-  } */
-
-  /* initContactForm(); */
 </script>

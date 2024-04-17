@@ -12,9 +12,11 @@
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "astro": "^4.5.4",
+    "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "gsap": "^3.12.5",
     "html-entities": "^2.5.2",
+    "jquery": "^3.7.1",
     "lenis": "^0.0.2",
     "sass": "^1.72.0",
     "swiper": "^11.0.7"

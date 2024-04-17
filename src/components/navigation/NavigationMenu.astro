@@ -181,12 +181,12 @@ const socialLinks = data.data.attributes.social_links;
         .links-col {
           display: flex;
           flex-direction: column;
-          gap: 2rem;
+          gap: 1.5rem;
           padding-bottom: 2rem;
           padding-right: 4rem;
 
           @media (max-width: $tablet) {
-            gap: 1.5rem;
+            gap: 1.25rem;
             padding-right: 3rem;
           }
 
@@ -194,16 +194,18 @@ const socialLinks = data.data.attributes.social_links;
             display: flex;
             flex-direction: column;
 
+            li {
+              &:nth-child(1),
+              &:nth-child(2) {
+                padding-bottom: 0.35rem;
+              }
+            }
+
             .primary-link {
               font-size: 3.5rem;
               cursor: pointer;
               overflow: hidden;
               text-align: left;
-
-              &:nth-child(1),
-              &:nth-child(2) {
-                padding-bottom: 0.85rem;
-              }
 
               @media (max-width: $tablet) {
                 font-size: 3rem;

@@ -5,10 +5,11 @@ interface Props {
   type: "text" | "textarea" | "email" | "number";
   name: string;
   placeholder: string;
+  id?: string;
   required?: boolean;
 }
 
-const { type, name, placeholder, required } = Astro.props as Props;
+const { type, name, placeholder, id, required } = Astro.props as Props;
 ---
 
 <div class="field-w">
@@ -20,6 +21,7 @@ const { type, name, placeholder, required } = Astro.props as Props;
         type={type}
         name={name}
         placeholder={placeholder}
+        id={id}
         required={required}
       />
     )
@@ -73,8 +75,8 @@ const { type, name, placeholder, required } = Astro.props as Props;
       padding: 0;
       overflow-y: hidden;
       resize: none;
-      padding-top: 0.875rem;
-      padding-bottom: 0.875rem;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
       line-height: 1.25;
       height: 2.75rem;
 

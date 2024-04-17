@@ -9,7 +9,7 @@ const imageFirst = createImageObject(objects.doublecard_image_first);
 const imageSecond = createImageObject(objects.doublecard_image_second);
 ---
 
-<section class="section-doublecard">
+<section id="section-doublecard">
   <div class="card-w">
     <div class="card">
       <ImageWellmade image={imageFirst} sizes="60vw" />
@@ -23,7 +23,7 @@ const imageSecond = createImageObject(objects.doublecard_image_second);
 <style lang="scss">
   @use "../../styles/vars" as *;
 
-  .section-doublecard {
+  #section-doublecard {
     margin: 0 auto;
     padding: 0 calc(2 * var(--page-margin)) 20vw;
 
@@ -101,10 +101,13 @@ const imageSecond = createImageObject(objects.doublecard_image_second);
   gsap.registerPlugin(ScrollTrigger);
 
   function initDoubleCardSection() {
-    const doublecardSection = document.querySelector(".section-doublecard");
+    const doublecardSection =
+      document.querySelector<HTMLElement>("section-doublecard");
 
     if (doublecardSection) {
-      const cards = doublecardSection.querySelectorAll(".card");
+      const cards = doublecardSection.querySelectorAll<HTMLElement>(".card");
+      const firstImage =
+        doublecardSection.querySelector<HTMLImageElement>("img");
 
       gsap
         .timeline({
@@ -124,13 +127,7 @@ const imageSecond = createImageObject(objects.doublecard_image_second);
           "start"
         );
 
-      imageParallax(
-        document.querySelector(".section-doublecard img"),
-        "top bottom",
-        "bottom top",
-        "0%",
-        "10%"
-      );
+      imageParallax(firstImage, "top bottom", "bottom top", "0%", "10%");
     }
   }
 

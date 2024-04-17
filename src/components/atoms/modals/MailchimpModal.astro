@@ -1,0 +1,57 @@
+---
+import ModalSkeleton from "./ModalSkeleton.astro";
+import FormField from "./FormField.astro";
+import ModalForm from "./ModalForm.astro";
+const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
+
+const title = "Stay in the Loop";
+const subtitle = "Get updates on new music and upcoming gigs.";
+const buttonLabel = "Sign Up";
+---
+
+<ModalSkeleton type="mailchimp" title={title} subtitle={subtitle}>
+  <ModalForm
+    actionURL=`${STRAPI_API_URL}mailchimp/submit`
+    buttonLabel={buttonLabel}
+  >
+    <FormField
+      type="email"
+      name="EMAIL"
+      placeholder="Email Address *"
+      id="mce-EMAIL"
+      required
+    />
+    <FormField
+      type="text"
+      name="MCFNAME"
+      placeholder="First Name*"
+      id="mce-MCFNAME"
+      required
+    />
+    <FormField
+      type="text"
+      name="MCLNAME"
+      placeholder="Last Name*"
+      id="mce-MCLNAME"
+      required
+    />
+    <FormField type="text" name="MCCITY" placeholder="City" id="mce-CITY" />
+  </ModalForm>
+</ModalSkeleton>
+
+<script>
+  // Variable Declarations
+  const mailchimpModal: HTMLDialogElement | null = document.querySelector(
+    'dialog[data-modal="mailchimp"]'
+  );
+  const mailchimpButtons = document.querySelectorAll(
+    'button[data-modal="mailchimp"]'
+  );
+
+  // Add Event Listeners to all Contact Buttons
+  mailchimpButtons.forEach((mailchimpButton) => {
+    mailchimpButton.addEventListener("click", () => {
+      mailchimpModal?.showModal();
+    });
+  });
+</script>

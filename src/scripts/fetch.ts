@@ -4,7 +4,6 @@ import type {
   CatalogueApiData,
   ImageAttributes,
   EventApiData,
-  VariantStrapiApi,
 } from "../types/strapi-attributes";
 
 import { format } from "date-fns";
@@ -58,7 +57,7 @@ export function createImageObject(object: any) {
   }
 
   const image = {
-    src: STRAPI_URL + attributes.url,
+    src: attributes.url,
     srcset: srcset,
     alt: altText,
   };
@@ -69,7 +68,7 @@ export function createImageObject(object: any) {
 export function createSrcset(formats: StrapiImageFormats): string {
   const srcsetComponents = Object.entries(formats).map(
     ([key, { url, width }]) => {
-      return `${STRAPI_URL}${url} ${width}w`;
+      return `${url} ${width}w`;
     }
   );
 
@@ -80,7 +79,7 @@ export function createVideoObject(object: any) {
   const attributes = object.data.attributes;
 
   const video = {
-    src: STRAPI_URL + attributes.url,
+    src: attributes.url,
     alt: attributes.alternativeText ? attributes.alternativeText : "",
   };
 
