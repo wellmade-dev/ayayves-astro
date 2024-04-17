@@ -10,7 +10,6 @@ import { format } from "date-fns";
 
 const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
 const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
-const STRAPI_URL = import.meta.env.STRAPI_URL;
 
 // Set up Strapi Auth Headers
 const strapiHeaders = {
