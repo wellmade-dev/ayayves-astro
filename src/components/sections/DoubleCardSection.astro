@@ -102,7 +102,7 @@ const imageSecond = createImageObject(objects.doublecard_image_second);
 
   function initDoubleCardSection() {
     const doublecardSection =
-      document.querySelector<HTMLElement>("section-doublecard");
+      document.getElementById("section-doublecard");
 
     if (doublecardSection) {
       const cards = doublecardSection.querySelectorAll<HTMLElement>(".card");
