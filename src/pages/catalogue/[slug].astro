@@ -3,7 +3,6 @@ import { fetchCatalogue } from "../../scripts/fetch";
 
 export async function getStaticPaths() {
   const catalogue = await fetchCatalogue();
-  console.log(catalogue);
   return catalogue.map((release) => ({
     params: { slug: release.slug },
     props: release,
