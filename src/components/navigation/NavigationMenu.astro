@@ -194,7 +194,14 @@ const socialLinks = data.data.attributes.social_links;
             display: flex;
             flex-direction: column;
 
+            &:hover > :not(:hover), &:focus > :not(:focus) {
+              --link-opacity: 0.5;
+            }
+
             li {
+              opacity: var(--link-opacity);
+              transition: opacity 0.05s ease-out;
+
               &:nth-child(1),
               &:nth-child(2) {
                 padding-bottom: 0.35rem;
@@ -228,17 +235,19 @@ const socialLinks = data.data.attributes.social_links;
 
           .streaming-links-w,
           .social-links-w {
+
             .secondary-link {
               font-size: 1rem;
               letter-spacing: 0.01em;
-              color: var(--text-secondary);
+              color: var(--text);
               position: relative;
               cursor: pointer;
               overflow: hidden;
-              transition: color 0.1s;
+              transition: opacity 0.05s ease-out;
+              opacity: 0.6;
 
-              &:hover {
-                color: var(--text);
+              &:hover, &:focus {
+                opacity: 1;
               }
 
               .label {
