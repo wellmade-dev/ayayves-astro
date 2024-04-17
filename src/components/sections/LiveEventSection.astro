@@ -7,7 +7,6 @@ import {
 } from "../../scripts/fetch";
 
 import ImageWellmade from "../atoms/ImageWellmade.astro";
-import Image from "astro/components/Image.astro";
 import HeadingMarquee from "../atoms/HeadingMarquee.astro";
 import ButtonDisplayTertiary from "../atoms/buttons/ButtonDisplayTertiary.astro";
 import Divider from "../atoms/Divider.astro";
@@ -49,7 +48,7 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
               }
             </div>
 
-            <Divider />
+            <Divider animateHover />
           </div>
         ))
       }
@@ -105,8 +104,6 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
       }
   }
 
-
-
   .events-w {
       padding: 1vw var(--page-margin) 1rem;
       display: flex;
@@ -129,6 +126,10 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
       margin-top: 0.5rem;
       container-type: inline-size;
 
+      &:hover > :not(:hover), &:focus > :not(:focus) {
+        --text-opacity: 0.4;
+      }
+
       @media (max-width: $tablet) {
           width: 100%;
           margin-top: 0;
@@ -145,6 +146,11 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
     display: flex;
     flex-direction: column;
     position: relative;
+  
+    &:hover, &:focus {
+      --divider-fill: 100%;
+      --divider-fill-speed: 0.6s;
+    }
 
     .event-item-inner {
         display: grid;
@@ -157,8 +163,9 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
         align-items: center;
         cursor: default;
 
-        .heading-400 {
-            opacity: 0.8;
+        .heading-400, .heading-500 {
+          opacity: var(--text-opacity);
+          transition: all 0.3s ease;
         }
 
         @container (max-width: 30rem) {
@@ -181,45 +188,6 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
 </style>
 
 <script>
-  import gsap from "gsap";
   import { imageParallax } from "../../scripts/animations";
-
   imageParallax(document.querySelector(".section-events img"), "top bottom", "bottom top", "0%", "30%",);
-
-  function showItemHover() {
-    let items = document.querySelectorAll(".event-item");
-    let fadeItems = ".heading-400, .heading-500, a";
-    
-    items.forEach((item) => {
-      item.addEventListener("mouseenter", () => {
-        // Apply the effect to all target elements in all items
-        items.forEach(i => {
-          gsap.to(i.querySelectorAll(fadeItems), { opacity: 0.4, duration: 0.3 });
-        });
-        // Override the effect for the current item
-        gsap.to(item.querySelectorAll(fadeItems), { opacity: 1, duration: 0.3 });
-        gsap.to(item, { opacity: 1, duration: 0.3 });
-        gsap.to(item.querySelector(".divider_fill"), { 
-          width: "100%", 
-          duration: 0.6, 
-          ease: "power3.out",
-        });
-      });
-      item.addEventListener("mouseleave", () => {
-        gsap.killTweensOf(item.querySelector(".divider_fill"));
-        gsap.to(item.querySelector(".divider_fill"), { 
-          width: "0%", 
-          duration: 0.5, 
-          ease: "power4.out",
-        });
-        if (!Array.from(items).some(el => el.matches(':hover'))) {
-          items.forEach(i => {
-            gsap.to(i.querySelectorAll(fadeItems), { opacity: 1, duration: 0.3 });
-          });
-        }
-      });
-    });
-  }
-
-  showItemHover();
 </script>

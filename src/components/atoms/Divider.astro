@@ -1,13 +1,23 @@
 ---
+interface Props {
+  animateHover?: boolean;
+  [key: string]: any;
+}
 
+const { animateHover, ...attributes } = Astro.props as Props;
 ---
 
-<div class="divider">
+<div class={`divider ${animateHover ? "animate-hover" : ""}`} {...attributes}>
   <div class="divider_fill"></div>
   <div class="divider_bg"></div>
 </div>
 
 <style lang="scss">
+  body {
+      --divider-fill: 0%;
+      --divider-fill-speed: 0.5s;
+  }
+
   .divider {
     z-index: 5;
     height: 1px;
@@ -25,7 +35,7 @@
     }
 
     .divider_fill {
-      width: 0%;
+      width: var(--divider-fill);
       height: 1px;
       background-color: var(--divider-full);
       position: absolute;
@@ -33,6 +43,8 @@
       bottom: auto;
       left: 0%;
       right: 0%;
+      transition: width var(--divider-fill-speed) cubic-bezier(0.24,0.98,0.36,1);
     }
   }
+      
 </style>
