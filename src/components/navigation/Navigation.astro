@@ -159,6 +159,15 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
         display: flex;
         align-items: center;
 
+        &:hover > :not(:hover), &:focus > :not(:focus) {
+          --link-opacity: 0.5;
+        }
+
+        li {
+          opacity: var(--link-opacity);
+          transition: opacity 0.05s ease-out;
+        }
+
         @media (max-width: $phablet) {
           display: none;
         }
@@ -266,18 +275,6 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
   ) as NodeListOf<HTMLElement>;
   let secondaryLinksWrapper =
     navigationMenu?.querySelector(".secondary-links-w");
-
-  // Init ticker animation on NavButtons in Navigation Menu
-  if (navLinksWrapper) {
-    initLinkGroups(navLinksWrapper, ".navigation-link", {
-      dim: true,
-      dimOpacity: 0.5,
-      dimDuration: 0.2,
-      dimEase: "none",
-      ticker: true,
-      translateX: false,
-    });
-  }
 
   // Animate menu button
   function animateMenuButton(isOpening: boolean) {

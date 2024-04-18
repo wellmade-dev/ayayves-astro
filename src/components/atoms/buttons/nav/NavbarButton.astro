@@ -11,6 +11,7 @@ const { label, ariaLabel, modal } = Astro.props;
 <button class="navigation-link" aria-label={ariaLabel} data-modal={modal}>
   <span>
     <div class="label">{label}</div>
+    <div class="label duplicated-label">{label}</div>
   </span>
 </button>
 
@@ -24,10 +25,29 @@ const { label, ariaLabel, modal } = Astro.props;
     position: relative;
     will-change: transform;
 
+    &:hover {
+      .label {
+        transform: translateY(-100%);
+
+        &.duplicated-label {
+          transform: translateY(0%);
+        }
+      }
+    }
+
     .label {
       padding: 0.25rem 0.75rem;
       pointer-events: none;
       will-change: transform;
+      transition: transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94);
+
+      &.duplicated-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateY(100%);
+      }
     }
   }
+  
 </style>
