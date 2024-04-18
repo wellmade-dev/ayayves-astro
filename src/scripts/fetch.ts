@@ -57,6 +57,7 @@ export function createImageObject(object: any) {
 
   const image = {
     src: attributes.url,
+    width: attributes.width,
     srcset: srcset,
     alt: altText,
   };

@@ -97,6 +97,7 @@ export interface ImageStrapiApi {
 
 export interface ImageAttributes {
   src: string;
+  width: number;
   srcset: string;
   alt: string;
 }
