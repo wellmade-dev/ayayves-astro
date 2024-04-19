@@ -42,10 +42,13 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
               <div class="heading-500">
                 <span>{event.city}</span>, <span>{event.city_indigenous}</span>
               </div>
-              {event.expired ? 
-                <ButtonDisplayTertiary label="Sold Out" disabled /> :
-                <ButtonDisplayTertiary label="Tickets" ariaLabel=`Buy tickets for the ${event.city} event on ${event.date_time}` href={event.ticket_link}/>            
-              }
+              <div class="button-w">
+                {event.expired ? 
+                  <ButtonDisplayTertiary label="Sold Out" disabled /> :
+                  <ButtonDisplayTertiary label="Tickets" ariaLabel=`Buy tickets for the ${event.city} event on ${event.date_time}` href={event.ticket_link}/>            
+                }
+              </div>
+
             </div>
 
             <Divider animateHover />
@@ -179,7 +182,7 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
                 font-size: 1rem;
             }
 
-            .button--display {
+            .button-w {
                 margin-top: 0.75rem;
             }
         }

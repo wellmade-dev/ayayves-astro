@@ -1,39 +1,50 @@
 ---
 import type { CatalogueAttributes } from "../../../types/strapi-attributes";
 import ImageWellmade from "../ImageWellmade.astro";
+import CatalogueModal from "../modals/CatalogueModal.astro";
 import DiagonalArrowSVG from "../svgs/DiagonalArrowSVG.astro";
 
 const { release } = Astro.props as { release: CatalogueAttributes };
 const ariaLabel = `Learn more about ${release.title}`;
 ---
 
-<a
+<div class="release-w">
+  <a 
   class="release-card"
+  role="button"
   href=`/catalogue/${release.slug}`
   aria-label={ariaLabel}
->
-  <div class="bg-tint"></div>
-  <div class="bg-gradient"></div>
-  <ImageWellmade image={release.coverImage} sizes="360px" />
-  <div class="desc-w">
-    <div class="heading-300">{release.title}</div>
-    <div class="p2">{release.subtitle}</div>
-    <div class="listen-button-w">
-      <div class="button--listen" style="opacity: 1;">
-        <div
-          class="label"
-          style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"
-        >
-          Stream
+  >
+    <div class="bg-tint"></div>
+    <div class="bg-gradient"></div>
+    <ImageWellmade image={release.coverImage} sizes="360px" />
+    <div class="desc-w">
+      <div class="heading-300">{release.title}</div>
+      <div class="p2">{release.subtitle}</div>
+      <div class="listen-button-w">
+        <div class="button--listen" style="opacity: 1;">
+          <div
+            class="label"
+            style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"
+          >
+            Stream
+          </div>
+          <DiagonalArrowSVG />
         </div>
-        <DiagonalArrowSVG />
       </div>
     </div>
-  </div>
-</a>
+  </a>
+  <CatalogueModal release={release}/>
+</div>
+
+
 
 <style lang="scss">
   @use "../../../styles/vars" as *;
+
+  .release-w {
+    height: 100%;
+  }
 
   .release-card {
     display: flex;
@@ -47,6 +58,12 @@ const ariaLabel = `Learn more about ${release.title}`;
     padding: 1.375rem 1.25rem;
     transition: all 0.5s;
     transform: translate(0);
+
+    &:hover {
+      img {
+        scale: 1,
+      }
+    }
 
     .desc-w {
       gap: 0.2rem;
@@ -98,6 +115,7 @@ const ariaLabel = `Learn more about ${release.title}`;
       -o-object-fit: cover;
       object-fit: cover;
       scale: 1.025;
+      transition: scale 0.6s cubic-bezier(0.65,0.05,0.36,1);
     }
 
     .bg-tint {
@@ -187,6 +205,21 @@ const ariaLabel = `Learn more about ${release.title}`;
       });
     });
   }
-
   releaseCardHover();
+
+  if (!window.initCatalogueModals) {
+    const releaseCards = document.querySelectorAll('.release-w');
+    
+    releaseCards.forEach((releaseCard) => {
+      const card = releaseCard.querySelector(".release-card");
+      const dialog = releaseCard.querySelector("dialog");
+
+      if (card && dialog) {
+        card.addEventListener("click", (event) => {
+          event?.preventDefault();
+          dialog.showModal();
+        });
+      }
+    })
+  }
 </script>

@@ -345,23 +345,4 @@ const release = await fetchHeroRelease();
     }
   }
   heroParallax();
-
-  function lazyloadHeroVideo() {
-    const videoBackground = document.querySelector(
-      ".section-hero .bg-content.video-w"
-    );
-    const video = videoBackground?.querySelector("video");
-    const videoSrc = video?.getAttribute("data-src");
-
-    if (video && videoSrc) {
-      video.src = videoSrc;
-      video.onloadeddata = () => {
-        gsap.to(video, {
-          opacity: 1,
-          duration: 0.5,
-        });
-      };
-    }
-  }
 </script>
-../../scripts/fetch

@@ -210,7 +210,7 @@ export function createReleaseObject(object: CatalogueApiData) {
     presaveDate: attributes.presave_date,
     presaveLive: presaveLive,
     presaveLink: attributes.presave_link,
-    spotifylink: attributes.spotify_link,
+    spotifyLink: attributes.spotify_link,
     applemusicLink: attributes.applemusic_link,
     youtubeLink: attributes.youtube_link,
   };

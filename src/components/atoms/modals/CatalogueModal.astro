@@ -1,0 +1,96 @@
+---
+import type { CatalogueAttributes } from "../../../types/strapi-attributes";
+import ImageWellmade from "../ImageWellmade.astro";
+import StreamLinkBundle from "../StreamLinkBundle.astro";
+import ModalSkeleton from "./ModalSkeleton.astro";
+
+interface Props {
+    release: CatalogueAttributes;
+}
+
+const { release } = Astro.props as Props;
+---
+
+<ModalSkeleton type="catalogue">
+  <div class="img-w">
+    <ImageWellmade image={release.coverImage} sizes="360px"/>
+  </div>
+  <div class="info-w">
+    <div class="title-w">
+      <div class="heading-600">{release.title}</div>
+      <button data-close-modal class="close-button">
+        <svg
+          width="16"
+          height="10"
+          viewBox="0 0 16 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1 0.999997L6.83333 6.83333L8 8L15 0.999997"
+            stroke="#021117"
+            stroke-width="2"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="meta-w p1">
+      <div class="description">{release.subtitle}</div>
+      <div class="date">{release.releaseDate.slice(0,4)}</div>
+    </div>
+  </div>
+  <StreamLinkBundle release={release} linkPage/>
+</ModalSkeleton>
+
+<style lang=scss>
+  .img-w {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-extra-small);
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .info-w {
+    margin-top: 1.125rem;
+    display: flex;
+    flex-direction: column;;
+    gap: 0.875rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .title-w {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+    gap: 2rem;
+
+    .heading-600 {
+      font-size: 2rem;
+      text-wrap: pretty;
+    }
+  }
+
+  .close-button {
+    padding: 0.45rem 0.2rem 0.125rem;
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  .meta-w {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>

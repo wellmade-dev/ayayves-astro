@@ -1,0 +1,57 @@
+---
+import Divider from "./Divider.astro";
+import DiagonalArrowSVG from "./svgs/DiagonalArrowSVG.astro";
+
+interface Props {
+    title: string;
+    href: string;
+}
+
+const { title, href } = Astro.props as Props;
+
+---
+
+<a class="stream-link-w" href={href} target="_blank" >
+    <div class="stream-link">
+        <div class="platform-title">{title}</div>
+        <div class="arrow-w">
+            <DiagonalArrowSVG />
+        </div>
+    </div>
+    <Divider />
+</a>
+
+<style lang="scss">
+    .stream-link-w {
+        display: flex;
+        flex-direction: column;
+
+        .stream-link {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.75rem 0.375rem 0.825rem 0.05rem;
+
+            .platform-title {
+                font-size: 1.05rem;
+                font-weight: 400;
+            }
+
+            .platform-title, .arrow-w {
+                transition: all 0.3s cubic-bezier(0.17,0.84,0.44,1);
+                opacity: var(--hover-opacity);
+            }
+        }
+
+        &:hover, &:focus {
+            --divider-fill: 100%;
+            --divider-fill-speed: 0.5s;
+
+            .platform-title, .arrow-w {
+                transform: translate(0.1875rem, -0.1875rem);
+                opacity: 1!important;
+            }
+        }
+    }
+</style>

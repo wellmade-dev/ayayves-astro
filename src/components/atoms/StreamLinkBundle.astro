@@ -1,0 +1,37 @@
+---
+import type { CatalogueAttributes } from '../../types/strapi-attributes'
+import StreamLink from './StreamLink.astro';
+
+interface Props {
+    release: CatalogueAttributes;
+    linkPage?: boolean;
+}
+
+const { release, linkPage } = Astro.props as Props;
+
+---
+
+<div class="stream-links">
+    {release.released ? (
+        <>
+        {release.applemusicLink && (<StreamLink title="Apple Music" href={release.applemusicLink} />) }
+        {release.spotifyLink && (<StreamLink title="Spotify" href={release.spotifyLink} />) }
+        {release.youtubeLink && (<StreamLink title="YouTube" href={release.youtubeLink} />) }
+        </>
+    ) : (
+        <>
+        {release.presaveLink && release.presaveLive && (<StreamLink title="Pre-Save" href={release.presaveLink} />)}
+        </>
+    )}   
+</div>
+
+<style lang="scss">
+    .stream-links {
+        display: flex;
+        flex-direction: column;
+        
+        &:hover {
+            --hover-opacity: 0.4;
+        }
+    }
+</style>

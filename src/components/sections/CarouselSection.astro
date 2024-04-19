@@ -7,6 +7,8 @@ interface Props {
 }
 
 const { title, subtitle } = Astro.props;
+let hideSubtitle;
+console.log(subtitle.length)
 ---
 
 <div class="carousel-section">
@@ -38,6 +40,7 @@ const { title, subtitle } = Astro.props;
     padding-right: var(--page-margin);
     position: relative;
     padding-top: 4rem;
+    overflow: hidden;
   }
 
   .slider-header {

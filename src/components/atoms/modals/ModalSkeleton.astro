@@ -1,7 +1,7 @@
 ---
 interface Props {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   type: string;
 }
 
@@ -9,8 +9,9 @@ const { title, subtitle, type } = Astro.props as Props;
 ---
 
 <dialog class="modal" data-modal={type}>
-  <div class="modal-inner" data-theme="light">
-    <div class="header">
+    <div class="modal-inner" data-theme="light">
+    {title && (
+       <div class="header">
       <div class="heading-w">
         <div class="heading">{title}</div>
         <div class="p2">{subtitle}</div>
@@ -29,24 +30,22 @@ const { title, subtitle, type } = Astro.props as Props;
             stroke-width="2"></path>
         </svg>
       </button>
-    </div>
+    </div>  
+    ) }
     <div class="content">
       <slot />
     </div>
-  </div>
 </dialog>
 
 <style lang="scss">
   @use "../../../styles/vars" as *;
+
   .modal {
-    width: 24rem;
+    width: 22rem;
     overflow: clip;
     border-radius: var(--radius-small);
     position: fixed;
-    left: auto;
-    top: auto;
-    right: 0;
-    bottom: 0;
+    inset: auto 0 0 auto;
     margin: var(--page-margin);
 
     @media (max-width: 460px) {
@@ -54,7 +53,8 @@ const { title, subtitle, type } = Astro.props as Props;
     }
 
     &::backdrop {
-      background-color: rgba(0, 0, 0, 0.75);
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(7.5px);
     }
 
     &[open] {
