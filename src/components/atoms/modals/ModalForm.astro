@@ -78,14 +78,10 @@ const { actionURL, buttonLabel } = Astro.props as Props;
 
 <script>
   import axios from "axios";
-  import { initFieldDividers } from "../../../scripts/animations";
   import { validateForm, handleFormError } from "../../../scripts/utils";
 
   const forms = document.querySelectorAll(`form`);
   forms.forEach((form) => {
-    // Init field divider animations
-    initFieldDividers(form);
-
     // Add responsive sizing to textarea element
     const textarea = form?.querySelector("textarea");
     if (textarea) {
