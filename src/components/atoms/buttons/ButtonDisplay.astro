@@ -4,21 +4,38 @@ import StarSVG from "../svgs/StarSVG.astro";
 interface Props {
   label: string;
   ariaLabel: string;
-  href: string;
+  href?: string;
+  button?: boolean;
 }
 
-const { label, ariaLabel, href } = Astro.props as Props;
+const { label, ariaLabel, href, button } = Astro.props as Props;
 ---
 
-<a class="button--display" aria-label={ariaLabel} href={href}>
-  <div class="star-w">
-    <StarSVG width="1rem" />
-  </div>
-  <div class="label">{label}</div>
-  <div class="star-w">
-    <StarSVG width="1rem" />
-  </div>
-</a>
+{
+  button ? (
+    <button class="button--display" aria-label={ariaLabel}>
+      <span>
+        <div class="star-w">
+          <StarSVG width="1rem" />
+        </div>
+        <div class="label">{label}</div>
+        <div class="star-w">
+          <StarSVG width="1rem" />
+        </div>
+      </span>
+    </button>
+  ) : (
+    <a class="button--display link" aria-label={ariaLabel} href={href}>
+      <div class="star-w">
+        <StarSVG width="1rem" />
+      </div>
+      <div class="label">{label}</div>
+      <div class="star-w">
+        <StarSVG width="1rem" />
+      </div>
+    </a>
+  )
+}
 
 <style lang="scss">
   .button--display {
@@ -26,20 +43,26 @@ const { label, ariaLabel, href } = Astro.props as Props;
     $padding-right: 1.5rem;
     $star-width: 3rem;
 
-    gap: 1rem;
-    border: 1px solid var(--button-glass-outline);
-    color: 1px solid var(--text);
-    background-color: var(--button-glass-bg);
-    border-radius: var(--radius-circular);
-    justify-content: center;
-    align-items: center;
-    padding: $padding $padding $padding $padding-right;
+    &.button--display {
+      border: 1px solid var(--button-glass-outline);
+      color: 1px solid var(--text);
+      background-color: var(--button-glass-bg);
+      border-radius: var(--radius-circular);
+    }
+
+    &.link,
+    span {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      padding: $padding $padding $padding $padding-right;
+      justify-self: start;
+    }
+
     transition: all 0.25s;
-    display: flex;
     position: relative;
     overflow: clip;
-    justify-self: start;
-    transform: translate(0);
     letter-spacing: -0.02em;
     font-family: var(--editorial-old);
     font-size: 1.6rem;

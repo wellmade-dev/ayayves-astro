@@ -159,7 +159,8 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
         display: flex;
         align-items: center;
 
-        &:hover > :not(:hover), &:focus > :not(:focus) {
+        &:hover > :not(:hover),
+        &:focus > :not(:focus) {
           --link-opacity: 0.5;
         }
 
@@ -230,7 +231,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 
 <script>
   import { gsap } from "gsap";
-  import { initLinkGroups, tickerLinkHover } from "../../scripts/animations.js";
+  import { tickerLinkHover } from "../../scripts/animations.js";
   import { togglePageScroll } from "../../scripts/utils.ts";
   import { easingSmall, easingLarge } from "../../scripts/init.js";
 

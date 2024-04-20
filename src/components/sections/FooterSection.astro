@@ -295,7 +295,7 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
-  import { initMarquee, initLinkGroups } from "../../scripts/animations";
+  import { initMarquee } from "../../scripts/animations";
 
   const marquee = document.querySelector(".marquee-w");
   initMarquee(marquee, 45);
@@ -303,12 +303,12 @@ const currentYear = new Date().getFullYear();
   const footerLinksWrapper: HTMLElement | null =
     document.querySelector(".footer-link-w");
 
-  initLinkGroups(footerLinksWrapper, ".footer-link", {
+  /* initLinkGroups(footerLinksWrapper, ".footer-link", {
     dim: true,
     dimOpacity: 0.5,
     dimDuration: 0.2,
     dimEase: "none",
     ticker: true,
     translateX: false,
-  });
+  }); */
 </script>

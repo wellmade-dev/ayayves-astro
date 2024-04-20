@@ -3,6 +3,7 @@ import { fetchCatalogue } from "../../scripts/fetch";
 import ImageWellmade from "../atoms/ImageWellmade.astro";
 import Divider from "../atoms/Divider.astro";
 import ButtonDisplay from "../atoms/buttons/ButtonDisplay.astro";
+import CatalogueModal from "../atoms/modals/CatalogueModal.astro";
 
 async function fetchHeroRelease() {
   const catalogue = await fetchCatalogue();
@@ -16,6 +17,7 @@ async function fetchHeroRelease() {
 }
 
 const release = await fetchHeroRelease();
+console.log(release);
 ---
 
 <section class="home section-hero" data-theme="overlay">
@@ -99,20 +101,27 @@ const release = await fetchHeroRelease();
         </div>
         <Divider />
         <div class="feature_grid">
-          <ButtonDisplay
-            href={release.slug}
-            label={release.released ? "Listen" : "Pre-Save"}
-            ariaLabel={
-              release.released
-                ? `Listen to ${release?.title}`
-                : `Pre-Save ${release?.title}`
-            }
-          />
+          <div class="button-w">
+            {release.released && release.spotifyLink && release.applemusicLink ? (
+              <ButtonDisplay
+            label="Listen"
+            ariaLabel=`Listen to ${release?.title}`
+            button
+            />
+            ) : (
+              <ButtonDisplay
+            href={release.presaveLink}
+            label="Pre-save"
+            ariaLabel=`Pre-save ${release?.title}`
+            />
+          )}
+          </div>  
           <div class="p1" data-subtitle style="align-self: center;">
             Scroll to explore
           </div>
         </div>
       </div>
+      <CatalogueModal release={release} />
     )
   }
   <div style="z-index: 5">
@@ -122,6 +131,11 @@ const release = await fetchHeroRelease();
 
 <style lang="scss">
   @use "../../styles/vars" as *;
+
+    .button-w {
+    display: flex;
+    justify-items: start;
+  }
   .section-hero {
     z-index: 5;
     width: 100%;
@@ -306,6 +320,16 @@ const release = await fetchHeroRelease();
 <script>
   import gsap from "gsap";
 
+  const heroSection = document.querySelector('.section-hero');
+  const streamButton = heroSection?.querySelector('button.button--display');
+  const streamModal = heroSection?.querySelector('dialog');
+  
+  if (streamButton) {
+    streamButton.addEventListener("click", () => {
+      streamModal?.showModal();
+    })
+  }
+  
   // Hero Background Parallax
   function heroParallax() {
     const heroSection = document.querySelector(".section-hero");

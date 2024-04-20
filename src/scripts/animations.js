@@ -72,22 +72,6 @@ export function tickerLinkHover(
   }
 }
 
-export function initLinkGroups(parent, targetClass, config, outConfig) {
-  parent.addEventListener("mouseover", function (event) {
-    let targetElement = event.target.closest(targetClass);
-    if (targetElement && this.contains(targetElement)) {
-      animateLinkGroups(targetElement, true, config);
-    }
-  });
-
-  parent.addEventListener("mouseout", function (event) {
-    let targetElement = event.target.closest(targetClass);
-    if (targetElement && this.contains(targetElement)) {
-      animateLinkGroups(targetElement, false, outConfig || config);
-    }
-  });
-}
-
 export function imageParallax(image, start, end, startPosition, endPosition) {
   if (image) {
     gsap
@@ -160,25 +144,4 @@ export function initMarquee(marquee, speed) {
   marquee.marqueeTimeline = marqueeTimeline;
 
   return marqueeTimeline;
-}
-
-export function initFieldDividers(modal) {
-  let fields = modal.querySelectorAll(".field-w");
-  fields.forEach((field) => {
-    field.addEventListener("mouseenter", () => {
-      gsap.to(field.querySelector(".divider_fill"), {
-        width: "100%",
-        duration: 0.75,
-        ease: "power3.out",
-      });
-    });
-    field.addEventListener("mouseleave", () => {
-      gsap.killTweensOf(field.querySelector(".divider_fill"));
-      gsap.to(field.querySelector(".divider_fill"), {
-        width: "0%",
-        duration: 0.5,
-        ease: "power3.out",
-      });
-    });
-  });
 }
