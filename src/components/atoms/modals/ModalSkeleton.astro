@@ -9,32 +9,36 @@ const { title, subtitle, type } = Astro.props as Props;
 ---
 
 <dialog class="modal" data-modal={type}>
-    <div class="modal-inner" data-theme="light">
-    {title && (
-       <div class="header">
-      <div class="heading-w">
-        <div class="heading">{title}</div>
-        <div class="p2">{subtitle}</div>
-      </div>
-      <button data-close-modal class="close-button">
-        <svg
-          width="16"
-          height="10"
-          viewBox="0 0 16 10"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1 0.999997L6.83333 6.83333L8 8L15 0.999997"
-            stroke="#021117"
-            stroke-width="2"></path>
-        </svg>
-      </button>
-    </div>  
-    ) }
+  <div class="modal-inner" data-theme="light">
+    {
+      title && (
+        <div class="header">
+          <div class="heading-w">
+            <div class="heading">{title}</div>
+            <div class="p2">{subtitle}</div>
+          </div>
+          <button data-close-modal class="close-button">
+            <svg
+              width="16"
+              height="10"
+              viewBox="0 0 16 10"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 0.999997L6.83333 6.83333L8 8L15 0.999997"
+                stroke="#021117"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+        </div>
+      )
+    }
     <div class="content">
       <slot />
     </div>
+  </div>
 </dialog>
 
 <style lang="scss">
@@ -47,6 +51,9 @@ const { title, subtitle, type } = Astro.props as Props;
     position: fixed;
     inset: auto 0 0 auto;
     margin: var(--page-margin);
+    max-height: calc(100% - (2 * var(--page-margin)));
+    overflow-y: auto;
+    overscroll-behavior: contain;
 
     @media (max-width: 460px) {
       width: calc(100% - (2 * var(--page-margin)));
@@ -185,6 +192,8 @@ const { title, subtitle, type } = Astro.props as Props;
 </style>
 
 <script>
+  import { togglePageScroll } from "../../../scripts/utils";
+
   const modals = document.querySelectorAll("dialog");
 
   function dismissModal(modal: HTMLDialogElement) {

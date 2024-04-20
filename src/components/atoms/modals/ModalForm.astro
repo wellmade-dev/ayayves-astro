@@ -110,25 +110,32 @@ const { actionURL, buttonLabel } = Astro.props as Props;
 
   let contactFormErrorCount = 0; // Error count for this specific form
 
-  function submitForm(event, form) {
+  function submitForm(event: SubmitEvent): void {
     // Prevent default form submission
     event.preventDefault();
 
-    var honeypotField = form.find('[name="honeypot"]');
-    var feedbackMessage = form.find(".feedback-message");
-    var submitButton = form.find('button[type="submit"]');
+    const form = event.target as HTMLFormElement;
+    const honeypotField = form.querySelector(
+      '[name="honeypot"]'
+    ) as HTMLInputElement;
+    const feedbackMessage = form.querySelector(
+      ".feedback-message"
+    ) as HTMLElement;
+    const submitButton = form.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement;
 
-    if (honeypotField.val().trim() != "") {
+    if (honeypotField && honeypotField.value.trim() != "") {
       console.log("I see you.");
       return;
     }
 
     // Store original button text then send
-    const submitLabel = submitButton.text();
+    const submitLabel = submitButton.textContent;
     submitButton.textContent = "Sending...";
 
     axios
-      .post(form.action, new FormData($form))
+      .post(form.action, new FormData(form))
       .then((response) => {
         console.log("Success:", response);
       })
