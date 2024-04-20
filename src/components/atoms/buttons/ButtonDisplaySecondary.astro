@@ -21,6 +21,10 @@ const { label, ariaLabel, href } = Astro.props;
 </a>
 
 <style lang="scss">
+  $padding: 0.1rem;
+  $padding-right: 1rem;
+  $star-width: 1.75rem;
+
   .button--display.secondary {
     gap: 0.575rem;
     border: 1px solid var(--button-glass-outline);
@@ -30,7 +34,7 @@ const { label, ariaLabel, href } = Astro.props;
     justify-content: center;
     align-items: center;
     align-self: flex-start;
-    padding: 0.15rem 0.125rem 0.15rem 0.95rem;
+    padding: 0.0875rem $padding $padding $padding-right;
     transition: all 0.25s;
     display: flex;
     position: relative;
@@ -40,10 +44,23 @@ const { label, ariaLabel, href } = Astro.props;
     font-size: 0.875rem;
     font-style: unset;
 
+    .star-w,
+    .label {
+      transition: transform 0.225s cubic-bezier(0.46, 0.03, 0.52, 0.96);
+    }
+
     &:hover {
       border-color: var(--button-solid-bg);
       background-color: var(--button-glass-hover);
       color: var(--text);
+
+      .star-w {
+        transform: translateX(calc($star-width + $padding));
+      }
+
+      .label {
+        transform: translateX(calc($star-width - ($padding * 2)));
+      }
     }
 
     .label {
@@ -51,7 +68,7 @@ const { label, ariaLabel, href } = Astro.props;
     }
 
     .star-w {
-      width: 1.75rem;
+      width: $star-width;
       aspect-ratio: 1 / 1;
       background-color: var(--button-solid-bg);
       color: var(--button-solid-text);
@@ -71,8 +88,3 @@ const { label, ariaLabel, href } = Astro.props;
     }
   }
 </style>
-
-<script>
-  import { initDisplayButtons } from "../../../scripts/animations";
-  initDisplayButtons();
-</script>

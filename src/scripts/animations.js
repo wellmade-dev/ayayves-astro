@@ -147,53 +147,6 @@ export function initLinkGroups(parent, targetClass, config, outConfig) {
   });
 }
 
-export function initDisplayButtons() {
-  if (!window.initDisplayButtons) {
-    let buttonsGlass = document.querySelectorAll(
-      ".button--display:not(.tertiary)"
-    );
-
-    const animateButton = (buttonGlass, moveStar, moveText, duration, ease) => {
-      gsap.to(buttonGlass.querySelectorAll(".star-w"), {
-        x: moveStar,
-        duration: duration,
-        ease: ease,
-      });
-      gsap.to(buttonGlass.querySelector(".label"), {
-        x: moveText,
-        duration: duration,
-        ease: ease,
-      });
-    };
-
-    buttonsGlass.forEach((buttonGlass) => {
-      buttonGlass.addEventListener("mouseenter", (event) => {
-        let starElement = buttonGlass.querySelector(".star-w");
-        let starWidth = starElement?.offsetWidth;
-        let borderWidth = parseInt(
-          window.getComputedStyle(buttonGlass).outlineWidth,
-          10
-        );
-        let paddingRight = parseInt(
-          window.getComputedStyle(buttonGlass).paddingRight,
-          10
-        );
-
-        let moveStar = starWidth + borderWidth + paddingRight;
-        let moveText = starWidth - paddingRight * 2;
-
-        animateButton(buttonGlass, moveStar, moveText, 0.3, "power4");
-      });
-
-      buttonGlass.addEventListener("mouseleave", () => {
-        animateButton(buttonGlass, 0, 0, 0.4, "power2");
-      });
-    });
-
-    window.initDisplayButtons = true;
-  }
-}
-
 export function imageParallax(image, start, end, startPosition, endPosition) {
   if (image) {
     gsap

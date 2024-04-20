@@ -9,11 +9,11 @@ const ariaLabel = `Learn more about ${release.title}`;
 ---
 
 <div class="release-w">
-  <a 
-  class="release-card"
-  role="button"
-  href=`/catalogue/${release.slug}`
-  aria-label={ariaLabel}
+  <a
+    class="release-card"
+    role="button"
+    href=`/catalogue/${release.slug}`
+    aria-label={ariaLabel}
   >
     <div class="bg-tint"></div>
     <div class="bg-gradient"></div>
@@ -29,15 +29,15 @@ const ariaLabel = `Learn more about ${release.title}`;
           >
             Stream
           </div>
-          <DiagonalArrowSVG />
+          <div class="arrow-w">
+            <DiagonalArrowSVG />
+          </div>
         </div>
       </div>
     </div>
   </a>
-  <CatalogueModal release={release}/>
+  <CatalogueModal release={release} />
 </div>
-
-
 
 <style lang="scss">
   @use "../../../styles/vars" as *;
@@ -59,9 +59,27 @@ const ariaLabel = `Learn more about ${release.title}`;
     transition: all 0.5s;
     transform: translate(0);
 
+    .desc-w,
+    .bg-tint,
+    .bg-gradient {
+      transition: all 0.5s var(--easing-small);
+    }
+
     &:hover {
       img {
-        scale: 1,
+        scale: 1;
+      }
+
+      .desc-w {
+        transform: translateY(0);
+      }
+
+      .bg-tint {
+        opacity: 0.4;
+      }
+
+      .bg-gradient {
+        opacity: 1;
       }
     }
 
@@ -71,6 +89,7 @@ const ariaLabel = `Learn more about ${release.title}`;
       display: flex;
       flex-direction: column;
       padding-right: 0.75rem;
+      transform: translateY(2.5rem);
 
       .heading-300 {
         font-size: 1rem;
@@ -85,6 +104,15 @@ const ariaLabel = `Learn more about ${release.title}`;
         display: flex;
         padding-top: 0.5rem;
         justify-items: flex-start;
+        transition: opacity 0.3s var(--easing-small);
+
+        &:hover {
+          opacity: 0.825;
+
+          .arrow-w {
+            transform: translate(2px, -2px);
+          }
+        }
 
         .button--listen {
           display: flex;
@@ -98,6 +126,10 @@ const ariaLabel = `Learn more about ${release.title}`;
 
           .label {
             font-size: 1rem;
+          }
+
+          .arrow-w {
+            transition: transform 0.3s var(--easing-small);
           }
         }
       }
@@ -115,7 +147,7 @@ const ariaLabel = `Learn more about ${release.title}`;
       -o-object-fit: cover;
       object-fit: cover;
       scale: 1.025;
-      transition: scale 0.6s cubic-bezier(0.65,0.05,0.36,1);
+      transition: scale 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
     }
 
     .bg-tint {
@@ -149,67 +181,9 @@ const ariaLabel = `Learn more about ${release.title}`;
 </style>
 
 <script>
-  import gsap from "gsap";
-  import { easingSmall } from "../../../scripts/init";
-
-  function releaseCardHover() {
-    const releaseCards = document.querySelectorAll(".release-card");
-
-    releaseCards.forEach((releaseCard) => {
-      const image = releaseCard.querySelector("img");
-      const buttonWrapper = releaseCard.querySelector(
-        ".listen-button-w"
-      ) as HTMLElement;
-      const buttonWrapperHeight = buttonWrapper?.offsetHeight;
-      const button = releaseCard.querySelector(".button--listen");
-      const descriptionWrapper = releaseCard.querySelector(".desc-w");
-      const bgTint = releaseCard.querySelector(".bg-tint");
-      const bgGradient = releaseCard.querySelector(".bg-gradient");
-      const buttonSVG = releaseCard.querySelector("svg");
-
-      const rem = 16;
-
-      gsap.set(descriptionWrapper, { y: buttonWrapperHeight });
-      gsap.set(button, { opacity: 1 });
-
-      releaseCard.addEventListener("mouseenter", () => {
-        gsap.to(image, { scale: 1, ease: "power2.out", duration: 0.6 });
-        gsap.to(descriptionWrapper, {
-          y: 0,
-          ease: easingSmall,
-          duration: 0.5,
-        });
-        gsap.to(bgTint, { opacity: 0.4, ease: easingSmall, duration: 0.5 });
-        gsap.to(bgGradient, { opacity: 1, ease: easingSmall, duration: 0.5 });
-      });
-
-      button?.addEventListener("mouseenter", () => {
-        gsap.to(button, { opacity: 0.75, ease: easingSmall, duration: 0.3 });
-        gsap.to(buttonSVG, { x: 2, y: -2, ease: easingSmall, duration: 0.3 });
-      });
-
-      releaseCard.addEventListener("mouseleave", () => {
-        gsap.to(image, { scale: 1.025, ease: easingSmall, duration: 0.6 });
-        gsap.to(descriptionWrapper, {
-          y: buttonWrapperHeight,
-          ease: easingSmall,
-          duration: 0.6,
-        });
-        gsap.to(bgTint, { opacity: 0.3, ease: easingSmall, duration: 0.6 });
-        gsap.to(bgGradient, { opacity: 0, ease: easingSmall, duration: 0.6 });
-      });
-
-      button?.addEventListener("mouseleave", () => {
-        gsap.to(button, { opacity: 0.9, ease: easingSmall, duration: 0.3 });
-        gsap.to(buttonSVG, { x: 0, y: 0, ease: easingSmall, duration: 0.3 });
-      });
-    });
-  }
-  releaseCardHover();
-
   if (!window.initCatalogueModals) {
-    const releaseCards = document.querySelectorAll('.release-w');
-    
+    const releaseCards = document.querySelectorAll(".release-w");
+
     releaseCards.forEach((releaseCard) => {
       const card = releaseCard.querySelector(".release-card");
       const dialog = releaseCard.querySelector("dialog");
@@ -220,6 +194,6 @@ const ariaLabel = `Learn more about ${release.title}`;
           dialog.showModal();
         });
       }
-    })
+    });
   }
 </script>
