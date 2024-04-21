@@ -20,6 +20,7 @@ export async function getStaticPaths() {
 const product = Astro.props;
 const variants = product.variants;
 
+// Set the default variant as the first with stock
 let defaultVariant: VariantStrapiApi;
 if (variants) {
   for (let i = 0; i < variants.length; i++) {
@@ -29,6 +30,31 @@ if (variants) {
     }
   }
 }
+
+// Variant setup on Snipcart Button
+const variantArray = variants.map((variant: VariantStrapiApi) => {
+  return variant.variant_name;
+});
+
+const variantOptions = variantArray.join("|");
+
+console.log(variantOptions);
+
+// Options array, this was used before but only displays the in stock options
+// With the stock levels from Strapi. Move to Snipcart but keep here as reference.
+/* const optionsArray = activeOptions.map((option: any) => {
+  // Check if there's a price and it's not 0, to append the price difference
+  if (defaultPrice > 0 && option.dataset.price && option.dataset.price !== 0) {
+    // Format price with + or - sign and fixed to 2 decimal places
+    const priceFormat =
+      (option.dataset.price > defaultPrice ? "+" : "") +
+      (option.dataset.price - defaultPrice);
+    return `${option.value}[${priceFormat}]`;
+  } else {
+    // If there's no price difference, just return the value/name
+    return option.value;
+  }
+}); */
 ---
 
 <Layout title={product.name}>
@@ -91,6 +117,8 @@ if (variants) {
         data-item-description={product.short_description}
         data-item-quantity="1"
         data-item-name={product.name}
+        data-item-custom1-name={product.variants[0].variant_group}
+        data-item-custom1-options={variantOptions}
       >
         <span>
           <ButtonMarquee
@@ -328,29 +356,6 @@ if (variants) {
       atcButton.setAttribute(`data-item-custom1-value`, target.value);
     });
 
-    /* const optionsArray = activeOptions.map((option) => option.value); */
-    const optionsArray = activeOptions.map((option: any) => {
-      // Check if there's a price and it's not 0, to append the price difference
-      if (
-        defaultPrice > 0 &&
-        option.dataset.price &&
-        option.dataset.price !== 0
-      ) {
-        // Format price with + or - sign and fixed to 2 decimal places
-        const priceFormat =
-          (option.dataset.price > defaultPrice ? "+" : "") +
-          (option.dataset.price - defaultPrice);
-        return `${option.value}[${priceFormat}]`;
-      } else {
-        // If there's no price difference, just return the value/name
-        return option.value;
-      }
-    });
-
-    const concatenatedOptions = optionsArray.join("|");
-
-    atcButton.setAttribute(`data-item-custom1-name`, activeOptions[0].name);
-    atcButton.setAttribute(`data-item-custom1-options`, concatenatedOptions);
     atcButton.setAttribute(`data-item-custom1-value`, selectedVariant?.value);
   }
 </script>
