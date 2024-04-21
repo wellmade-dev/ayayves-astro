@@ -115,8 +115,11 @@ const variantOptions = variantArray.join("|");
         data-item-description={product.short_description}
         data-item-quantity="1"
         data-item-name={product.name}
-        data-item-custom1-name={product.variants[0].variant_group}
-        data-item-custom1-options={variantOptions}
+        {...variants &&
+          variants.length > 0 && {
+            "data-item-custom1-name": product.variants[0].variant_group,
+            "data-item-custom1-options": variantOptions,
+          }}
       >
         <span>
           <ButtonMarquee
