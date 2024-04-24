@@ -3,7 +3,7 @@ const PUBLIC_SNIPCART_API_KEY = import.meta.env.PUBLIC_SNIPCART_API_KEY;
 export function initSnipcart() {
   window.SnipcartSettings = {
     publicApiKey: PUBLIC_SNIPCART_API_KEY,
-    loadCSS: false,
+    loadCSS: true,
     loadStrategy: "on-user-interaction",
     templatesUrl: "/SnipcartTemplates.html"
   };
