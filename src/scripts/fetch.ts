@@ -80,8 +80,15 @@ export function createImageObject(object: any) {
 export function createVideoObject(object: any) {
   const attributes = object.data.attributes;
 
+    let src;
+    if (STRAPI_URL) {
+      src = `${STRAPI_URL}${attributes.url}`
+    } else {
+      src = attributes.url
+    }
+
   const video = {
-    src: `${STRAPI_URL}${attributes.url}`,
+    src: src,
     alt: attributes.alternativeText ? attributes.alternativeText : "",
   };
 
