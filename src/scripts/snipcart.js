@@ -3,7 +3,9 @@ const PUBLIC_SNIPCART_API_KEY = import.meta.env.PUBLIC_SNIPCART_API_KEY;
 export function initSnipcart() {
   window.SnipcartSettings = {
     publicApiKey: PUBLIC_SNIPCART_API_KEY,
+    loadCSS: false,
     loadStrategy: "on-user-interaction",
+    templatesUrl: "/SnipcartTemplates.html"
   };
 
   (function () {
@@ -99,4 +101,12 @@ export function initSnipcart() {
           (t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl));
     }
   })();
+
+  document.addEventListener('snipcart.ready', function () {
+    console.log("snipcart is ready")
+
+    Snipcart.events.on('snipcart.initialized', function () {
+      document.getElementById('snipcart').setAttribute('data-theme', 'light');
+    })
+  })
 }

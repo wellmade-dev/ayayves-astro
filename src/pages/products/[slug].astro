@@ -100,6 +100,7 @@ if (variantGroups && variantGroups.length > 0) {
         data-item-description={product.short_description}
         data-item-quantity="1"
         data-item-name={product.name}
+        data-item-image={product.image.src}
         disabled={product.in_stock ? false : true}
         {...variantAttributes}
       >

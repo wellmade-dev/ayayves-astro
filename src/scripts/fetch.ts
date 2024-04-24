@@ -189,31 +189,6 @@ export function createProductObject(strapiProductData: ProductAPI, snipcartData:
       })
     }
   }
-
-  // Add out of stock strings for products in Snipcart
-  /* snipcartProduct.variants.forEach((variant) => {
-    if (variant.stock == 0) {
-      const snipcartVariantGroup = variant.variation[0].name; // Snipcart Group Name, "Size"
-      const snipcartVariantOption = variant.variation[0].option; // Snipcart Variant Name, "Small"
-
-      const strapiVariantGroup = newVariantGroupArray?.find(
-        (variantGroup) => variantGroup.variant_type === snipcartVariantGroup // Find the Out of Stock Variant's Group in the Strapi Product Data
-      );
-
-      if (!strapiVariantGroup) {
-        return; // Early return if not found
-      }
-
-      const strapiVariantOption = strapiVariantGroup.variant.find(
-        (variant) => variant.variant_name === snipcartVariantOption // Find the Out of Stock Variant in the Strapi Product Data
-      );
-
-      if (!strapiVariantOption) {
-        return; // Early return if not found
-      }
-      strapiVariantOption.out_of_stock = true; // Mark the individual variant option as out of stock
-    }
-  }); */
   
   const product: ProductData = {
     id: strapiProductData.id,

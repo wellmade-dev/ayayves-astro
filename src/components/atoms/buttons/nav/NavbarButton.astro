@@ -10,8 +10,30 @@ const { label, ariaLabel, modal } = Astro.props;
 
 <button class="navigation-link" aria-label={ariaLabel} data-modal={modal}>
   <span>
-    <div class="label">{label}</div>
-    <div class="label duplicated-label">{label}</div>
+    <div class="label">
+      {label}
+      {
+        modal === "cart" && (
+          <div class="cart-counter-w">
+            <div>(</div>
+            <div>0</div>
+            <div>)</div>
+          </div>
+        )
+      }
+    </div>
+    <div class="label duplicated-label">
+      {label}
+      {
+        modal === "cart" && (
+          <div class="cart-counter-w">
+            <div>(</div>
+            <div>0</div>
+            <div>)</div>
+          </div>
+        )
+      }
+    </div>
   </span>
 </button>
 
@@ -35,10 +57,13 @@ const { label, ariaLabel, modal } = Astro.props;
     }
 
     .label {
+      display: flex;
+      flex-direction: row;
+      gap: 0.25rem;
       padding: 0.25rem 0.75rem;
       pointer-events: none;
       will-change: transform;
-      transition: transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94);
+      transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
       &.duplicated-label {
         position: absolute;
@@ -47,6 +72,11 @@ const { label, ariaLabel, modal } = Astro.props;
         transform: translateY(100%);
       }
     }
+
+    .cart-counter-w {
+      display: flex;
+      flex-direction: row;
+      gap: 0.075rem;
+    }
   }
-  
 </style>

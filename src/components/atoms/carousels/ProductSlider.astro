@@ -13,8 +13,6 @@ const { isDisplayCarousel, excludedProductID } = Astro.props as Props;
 
 let products = await fetchProducts();
 
-console.log(products);
-
 if (excludedProductID) {
   products = products.filter((product) => product.id !== excludedProductID);
 }

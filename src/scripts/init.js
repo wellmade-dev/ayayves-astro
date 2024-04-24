@@ -34,5 +34,12 @@ function initGSAPLenis() {
 
 initGSAPLenis();
 
+const cartButtons = document.querySelectorAll("button[data-modal=cart]");
+cartButtons?.forEach((cartButton) => {
+  cartButton.addEventListener(("click"), ()  => {
+    Snipcart.api.theme.cart.open();
+  })
+})
+
 export const easingSmall = CustomEase.create("custom", "M0,0 C0.288,0 0.199,0.599 0.4,0.8 0.609,1.011 0.898,1 1,1 ");
 export const easingLarge = CustomEase.create("custom", "M0,0 C0.3,0 0.387,0.256 0.455,0.512 0.517,0.75 0.599,1 1,1 ");
