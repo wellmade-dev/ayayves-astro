@@ -61,8 +61,15 @@ export function createImageObject(object: any) {
     altText = "";
   }
 
+  let src;
+  if (STRAPI_URL) {
+    src = `${STRAPI_URL}${attributes.url}`
+  } else {
+    src = attributes.url
+  }
+
   const image = {
-    src: `${STRAPI_URL}${attributes.url}`,
+    src: src,
     width: attributes.width,
     alt: altText,
   };
