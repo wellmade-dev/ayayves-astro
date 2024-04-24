@@ -1,6 +1,10 @@
 ---
 import { fetchProducts } from "../../scripts/fetch";
-import type { VariantStrapiApi } from "../../types/strapi-attributes";
+import type {
+  VariantAPI,
+  VariantGroupData,
+  ProductSnipcartAPI,
+} from "../../types/strapi-attributes";
 import Layout from "../../layouts/Layout.astro";
 import ImageWellmade from "../../components/atoms/ImageWellmade.astro";
 import Divider from "../../components/atoms/Divider.astro";
@@ -18,41 +22,18 @@ export async function getStaticPaths() {
 }
 
 const product = Astro.props;
-const variants = product.variants;
+const variantGroups = product.variants;
 
-// Set the default variant as the first with stock
-let defaultVariant: VariantStrapiApi;
-if (variants) {
-  for (let i = 0; i < variants.length; i++) {
-    if (variants[i].inventory_quantity > 0) {
-      defaultVariant = variants[i];
-      break;
-    }
-  }
+// Set variant attributes on button for Snipcart
+const variantAttributes: any = {};
+if (variantGroups && variantGroups.length > 0) {
+  variantGroups.forEach((variantGroup: VariantGroupData, index) => {
+    variantAttributes[`data-item-custom${index + 1}-name`] =
+      variantGroup.variant_type;
+    variantAttributes[`data-item-custom${index + 1}-options`] =
+      variantGroup.variant_string;
+  });
 }
-
-// Variant setup on Snipcart Button
-const variantArray = variants.map((variant: VariantStrapiApi) => {
-  return variant.variant_name;
-});
-
-const variantOptions = variantArray.join("|");
-
-// Options array, this was used before but only displays the in stock options
-// With the stock levels from Strapi. Move to Snipcart but keep here as reference.
-/* const optionsArray = activeOptions.map((option: any) => {
-  // Check if there's a price and it's not 0, to append the price difference
-  if (defaultPrice > 0 && option.dataset.price && option.dataset.price !== 0) {
-    // Format price with + or - sign and fixed to 2 decimal places
-    const priceFormat =
-      (option.dataset.price > defaultPrice ? "+" : "") +
-      (option.dataset.price - defaultPrice);
-    return `${option.value}[${priceFormat}]`;
-  } else {
-    // If there's no price difference, just return the value/name
-    return option.value;
-  }
-}); */
 ---
 
 <Layout title={product.name}>
@@ -73,30 +54,33 @@ const variantOptions = variantArray.join("|");
         <p>{product.short_description}</p>
       </div>
       <div class="price heading-300">
-        <div class="amount">${product.current_price}</div>
+        <div class="amount">${product.price}</div>
         {
-          product.original_price && (
-            <div class="strikeout">${product.original_price}</div>
+          product.price_original && (
+            <div class="strikeout">${product.price_original}</div>
           )
         }
       </div>
       {
-        variants && variants.length > 0 && (
-          <div class="variant-w">
-            {variants.map((variant, index) => (
-              <>
-                <input
-                  type="radio"
-                  id={variant.id}
-                  name={variant.variant_group}
-                  value={variant.variant_name}
-                  data-price={variant.price}
-                  disabled={variant.inventory_quantity > 0 ? false : true}
-                  required
-                  checked={defaultVariant.id === variant.id ? true : false}
-                />
-                <label for={variant.id}>{variant.variant_name}</label>
-              </>
+        variantGroups && variantGroups.length > 0 && (
+          <div>
+            {variantGroups.map((variantGroup: VariantGroupData) => (
+              <div class="variant-w">
+                {variantGroup.variant.map((variant) => (
+                  <>
+                    <input
+                      type="radio"
+                      id={variant.id}
+                      name={variantGroup.variant_type}
+                      value={variant.variant_name}
+                      data-differential={variant.price_differential}
+                      disabled={variant.enabled ? false : true}
+                      required
+                    />
+                    <label for={variant.id}>{variant.variant_name}</label>
+                  </>
+                ))}
+              </div>
             ))}
           </div>
         )
@@ -110,29 +94,27 @@ const variantOptions = variantArray.join("|");
         class="snipcart-add-item"
         id="product-atc"
         data-item-id={product.id}
-        data-item-price={product.current_price}
+        data-item-price={product.price}
+        data-item-price-original={product.price_original}
         data-item-url=`/${product.slug}`
         data-item-description={product.short_description}
         data-item-quantity="1"
         data-item-name={product.name}
-        {...variants &&
-          variants.length > 0 && {
-            "data-item-custom1-name": product.variants[0].variant_group,
-            "data-item-custom1-options": variantOptions,
-          }}
+        disabled={product.in_stock ? false : true}
+        {...variantAttributes}
       >
         <span>
           <ButtonMarquee
-            firstString={product.sold_out ? "Out of Stock" : "Add to Cart"}
-            secondString={product.sold_out ? "Limited Drop" : "Bag It"}
-            {...product.sold_out ? { disabled: true } : {}}
+            firstString={product.in_stock ? "Add to Cart" : "Out of Stock"}
+            secondString={product.in_stock ? "Bag It" : "Limited Drop"}
+            {...product.in_stock ? {} : { disabled: true }}
           />
         </span>
       </button>
     </div>
   </section>
   <CarouselSection title="Bundle Me" subtitle="Related">
-    <ProductSlider />
+    <ProductSlider excludedProductID={product.id} />
   </CarouselSection>
   <div style="height: 4rem"></div>
 </Layout>
@@ -188,8 +170,8 @@ const variantOptions = variantArray.join("|");
     .product-detail {
       width: 25rem;
       flex-shrink: 0;
-      padding: calc($navheight + 2rem) 0;
-      margin: 0 calc(1.75 * var(--page-margin));
+      padding: 2rem 0 3rem;
+      margin: $navheight calc(1.75 * var(--page-margin)) 0;
       position: sticky;
       top: 0;
       display: flex;
@@ -197,7 +179,8 @@ const variantOptions = variantArray.join("|");
 
       @media (max-width: $tablet) {
         width: clamp(20rem, 40vw, 25rem);
-        margin: calc(1.25 * var(--page-margin));
+        padding: 1rem 0 3rem;
+        margin: $navheight calc(1.25 * var(--page-margin)) 0;
       }
 
       @media (max-width: $phablet) {
@@ -252,7 +235,7 @@ const variantOptions = variantArray.join("|");
     gap: 0.5rem;
     margin-bottom: 2rem;
 
-    &.grid {
+    &:has(> :nth-child(8)) {
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
@@ -268,6 +251,7 @@ const variantOptions = variantArray.join("|");
     }
 
     label {
+      display: inline-flex;
       width: 100%;
       background-color: none;
       border: 1px solid var(--divider-demi);
@@ -275,6 +259,8 @@ const variantOptions = variantArray.join("|");
       padding: 0.75rem 1.5rem;
       font-size: 0.875rem;
       text-align: center !important;
+      align-items: center;
+      justify-content: center;
       letter-spacing: 0.02em;
       font-weight: 400;
       transition: all 0.25s;
@@ -325,38 +311,47 @@ const variantOptions = variantArray.join("|");
 </style>
 
 <script>
-  const atcButton = document.getElementById("product-atc");
+  const atcButton = document.getElementById("product-atc")!;
   const variants = document.querySelector(".variant-w");
+  //
   const priceWrapper = document.querySelector(".price");
-  const activePrice = priceWrapper?.querySelector(".amount");
-  const strikeoutPrice = priceWrapper?.querySelector(".strikeout");
+  const activePriceObject = priceWrapper?.querySelector(".amount");
+  const strikeoutPriceObject = priceWrapper?.querySelector(".strikeout");
+  //
+  const productPrice = atcButton.getAttribute("data-item-price");
+  const strikeoutPrice = atcButton.getAttribute("data-item-price-original");
 
-  if (atcButton && variants && priceWrapper && activePrice) {
-    const activeOptions: any = Array.from(
-      variants.querySelectorAll('input[type="radio"]:enabled')
-    );
-
-    const priceString = atcButton.getAttribute("data-item-price");
-    const defaultPrice: number = priceString ? parseFloat(priceString) : 0;
-    let selectedVariant: any = activeOptions.find(
-      (option: any) => option.checked
-    );
-
+  if (atcButton && variants && priceWrapper && activePriceObject) {
     // When the variant is changed adjust price on button
     variants.addEventListener("change", function (event) {
-      const target = event.target as HTMLElement;
-      const variantPrice = target.getAttribute("data-price");
+      const target = event.target as HTMLInputElement;
+      const variantDifferential = target.getAttribute("data-differential");
 
-      if (variantPrice) {
-        const newPrice = target.getAttribute("data-price");
-        activePrice.textContent = String(`$${newPrice}`);
+      if (productPrice && variantDifferential) {
+        const newProductPrice =
+          parseFloat(productPrice) + parseFloat(variantDifferential);
+        activePriceObject.textContent = String(`$${newProductPrice}`);
+
+        if (strikeoutPrice) {
+          const newStrikeoutPrice =
+            parseFloat(strikeoutPrice) + parseFloat(variantDifferential);
+
+          if (strikeoutPriceObject)
+            strikeoutPriceObject.textContent = String(`$${newStrikeoutPrice}`);
+        }
       } else {
-        activePrice.textContent = String(`$${defaultPrice}`);
+        console.log("Couldn't find item price or variant differential values.");
       }
-
       atcButton.setAttribute(`data-item-custom1-value`, target.value);
     });
 
-    atcButton.setAttribute(`data-item-custom1-value`, selectedVariant?.value);
+    // If there are variants, select the first enabled option
+    const defaultVariant: HTMLInputElement | null = variants.querySelector(
+      "input:not([disabled])"
+    );
+    if (defaultVariant) {
+      defaultVariant.checked = true;
+      atcButton.setAttribute(`data-item-custom1-value`, defaultVariant.value);
+    }
   }
 </script>

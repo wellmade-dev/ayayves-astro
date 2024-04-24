@@ -4,20 +4,20 @@ import ImageWellmade from "../atoms/ImageWellmade.astro";
 import Divider from "../atoms/Divider.astro";
 import ButtonDisplay from "../atoms/buttons/ButtonDisplay.astro";
 import CatalogueModal from "../atoms/modals/CatalogueModal.astro";
+import type { CatalogueData } from "../../types/strapi-attributes";
 
 async function fetchHeroRelease() {
   const catalogue = await fetchCatalogue();
 
   for (const release of catalogue) {
     if (release.released || release.presaveLive) {
-      return release;
+      return release as CatalogueData;
     }
   }
   return null;
 }
 
 const release = await fetchHeroRelease();
-console.log(release);
 ---
 
 <section class="home section-hero" data-theme="overlay">

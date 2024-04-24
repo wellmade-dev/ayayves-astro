@@ -6,11 +6,18 @@ import ProductCard from "../cards/ProductCard.astro";
 
 interface Props {
   isDisplayCarousel?: boolean;
+  excludedProductID?: number;
 }
 
-const { isDisplayCarousel } = Astro.props as Props;
+const { isDisplayCarousel, excludedProductID } = Astro.props as Props;
 
-const products = await fetchProducts();
+let products = await fetchProducts();
+
+console.log(products);
+
+if (excludedProductID) {
+  products = products.filter((product) => product.id !== excludedProductID);
+}
 ---
 
 <div class="slider swiper">

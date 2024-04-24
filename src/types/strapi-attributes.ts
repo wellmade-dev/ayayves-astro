@@ -1,12 +1,15 @@
-export interface CatalogueAttributes {
+export interface CatalogueData {
   id: number;
   title: string;
   slug: string;
   subtitle: string;
-  coverImage: ImageAttributes;
-  keyImage?: ImageAttributes;
-  secondaryImages?: ImageAttributes[];
-  musicVideo?: object;
+  coverImage: ImageData;
+  keyImage?: ImageData;
+  secondaryImages?: ImageData[];
+  musicVideo?: {
+    src: string;
+    alt: string;
+  };
   releaseType: string;
   released: boolean;
   releaseDate: string;
@@ -18,7 +21,7 @@ export interface CatalogueAttributes {
   youtubeLink?: string;
 }
 
-export interface CatalogueApiData {
+export interface CatalogueAPI {
   id: number;
   attributes: {
     title: string;
@@ -36,21 +39,21 @@ export interface CatalogueApiData {
     applemusic_link?: string;
     youtube_link?: string;
     cover_image: {
-      data: ImageStrapiApi;
+      data: ImageAPI;
     };
     key_image: {
-      data: ImageStrapiApi;
+      data: ImageAPI;
     };
     secondary_images?: {
-      data: ImageStrapiApi[];
+      data: ImageAPI[];
     };
     music_video_clip?: {
-      data: VideoStrapiApi;
+      data: VideoAPI;
     };
   };
 }
 
-export interface ProductAttributes {
+export interface ProductData {
   id: number;
   name: string;
   slug: string;
@@ -58,56 +61,49 @@ export interface ProductAttributes {
   short_description: string;
   long_desription: string;
   price: number;
-  markdown_price?: number | null;
-  inventory_quantity?: number | null;
-  variants: object;
-  image: ImageAttributes;
+  price_original?: number;
+  in_stock: boolean;
+  image: ImageData;
+  variants?: VariantGroupData[];  
 }
 
-export interface ProductApiData {
+export interface ProductAPI {
   id: number;
   attributes: {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
+    name: string;
+    slug: string;
     short_description: string;
     long_description: string;
     price: number;
-    markdown_price?: number;
-    current_price: number;
-    original_price?: number;
-    inventory_quantity?: number;
-    sold_out: boolean;
+    price_original: number;
     collection?: string;
-    slug: string;
-    name: string;
-    product_image: ImageStrapiApi;
-    variant: VariantStrapiApi[];
+    product_image: ImageAPI;
+    variants?: VariantGroupAPI[];
   };
 }
 
-export interface ImageStrapiApi {
+export interface ImageAPI {
   id: number;
   attributes: {
     url: string;
     alternativeText?: string;
-    formats: StrapiImageFormats;
+    formats: {
+      url: string;
+      width: number;
+    }[];
   };
 }
 
-export interface ImageAttributes {
+export interface ImageData {
   src: string;
   width: number;
-  srcset: string;
   alt: string;
 }
 
-export interface StrapiImageFormats {
-  url: string;
-  width: number;
-}
-
-export interface VideoStrapiApi {
+export interface VideoAPI {
   id: number;
   attributes: {
     url: string;
@@ -115,16 +111,33 @@ export interface VideoStrapiApi {
   };
 }
 
-export interface VariantStrapiApi {
+export interface VariantGroupAPI {
   id: string;
-  variant_name: string;
-  variant_group: string;
-  price?: number;
-  markdown_price?: number;
-  inventory_quantity: number;
+  variant_type: string;
+  variant: VariantAPI[];
 }
 
-export interface EventAttributes {
+export interface VariantAPI {
+  id: string;
+  variant_name: string;
+  price_differential: number;
+}
+
+export interface VariantGroupData {
+  id: string;
+  variant_type: string;
+  variant_string?: string;
+  variant: VariantData[];
+}
+
+export interface VariantData {
+  id: string;
+  variant_name: string;
+  price_differential: number;
+  enabled?: boolean;
+}
+
+export interface EventData {
   id: number;
   city: string;
   city_indigenous: string;
@@ -134,7 +147,7 @@ export interface EventAttributes {
   ticket_link: string;
 }
 
-export interface EventApiData {
+export interface EventAPI {
   id: number;
   attributes: {
     createdAt: string;
@@ -146,4 +159,25 @@ export interface EventApiData {
     date_time: string;
     ticket_link: string;
   };
+}
+
+export interface ProductsSnipcartAPI {
+  items: {
+    userDefinedId: string;
+    totalStock: number;
+    customFields: {
+      name: string;
+      type: string;
+      options: string;
+      required: boolean;
+    }[];
+    variants: {
+      stock: number;
+      variation: {
+        name: string;
+        option: string;
+      }[];
+      allowOutOfStockPurchases: boolean;
+    }[];
+  }[];
 }

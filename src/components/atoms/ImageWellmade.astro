@@ -1,9 +1,9 @@
 ---
 import Image from "astro/components/Image.astro";
-import type { ImageAttributes } from "../../types/strapi-attributes";
+import type { ImageData } from "../../types/strapi-attributes";
 
 interface Props {
-  image: ImageAttributes;
+  image: ImageData;
   sizes: string;
   class?: string;
   eagerLoading?: boolean;

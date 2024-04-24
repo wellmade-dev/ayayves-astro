@@ -1,10 +1,10 @@
 ---
-import type { CatalogueAttributes } from "../../../types/strapi-attributes";
+import type { CatalogueData } from "../../../types/strapi-attributes";
 import ImageWellmade from "../ImageWellmade.astro";
 import CatalogueModal from "../modals/CatalogueModal.astro";
 import DiagonalArrowSVG from "../svgs/DiagonalArrowSVG.astro";
 
-const { release } = Astro.props as { release: CatalogueAttributes };
+const { release } = Astro.props as { release: CatalogueData };
 const ariaLabel = `Learn more about ${release.title}`;
 ---
 

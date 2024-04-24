@@ -1,5 +1,5 @@
 ---
-import type { ImageAttributes } from "../../types/strapi-attributes";
+import type { ImageData } from "../../types/strapi-attributes";
 import ImageWellmade from "../atoms/ImageWellmade.astro";
 import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
 
@@ -28,7 +28,7 @@ const socialLinks = data.data.attributes.social_links;
   <div class="menu-content">
     <div class="image-col" aria-hidden="true">
       {
-        images.map((image: ImageAttributes) => (
+        images.map((image: ImageData) => (
           <div class="img-w">
             <ImageWellmade
               image={image}
@@ -194,7 +194,8 @@ const socialLinks = data.data.attributes.social_links;
             display: flex;
             flex-direction: column;
 
-            &:hover > :not(:hover), &:focus > :not(:focus) {
+            &:hover > :not(:hover),
+            &:focus > :not(:focus) {
               --link-opacity: 0.5;
             }
 
@@ -235,7 +236,6 @@ const socialLinks = data.data.attributes.social_links;
 
           .streaming-links-w,
           .social-links-w {
-
             .secondary-link {
               font-size: 1rem;
               letter-spacing: 0.01em;
@@ -246,7 +246,8 @@ const socialLinks = data.data.attributes.social_links;
               transition: opacity 0.05s ease-out;
               opacity: 0.6;
 
-              &:hover, &:focus {
+              &:hover,
+              &:focus {
                 opacity: 1;
               }
 
