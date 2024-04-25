@@ -3,7 +3,7 @@ const PUBLIC_SNIPCART_API_KEY = import.meta.env.PUBLIC_SNIPCART_API_KEY;
 export function initSnipcart() {
   window.SnipcartSettings = {
     publicApiKey: PUBLIC_SNIPCART_API_KEY,
-    loadCSS: true,
+    loadCSS: false,
     loadStrategy: "on-user-interaction",
     templatesUrl: "/SnipcartTemplates.html"
   };
@@ -103,10 +103,15 @@ export function initSnipcart() {
   })();
 
   document.addEventListener('snipcart.ready', function () {
-    console.log("snipcart is ready")
-
     Snipcart.events.on('snipcart.initialized', function () {
       document.getElementById('snipcart').setAttribute('data-theme', 'light');
     })
+
+    Snipcart.api.session.setLanguage('en', { // Message for too many items for the amount of stock
+            errors: {
+              quantity_revised: "Unfortunately, that's all the stock we have.",
+              quantity_out_of_stock: "Unforunately, this product option is out of stock. Maybe try a different option."
+            }
+        });
   })
 }
