@@ -8,117 +8,117 @@
 
 // Headings
 .heading-900 {
-  font-family: var(--editorial-old);
-  font-size: clamp(5.25rem, 7.5em, 6rem);
-  font-weight: 200;
-  line-height: 95%;
-  letter-spacing: -0.02em;
+	font-family: var(--editorial-old);
+	font-size: clamp(5.25rem, 7.5em, 6rem);
+	font-weight: 200;
+	line-height: 95%;
+	letter-spacing: -0.02em;
 
-  @media (max-width: $tablet) {
-    font-size: min(14em, 5.25rem);
-  }
+	@media (max-width: $tablet) {
+		font-size: min(14em, 5.25rem);
+	}
 }
 
 .heading-800 {
-  font-size: clamp(4.25rem, 6.25em, 5.5rem);
-  font-weight: 400;
-  line-height: 100%;
+	font-size: clamp(4.25rem, 6.25em, 5.5rem);
+	font-weight: 400;
+	line-height: 100%;
 
-  @media (max-width: $tablet) {
-    font-size: clamp(2.6rem, 11em, 4.25rem);
-  }
+	@media (max-width: $tablet) {
+		font-size: clamp(2.6rem, 11em, 4.25rem);
+	}
 }
 
 .heading-700 {
-  font-family: var(--editorial-old);
-  font-size: clamp(3.5rem, 4.5em, 4rem);
-  font-weight: 200;
-  line-height: 100%;
-  letter-spacing: -0.02em;
+	font-family: var(--editorial-old);
+	font-size: clamp(3.5rem, 4.5em, 4rem);
+	font-weight: 200;
+	line-height: 100%;
+	letter-spacing: -0.02em;
 
-  @media (max-width: $tablet) {
-    font-size: 3.25rem;
-  }
+	@media (max-width: $tablet) {
+		font-size: 3.25rem;
+	}
 
-  @media (max-width: $phablet) {
-    font-size: 2.75rem;
-  }
+	@media (max-width: $phablet) {
+		font-size: 2.75rem;
+	}
 }
 
 .heading-600 {
-  font-family: var(--editorial-old);
-  font-size: clamp(2rem, 2.4em, 2.4rem);
-  font-weight: 200;
-  line-height: 100%;
-  letter-spacing: -0.02em;
+	font-family: var(--editorial-old);
+	font-size: clamp(2rem, 2.4em, 2.4rem);
+	font-weight: 200;
+	line-height: 100%;
+	letter-spacing: -0.02em;
 
-  @media (max-width: $mobile) {
-    font-size: clamp(1.5rem, 5.5em, 2rem);
-  }
+	@media (max-width: $mobile) {
+		font-size: clamp(1.5rem, 5.5em, 2rem);
+	}
 }
 
 .heading-500 {
-  font-size: 1.4rem;
-  font-weight: 400;
-  line-height: 120%;
-  letter-spacing: -0.01em;
+	font-size: 1.4rem;
+	font-weight: 400;
+	line-height: 120%;
+	letter-spacing: -0.01em;
 }
 
 .heading-400 {
-  font-family: var(--editorial-old);
-  font-size: 1.15rem;
-  font-weight: 200;
-  line-height: 130%;
-  letter-spacing: 0.02em;
+	font-family: var(--editorial-old);
+	font-size: 1.15rem;
+	font-weight: 200;
+	line-height: 130%;
+	letter-spacing: 0.02em;
 }
 
 .heading-300 {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
+	font-size: 1rem;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	line-height: 1.3;
 }
 
 .heading-200 {
-  letter-spacing: 0.01em;
-  font-size: 0.875rem;
-  line-height: 125%;
-  text-transform: uppercase;
+	letter-spacing: 0.01em;
+	font-size: 0.875rem;
+	line-height: 125%;
+	text-transform: uppercase;
 }
 
 // Paragraph
 .p1 {
-  letter-spacing: 0.02em;
-  font-size: 0.925rem;
-  line-height: 130%;
-  margin: 0px;
+	letter-spacing: 0.02em;
+	font-size: 0.925rem;
+	line-height: 130%;
+	margin: 0px;
 }
 
 .p2 {
-  letter-spacing: 0.01em;
-  font-size: 0.875rem;
-  line-height: 150%;
+	letter-spacing: 0.01em;
+	font-size: 0.875rem;
+	line-height: 150%;
 }
 
 // Global
 body {
-  background-color: var(--bg-dark);
-  color: var(--text);
-  font-family: var(--neue-montreal);
-  font-size: 1.11111vw;
-  font-weight: 400;
-  line-height: 1;
-  overflow: visible;
+	background-color: var(--bg-dark);
+	color: var(--text);
+	font-family: var(--neue-montreal);
+	font-size: 1.11111vw;
+	font-weight: 400;
+	line-height: 1;
+	overflow: visible;
 
-  --easing-small: cubic-bezier(0.42, 0, 0, 1.01);
+	--easing-small: cubic-bezier(0.42, 0, 0, 1.01);
 }
 
 .page-content {
-  position: relative;
-  background-color: var(--bg-dark);
-  min-height: 100vh;
+	position: relative;
+	background-color: var(--bg-dark);
+	min-height: 100vh;
 
-  @media (max-width: $mobile) {
-    min-height: 100lvh;
-  }
+	@media (max-width: $mobile) {
+		min-height: 100lvh;
+	}
 }

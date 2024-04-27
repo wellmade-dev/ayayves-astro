@@ -1,93 +1,109 @@
 <html>
-  <head><title>Templates</title></head>
+	<head>
+		<title>Templates</title>
+	</head>
 
-  <body>
-    <div id="snipcart-templates">
-      <cart-header>
-          <div class="header">
-            <div class="heading-w">
-                <div class="heading">Cart</div>
-            </div>
-            <close-cart-action class="snipcart-modal__close close-button">
-                <svg
-                width="16"
-                height="10"
-                viewBox="0 0 16 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <path
-                    d="M1 0.999997L6.83333 6.83333L8 8L15 0.999997"
-                    stroke="#021117"
-                    stroke-width="2"
-                />
-                </svg>
-            </close-cart-action>
-        </div>
-      </cart-header>
-      <item-line>
-        <li :class="{'snipcart-item-line': true, 'snipcart-item-line--cart-edit': editingCart}">
-            <flash-message
-                type="info"
-                icon="box"
-                v-if="stockLimitReached"
-                :title="$localize('errors.quantity_revised')"
-            ></flash-message>
-            <flash-message
-                type="error"
-                icon="box"
-                v-if="outOfStock"
-                :title="$localize('errors.quantity_out_of_stock')"
-            ></flash-message>
-            <div class="snipcart-item-line__container">
-                <figure class="snipcart-item-line__media">
-                    <item-image class="snipcart-item-line__image"></item-image>
-                </figure>
-                <div class="snipcart-item-line__product">
-                    <h2 class="snipcart-item-line__title">
-                        {{ item.name }}
-                    </h2>
-                    <div class="snipcart-item-line__body">
-                        <div class="snipcart-item-line__variants">
-                            <div>
-                                <item-plans
-                                    :item="item"
-                                    v-if="!adding && isSubscribable"
-                                ></item-plans>
-                                <item-custom-fields v-if="!adding"></item-custom-fields>
-                            </div>
-                            <item-quantity
-                                class="snipcart-item-line__quantity"
-                                v-if="!adding && !isSubscribable"
-                                :disabled="outOfStock || isSubscribable"
-                            ></item-quantity>
-                            <div
-                                class="snipcart-form__field snipcart-form__field--plan snipcart-form__field--plan--billed-on"
-                                v-if="isSubscribable && !adding"
-                            >
-                                <span class="snipcart-form__label snipcart__font--tiny">
-                                    {{$localize('subscription.payment_amount')}}
-                                </span>
-                                <div class="snipcart-form__field--plan__readonly">
-                                    <item-price
-                                        :item="item"
-                                        :selected-plan="selectedPlan"
-                                    >
-                                    </item-price>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-      </item-line>
-      <empty-cart>
-        <section class="snipcart-empty-cart">
-          <p>Your cart is currently empty.</p>
-          <a class="cart-button" href="/products">Explore the Merch Shop</a>
-        </section>
-      </empty-cart>
-    </div>
-  </body>
+	<body>
+		<div id="snipcart-templates">
+			<cart-header>
+				<div class="header">
+					<div class="heading-w">
+						<div class="heading">Cart</div>
+						<close-cart-action
+							class="snipcart-modal__close close-button"
+						>
+							<svg
+								width="16"
+								height="10"
+								viewBox="0 0 16 10"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M1 0.999997L6.83333 6.83333L8 8L15 0.999997"
+									stroke="#021117"
+									stroke-width="2"
+								/>
+							</svg>
+						</close-cart-action>
+					</div>
+				</div>
+			</cart-header>
+			<item-line>
+				<li
+					:class="{'snipcart-item-line': true, 'snipcart-item-line--cart-edit': editingCart}"
+				>
+					<flash-message
+						type="info"
+						icon="box"
+						v-if="stockLimitReached"
+						:title="$localize('errors.quantity_revised')"
+					></flash-message>
+					<flash-message
+						type="error"
+						icon="box"
+						v-if="outOfStock"
+						:title="$localize('errors.quantity_out_of_stock')"
+					></flash-message>
+					<div class="snipcart-item-line__container">
+						<figure class="snipcart-item-line__media">
+							<item-image
+								class="snipcart-item-line__image"
+							></item-image>
+						</figure>
+						<div class="snipcart-item-line__product">
+							<h2 class="snipcart-item-line__title">
+								{{ item.name }}
+							</h2>
+							<div class="snipcart-item-line__body">
+								<div class="snipcart-item-line__variants">
+									<div>
+										<item-plans
+											:item="item"
+											v-if="!adding && isSubscribable"
+										></item-plans>
+										<item-custom-fields
+											v-if="!adding"
+										></item-custom-fields>
+									</div>
+									<item-quantity
+										class="snipcart-item-line__quantity"
+										v-if="!adding && !isSubscribable"
+										:disabled="outOfStock || isSubscribable"
+									></item-quantity>
+									<div
+										class="snipcart-form__field snipcart-form__field--plan snipcart-form__field--plan--billed-on"
+										v-if="isSubscribable && !adding"
+									>
+										<span
+											class="snipcart-form__label snipcart__font--tiny"
+										>
+											{{$localize('subscription.payment_amount')}}
+										</span>
+										<div
+											class="snipcart-form__field--plan__readonly"
+										>
+											<item-price
+												:item="item"
+												:selected-plan="selectedPlan"
+											>
+											</item-price>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</item-line>
+			<empty-cart>
+				<section class="snipcart-empty-cart">
+					<p>Your cart is currently empty.</p>
+					<a class="cart-button" href="/products"
+						>Explore the Merch Shop</a
+					>
+				</section>
+			</empty-cart>
+		</div>
+	</body>
 </html>
