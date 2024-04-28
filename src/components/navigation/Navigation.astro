@@ -5,6 +5,12 @@ import NavbarLink from "../../components/atoms/buttons/nav/NavbarLink.astro";
 import NavigationMenu from "./NavigationMenu.astro";
 import { fetchStrapiData } from "../../scripts/fetch";
 
+interface Props {
+	mobileOnDesktop?: boolean;
+}
+
+const { mobileOnDesktop } = Astro.props as Props;
+
 const data = await fetchStrapiData("navigation?populate=*");
 
 const desktopLinks = data.data.attributes.navbar_links;
@@ -12,446 +18,479 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 ---
 
 <nav class="navigation" id="navigation">
-  <div class="navigation-bar" id="navigation-bar">
-    <a href="/" aria-label="Homepage" aria-current="page" class="home-button">
-      <LogoSVG />
-    </a>
-    <div class="navigation-links">
-      <ul class="desktop-links" id="nav-desktop-links">
-        {
-          desktopLinks.map((link: any) => (
-            <li>
-              {link.url && !link.modal && (
-                <NavbarLink
-                  label={link.title}
-                  ariaLabel={link.alt}
-                  href={link.url}
-                />
-              )}
-              {link.modal && (
-                <NavbarButton
-                  label={link.title}
-                  ariaLabel={link.alt}
-                  modal={link.modal_type}
-                />
-              )}
-            </li>
-          ))
-        }
-      </ul>
-      <ul class="mobile-links" id="nav-mobile-links">
-        {
-          mobileLinks.map((link: any) => (
-            <li>
-              {link.url && !link.modal && (
-                <NavbarLink
-                  label={link.title}
-                  ariaLabel={link.alt}
-                  href={link.url}
-                />
-              )}
-              {link.modal && (
-                <NavbarButton
-                  label={link.title}
-                  ariaLabel={link.alt}
-                  modal={link.modal_type}
-                />
-              )}
-            </li>
-          ))
-        }
-      </ul>
-      <button
-        id="menu-button"
-        aria-label="Toggle navigation menu"
-        aria-controls="navigation-menu"
-        aria-expanded="false"
-        aria-haspopup="true"
-      >
-        <span class="menu-button">
-          <div class="menu-icon">
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-          <div class="button-label-w">
-            <div class="label">Menu</div>
-          </div>
-        </span>
-      </button>
-    </div>
-  </div>
-  <NavigationMenu />
+	<div class="navigation-bar" id="navigation-bar">
+		<a
+			href="/"
+			aria-label="Homepage"
+			aria-current="page"
+			class="home-button"
+		>
+			<LogoSVG />
+		</a>
+		<div
+			class={`navigation-links ${mobileOnDesktop ? "mobile-layout" : ""}`}
+		>
+			<ul class="desktop-links">
+				{
+					desktopLinks.map((link: any) => (
+						<li>
+							{link.url && !link.modal && (
+								<NavbarLink
+									label={link.title}
+									ariaLabel={link.alt}
+									href={link.url}
+								/>
+							)}
+							{link.modal && (
+								<NavbarButton
+									label={link.title}
+									ariaLabel={link.alt}
+									modal={link.modal_type}
+								/>
+							)}
+						</li>
+					))
+				}
+			</ul>
+			<ul class="mobile-links">
+				{
+					mobileLinks.map((link: any) => (
+						<li>
+							{link.url && !link.modal && (
+								<NavbarLink
+									label={link.title}
+									ariaLabel={link.alt}
+									href={link.url}
+								/>
+							)}
+							{link.modal && (
+								<NavbarButton
+									label={link.title}
+									ariaLabel={link.alt}
+									modal={link.modal_type}
+								/>
+							)}
+						</li>
+					))
+				}
+			</ul>
+			<button
+				id="menu-button"
+				aria-label="Toggle navigation menu"
+				aria-controls="navigation-menu"
+				aria-expanded="false"
+				aria-haspopup="true"
+			>
+				<span class="menu-button">
+					<div class="menu-icon">
+						<div class="line"></div>
+						<div class="line"></div>
+					</div>
+					<div class="button-label-w">
+						<div class="label">Menu</div>
+					</div>
+				</span>
+			</button>
+		</div>
+	</div>
+	<NavigationMenu />
 </nav>
 
 <style lang="scss">
-  @use "../../styles/vars" as *;
+	@use "../../styles/vars" as *;
 
-  li {
-    overflow: hidden;
-  }
+	li {
+		overflow: hidden;
+	}
 
-  .navigation {
-    z-index: 10;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    position: fixed;
-    top: 0;
+	.navigation {
+		z-index: 10;
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+		position: fixed;
+		top: 0;
 
-    &[theme="product"] {
-      .home-button {
-        color: var(--bg);
+		&[theme="product"] {
+			.home-button {
+				color: var(--bg);
 
-        @media (max-width: $phablet) {
-          color: inherit;
-        }
-      }
+				@media (max-width: $phablet) {
+					color: inherit;
+				}
+			}
 
-      @media (max-width: $phablet) {
-        .navigation-bar {
-          color: var(--bg);
+			@media (max-width: $phablet) {
+				.navigation-bar {
+					color: var(--bg);
 
-          .line {
-            background-color: var(--bg) !important;
-          }
-        }
-      }
-    }
-  }
+					.line {
+						background-color: var(--bg) !important;
+					}
+				}
+			}
+		}
+	}
 
-  .navigation-bar {
-    z-index: 11;
-    width: 100%;
-    height: $navheight;
-    padding-right: var(--page-margin);
-    padding-left: var(--page-margin);
-    display: flex;
-    justify-content: space-between;
-    container-type: inline-size;
-    align-items: center;
-    position: relative;
-    transition: 0.5s all;
+	.navigation-bar {
+		z-index: 11;
+		width: 100%;
+		height: $navheight;
+		padding-right: var(--page-margin);
+		padding-left: var(--page-margin);
+		display: flex;
+		justify-content: space-between;
+		container-type: inline-size;
+		align-items: center;
+		position: relative;
+		transition: 0.5s all;
 
-    .home-button {
-      margin-bottom: -0.1rem;
-      width: 5.5rem;
-    }
+		.home-button {
+			margin-bottom: -0.1rem;
+			width: 5.25rem;
+			transition: color 0.075s ease-out;
+		}
 
-    .navigation-links {
-      width: 47.5cqw;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 3rem;
+		.navigation-links {
+			width: 47.5cqw;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 3rem;
 
-      @media (max-width: $tablet) {
-        max-width: unset;
-        width: unset;
-      }
+			@media (max-width: $tablet) {
+				max-width: unset;
+				width: unset;
+			}
 
-      @media (max-width: $phablet) {
-        gap: 1.25rem;
-      }
+			@media (max-width: $phablet) {
+				gap: 1.25rem;
+			}
 
-      .desktop-links {
-        gap: 2rem;
-        justify-content: start;
-        display: flex;
-        align-items: center;
+			&.mobile-layout {
+				max-width: unset;
+				width: unset;
 
-        &:hover > :not(:hover),
-        &:focus > :not(:focus) {
-          --link-opacity: 0.5;
-        }
+				.desktop-links {
+					display: none;
+				}
 
-        li {
-          opacity: var(--link-opacity);
-          transition: opacity 0.2s ease-out;
-        }
+				.mobile-links {
+					display: flex;
+				}
+			}
 
-        @media (max-width: $phablet) {
-          display: none;
-        }
-      }
+			.desktop-links {
+				gap: 2rem;
+				justify-content: start;
+				display: flex;
+				align-items: center;
 
-      .mobile-links {
-        display: none;
-        align-items: center;
+				&:hover > :not(:hover),
+				&:focus > :not(:focus) {
+					--link-opacity: 0.5;
+				}
 
-        @media (max-width: $phablet) {
-          display: flex;
-        }
-      }
-    }
+				li {
+					opacity: var(--link-opacity);
+					transition: opacity 0.2s ease-out;
+				}
 
-    .menu-button {
-      display: flex;
-      padding: 0.75rem;
-      font-size: 0.925rem;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      align-items: center;
-      cursor: pointer;
-      gap: 1rem;
-      transition: 0.3s all;
+				@media (max-width: $phablet) {
+					display: none;
+				}
+			}
 
-      .menu-icon {
-        display: flex;
-        flex-direction: column;
-        gap: 0.325rem;
-        width: 1.75rem;
-        align-items: center;
-        height: 100%;
-        justify-content: center;
+			.mobile-links {
+				display: none;
+				align-items: center;
 
-        .line {
-          width: 100%;
-          height: 1px;
-          background-color: var(--text);
-        }
-      }
+				@media (max-width: $phablet) {
+					display: flex;
+				}
+			}
+		}
 
-      .label {
-        width: 2.375rem;
-        text-align: center;
-      }
-    }
-  }
+		.menu-button {
+			display: flex;
+			padding: 0.75rem;
+			font-size: 0.925rem;
+			font-weight: 400;
+			letter-spacing: 0.02em;
+			align-items: center;
+			cursor: pointer;
+			gap: 1rem;
+			transition: 0.3s all;
 
-  .button-label-w {
-    overflow: hidden;
-    position: relative;
+			.menu-icon {
+				display: flex;
+				flex-direction: column;
+				gap: 0.325rem;
+				width: 1.75rem;
+				align-items: center;
+				height: 100%;
+				justify-content: center;
 
-    .label {
-      padding: 0.25rem 0;
-      height: 100%;
-    }
-  }
+				.line {
+					width: 100%;
+					height: 1px;
+					background-color: var(--text);
+				}
+			}
+
+			.label {
+				width: 2.375rem;
+				text-align: center;
+			}
+		}
+	}
+
+	.button-label-w {
+		overflow: hidden;
+		position: relative;
+
+		.label {
+			padding: 0.25rem 0;
+			height: 100%;
+		}
+	}
 </style>
 
 <script>
-  import { gsap } from "gsap";
-  import { tickerLinkHover } from "../../scripts/animations.js";
-  import { togglePageScroll } from "../../scripts/utils.ts";
-  import { easingSmall, easingLarge } from "../../scripts/init.js";
+	import { gsap } from "gsap";
+	import { tickerLinkHover } from "../../scripts/animations.js";
+	import { togglePageScroll } from "../../scripts/utils.ts";
+	import { easingSmall, easingLarge } from "../../scripts/init.js";
 
-  // Menu Variable Declarations
-  const navigation = document.getElementById("navigation") as HTMLElement;
-  const navigationMenu = document.getElementById(
-    "navigation-menu"
-  ) as HTMLElement;
+	// Menu Variable Declarations
+	const navigation = document.getElementById("navigation") as HTMLElement;
+	const navigationMenu = document.getElementById(
+		"navigation-menu"
+	) as HTMLElement;
 
-  let navTheme: string | null = null;
+	let navTheme: string | null = null;
 
-  let navDesktopLinks = navigation?.querySelector(
-    ".desktop-links"
-  ) as HTMLElement;
-  let navMobileLinks = navigation?.querySelector(
-    ".mobile-links"
-  ) as HTMLElement;
-  let navMenuButton = document.getElementById("menu-button") as HTMLElement;
-  let menuButtonIcon: HTMLElement | null = navMenuButton?.querySelector(
-    ".menu-icon"
-  ) as HTMLElement;
-  let menuIconLineOne = navMenuButton?.querySelector(
-    ".line:nth-child(1)"
-  ) as HTMLElement;
-  let menuIconLineTwo = navMenuButton?.querySelector(
-    ".line:nth-child(2)"
-  ) as HTMLElement;
-  let navImageColumn = navigationMenu?.querySelector(
-    ".image-col"
-  ) as HTMLElement;
-  let navImageBack = navImageColumn?.querySelector(
-    ".img-w:nth-child(1)"
-  ) as HTMLElement;
-  let navImageFront = navImageColumn?.querySelector(
-    ".img-w:nth-child(2)"
-  ) as HTMLElement;
-  let primaryLinksWrapper = navigationMenu?.querySelector(".primary-links-w");
-  let primaryLinkLabels = primaryLinksWrapper?.querySelectorAll(
-    ".label"
-  ) as NodeListOf<HTMLElement>;
-  let secondaryLinksWrapper =
-    navigationMenu?.querySelector(".secondary-links-w");
+	let navDesktopLinks = navigation?.querySelector(
+		".desktop-links"
+	) as HTMLElement;
+	let navMobileLinks = navigation?.querySelector(
+		".mobile-links"
+	) as HTMLElement;
+	let navMenuButton = document.getElementById("menu-button") as HTMLElement;
+	let menuButtonIcon: HTMLElement | null = navMenuButton?.querySelector(
+		".menu-icon"
+	) as HTMLElement;
+	let menuIconLineOne = navMenuButton?.querySelector(
+		".line:nth-child(1)"
+	) as HTMLElement;
+	let menuIconLineTwo = navMenuButton?.querySelector(
+		".line:nth-child(2)"
+	) as HTMLElement;
+	let navImageColumn = navigationMenu?.querySelector(
+		".image-col"
+	) as HTMLElement;
+	let navImageBack = navImageColumn?.querySelector(
+		".img-w:nth-child(1)"
+	) as HTMLElement;
+	let navImageFront = navImageColumn?.querySelector(
+		".img-w:nth-child(2)"
+	) as HTMLElement;
+	let primaryLinksWrapper = navigationMenu?.querySelector(".primary-links-w");
+	let primaryLinkLabels = primaryLinksWrapper?.querySelectorAll(
+		".label"
+	) as NodeListOf<HTMLElement>;
+	let secondaryLinksWrapper =
+		navigationMenu?.querySelector(".secondary-links-w");
 
-  // Animate menu button
-  function animateMenuButton(isOpening: boolean) {
-    const gap = isOpening ? 0 : "0.325rem";
-    const lineWidth = isOpening ? "75%" : "100%";
+	// Animate menu button
+	function animateMenuButton(isOpening: boolean) {
+		const gap = isOpening ? 0 : "0.325rem";
+		const lineWidth = isOpening ? "75%" : "100%";
 
-    gsap.to(menuButtonIcon, {
-      gap,
-      duration: 0.75,
-      ease: easingSmall,
-    });
-    gsap.to([menuIconLineOne, menuIconLineTwo], {
-      duration: 0.75,
-      ease: easingSmall,
-      width: lineWidth,
-      rotation: (index) => (isOpening ? (index === 0 ? 135 : 45) : 0),
-      y: (index) => (isOpening ? (index === 0 ? 0.5 : -0.5) : 0.5),
-    });
-  }
+		gsap.to(menuButtonIcon, {
+			gap,
+			duration: 0.75,
+			ease: easingSmall,
+		});
+		gsap.to([menuIconLineOne, menuIconLineTwo], {
+			duration: 0.75,
+			ease: easingSmall,
+			width: lineWidth,
+			rotation: (index) => (isOpening ? (index === 0 ? 135 : 45) : 0),
+			y: (index) => (isOpening ? (index === 0 ? 0.5 : -0.5) : 0.5),
+		});
+	}
 
-  // Set animated flag
-  let isAnimating = false;
+	// Set animated flag
+	let isAnimating = false;
 
-  // Open and close Navigation Menu
-  function toggleNavigationMenu() {
-    if (navigation && navigationMenu && navMenuButton && !isAnimating) {
-      const isOpening = navMenuButton.getAttribute("aria-expanded") === "false";
-      isAnimating = true;
+	// Open and close Navigation Menu
+	function toggleNavigationMenu() {
+		if (navigation && navigationMenu && navMenuButton && !isAnimating) {
+			const isOpening =
+				navMenuButton.getAttribute("aria-expanded") === "false";
+			isAnimating = true;
 
-      // Check if navigation has a theme and store it
-      if (isOpening && navigation.hasAttribute("theme")) {
-        navTheme = navigation.getAttribute("theme");
-      }
+			// Check if navigation has a theme and store it
+			if (isOpening && navigation.hasAttribute("theme")) {
+				navTheme = navigation.getAttribute("theme");
+			}
 
-      // Set navigation theme and restore previous theme on close
-      if (isOpening) {
-        navigation.setAttribute("theme", "secondary");
-      } else {
-        setTimeout(function () {
-          if (navTheme !== null) {
-            navigation.setAttribute("theme", navTheme);
-          } else {
-            navigation.removeAttribute("theme");
-          }
-        }, 750);
-      }
+			// Set navigation theme and restore previous theme on close
+			if (isOpening) {
+				navigation.setAttribute("theme", "secondary");
+			} else {
+				setTimeout(function () {
+					if (navTheme !== null) {
+						navigation.setAttribute("theme", navTheme);
+					} else {
+						navigation.removeAttribute("theme");
+					}
+				}, 750);
+			}
 
-      // Open GSAP Timeline to manage menu open and close animation
-      const tl = gsap.timeline({
-        onStart: () => {
-          togglePageScroll(isOpening ? false : true);
-          gsap.set(navigationMenu, { display: "flex" });
-          animateMenuButton(isOpening);
-          tickerLinkHover(
-            navMenuButton,
-            isOpening ? "Close" : "Menu",
-            0.4,
-            true
-          );
-          if (isOpening) {
-            gsap.set(navImageFront, { y: "2.5rem" });
-            gsap.set(navImageBack, { y: "4rem" });
-            gsap.set(primaryLinkLabels, { y: "-2rem", autoAlpha: 0 });
-            gsap.set(secondaryLinksWrapper, { autoAlpha: 0, y: "-0.5rem" });
-          }
-        },
-        onComplete: () => {
-          if (isOpening) {
-            document.addEventListener("keydown", onEscapePressNav);
-            navMenuButton?.setAttribute("aria-expanded", "true");
-          } else {
-            document.removeEventListener("keydown", onEscapePressNav);
-            navMenuButton?.setAttribute("aria-expanded", "false");
-            gsap.set(navigationMenu, { display: "none" });
-          }
-          isAnimating = false;
-        },
-      });
+			// Open GSAP Timeline to manage menu open and close animation
+			const tl = gsap.timeline({
+				onStart: () => {
+					togglePageScroll(isOpening ? false : true);
+					gsap.set(navigationMenu, { display: "flex" });
+					animateMenuButton(isOpening);
+					tickerLinkHover(
+						navMenuButton,
+						isOpening ? "Close" : "Menu",
+						0.4,
+						true
+					);
+					if (isOpening) {
+						gsap.set(navImageFront, { y: "2.5rem" });
+						gsap.set(navImageBack, { y: "4rem" });
+						gsap.set(primaryLinkLabels, {
+							y: "-2rem",
+							autoAlpha: 0,
+						});
+						gsap.set(secondaryLinksWrapper, {
+							autoAlpha: 0,
+							y: "-0.5rem",
+						});
+					}
+				},
+				onComplete: () => {
+					if (isOpening) {
+						document.addEventListener("keydown", onEscapePressNav);
+						navMenuButton?.setAttribute("aria-expanded", "true");
+					} else {
+						document.removeEventListener(
+							"keydown",
+							onEscapePressNav
+						);
+						navMenuButton?.setAttribute("aria-expanded", "false");
+						gsap.set(navigationMenu, { display: "none" });
+					}
+					isAnimating = false;
+				},
+			});
 
-      // Stagger In/Out Navbar Items
-      if (navDesktopLinks) {
-        tl.to(
-          navDesktopLinks.children,
-          {
-            duration: isOpening ? 0.175 : 0.5,
-            autoAlpha: isOpening ? 0 : 1,
-            y: isOpening ? "-0.5rem" : 0,
-            stagger: isOpening ? 0.15 : 0.2,
-            ease: isOpening ? "power1.out" : "power2.out",
-            delay: isOpening ? 0 : 1.1,
-          },
-          0
-        );
-      } else {
-        console.log("Unable to locate navDesktopLinks");
-      }
+			// Stagger In/Out Navbar Items
+			if (navDesktopLinks) {
+				tl.to(
+					navDesktopLinks.children,
+					{
+						duration: isOpening ? 0.175 : 0.5,
+						autoAlpha: isOpening ? 0 : 1,
+						y: isOpening ? "-0.5rem" : 0,
+						stagger: isOpening ? 0.15 : 0.2,
+						ease: isOpening ? "power1.out" : "power2.out",
+						delay: isOpening ? 0 : 1.1,
+					},
+					0
+				);
+			} else {
+				console.log("Unable to locate navDesktopLinks");
+			}
 
-      if (navMobileLinks) {
-        tl.to(
-          navMobileLinks.children,
-          {
-            duration: 0.175,
-            autoAlpha: isOpening ? 0 : 1,
-            y: isOpening ? "-0.5rem" : 0,
-            stagger: isOpening ? 0.15 : -0.15,
-            ease: "power1.out",
-          },
-          0
-        );
-      } else "Unable to locate navMobileLinks";
+			if (navMobileLinks) {
+				tl.to(
+					navMobileLinks.children,
+					{
+						duration: 0.175,
+						autoAlpha: isOpening ? 0 : 1,
+						y: isOpening ? "-0.5rem" : 0,
+						stagger: isOpening ? 0.15 : -0.15,
+						ease: "power1.out",
+					},
+					0
+				);
+			} else "Unable to locate navMobileLinks";
 
-      // Open Navigation Menu
-      tl.to(
-        navigationMenu,
-        {
-          clipPath: isOpening ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)",
-          duration: 1,
-          ease: easingLarge,
-        },
-        isOpening ? 0 : 0.2
-      );
+			// Open Navigation Menu
+			tl.to(
+				navigationMenu,
+				{
+					clipPath: isOpening
+						? "inset(0% 0% 0% 0%)"
+						: "inset(0% 0% 100% 0%)",
+					duration: 1,
+					ease: easingLarge,
+				},
+				isOpening ? 0 : 0.2
+			);
 
-      // Reveal Image Cards
-      tl.to(
-        navImageFront,
-        {
-          duration: 1,
-          y: isOpening ? 0 : "2.5rem",
-          ease: isOpening ? "power2.out" : "power2.in",
-        },
-        isOpening ? 0.25 : 0
-      );
+			// Reveal Image Cards
+			tl.to(
+				navImageFront,
+				{
+					duration: 1,
+					y: isOpening ? 0 : "2.5rem",
+					ease: isOpening ? "power2.out" : "power2.in",
+				},
+				isOpening ? 0.25 : 0
+			);
 
-      tl.to(
-        navImageBack,
-        {
-          duration: 1,
-          y: isOpening ? 0 : "4rem",
-          ease: isOpening ? "power2.out" : "power2.in",
-        },
-        isOpening ? 0.25 : 0
-      );
+			tl.to(
+				navImageBack,
+				{
+					duration: 1,
+					y: isOpening ? 0 : "4rem",
+					ease: isOpening ? "power2.out" : "power2.in",
+				},
+				isOpening ? 0.25 : 0
+			);
 
-      // Stagger Reveal Primary Links
-      tl.to(
-        primaryLinkLabels,
-        {
-          duration: isOpening ? 0.75 : 0.75,
-          y: isOpening ? 0 : "-1rem",
-          stagger: isOpening ? 0.15 : -0.1,
-          autoAlpha: isOpening ? 1 : 0,
-          ease: isOpening ? easingSmall : easingSmall,
-        },
-        isOpening ? 0 : 0.15
-      );
+			// Stagger Reveal Primary Links
+			tl.to(
+				primaryLinkLabels,
+				{
+					duration: isOpening ? 0.75 : 0.75,
+					y: isOpening ? 0 : "-1rem",
+					stagger: isOpening ? 0.15 : -0.1,
+					autoAlpha: isOpening ? 1 : 0,
+					ease: isOpening ? easingSmall : easingSmall,
+				},
+				isOpening ? 0 : 0.15
+			);
 
-      // Reveal Secondary Links
-      tl.to(
-        secondaryLinksWrapper,
-        {
-          duration: isOpening ? 0.3 : 0.5,
-          y: isOpening ? 0 : "-0.5rem",
-          autoAlpha: isOpening ? 1 : 0,
-        },
-        isOpening ? 0.5 : 0
-      );
-    }
-  }
+			// Reveal Secondary Links
+			tl.to(
+				secondaryLinksWrapper,
+				{
+					duration: isOpening ? 0.3 : 0.5,
+					y: isOpening ? 0 : "-0.5rem",
+					autoAlpha: isOpening ? 1 : 0,
+				},
+				isOpening ? 0.5 : 0
+			);
+		}
+	}
 
-  function onEscapePressNav(event: KeyboardEvent): void {
-    if (event.key === "Escape") {
-      toggleNavigationMenu();
-    }
-  }
+	function onEscapePressNav(event: KeyboardEvent): void {
+		if (event.key === "Escape") {
+			toggleNavigationMenu();
+		}
+	}
 
-  if (navMenuButton) {
-    navMenuButton.addEventListener("click", (event) => {
-      toggleNavigationMenu();
-    });
-  }
+	if (navMenuButton) {
+		navMenuButton.addEventListener("click", (event) => {
+			toggleNavigationMenu();
+		});
+	}
 </script>

@@ -1,10 +1,6 @@
 ---
 import { fetchProducts } from "../../scripts/fetch";
-import type {
-  VariantAPI,
-  VariantGroupData,
-  ProductSnipcartAPI,
-} from "../../types/strapi-attributes";
+import type { VariantGroupData } from "../../types/strapi-attributes";
 import Layout from "../../layouts/Layout.astro";
 import ImageWellmade from "../../components/atoms/ImageWellmade.astro";
 import Divider from "../../components/atoms/Divider.astro";
@@ -14,11 +10,11 @@ import CarouselSection from "../../components/sections/CarouselSection.astro";
 import ProductSlider from "../../components/atoms/carousels/ProductSlider.astro";
 
 export async function getStaticPaths() {
-  const products = await fetchProducts();
-  return products.map((product) => ({
-    params: { slug: product.slug },
-    props: product,
-  }));
+	const products = await fetchProducts();
+	return products.map((product) => ({
+		params: { slug: product.slug },
+		props: product,
+	}));
 }
 
 const product = Astro.props;
@@ -27,332 +23,399 @@ const variantGroups = product.variants;
 // Set variant attributes on button for Snipcart
 const variantAttributes: any = {};
 if (variantGroups && variantGroups.length > 0) {
-  variantGroups.forEach((variantGroup: VariantGroupData, index) => {
-    variantAttributes[`data-item-custom${index + 1}-name`] =
-      variantGroup.variant_type;
-    variantAttributes[`data-item-custom${index + 1}-options`] =
-      variantGroup.variant_string;
-  });
+	variantGroups.forEach((variantGroup: VariantGroupData, index) => {
+		variantAttributes[`data-item-custom${index + 1}-name`] =
+			variantGroup.variant_type;
+		variantAttributes[`data-item-custom${index + 1}-options`] =
+			variantGroup.variant_string;
+	});
 }
 ---
 
-<Layout title={product.name}>
-  <section class="product-template">
-    <div class="product-gallery">
-      <div class="product-img-w">
-        <ImageWellmade
-          image={product.image}
-          sizes="(min-width: 1100px) 800px, (min-width: 991px) 100vw, 100vw"
-          eagerLoading
-        />
-      </div>
-    </div>
-    <div class="product-detail">
-      <h1 class="heading-700 title">{product.name}</h1>
-      <div class="heading-300 collection">{product.collection}</div>
-      <div class="short-description">
-        <p>{product.short_description}</p>
-      </div>
-      <div class="price heading-300">
-        <div class="amount">${product.price}</div>
-        {
-          product.price_original && (
-            <div class="strikeout">${product.price_original}</div>
-          )
-        }
-      </div>
-      {
-        variantGroups && variantGroups.length > 0 && (
-          <div>
-            {variantGroups.map((variantGroup: VariantGroupData) => (
-              <div class="variant-w">
-                {variantGroup.variant.map((variant) => (
-                  <>
-                    <input
-                      type="radio"
-                      id={variant.id}
-                      name={variantGroup.variant_type}
-                      value={variant.variant_name}
-                      data-differential={variant.price_differential}
-                      disabled={variant.enabled ? false : true}
-                      required
-                    />
-                    <label for={variant.id}>{variant.variant_name}</label>
-                  </>
-                ))}
-              </div>
-            ))}
-          </div>
-        )
-      }
-      <div class="accordion-group-w">
-        <Divider />
-        <Accordion title="Description" paragraph={product.long_desription} />
-      </div>
+<Layout title={product.name} compactNavBar>
+	<section class="product-template">
+		<div class="product-gallery">
+			<div class="product-img-w">
+				<ImageWellmade
+					image={product.image}
+					sizes="(min-width: 1100px) 800px, (min-width: 991px) 100vw, 100vw"
+					eagerLoading
+				/>
+			</div>
+		</div>
+		<div class="product-detail">
+			<h1 class="heading-700 title">{product.name}</h1>
+			<div class="heading-300 collection">{product.collection}</div>
+			<div class="short-description">
+				<p>{product.short_description}</p>
+			</div>
+			<div class="price heading-300">
+				<div class="amount">${product.price}</div>
+				{
+					product.price_original && (
+						<div class="strikeout">${product.price_original}</div>
+					)
+				}
+			</div>
+			{
+				variantGroups && variantGroups.length > 0 && (
+					<div>
+						{variantGroups.map((variantGroup: VariantGroupData) => (
+							<div class="variant-w">
+								{variantGroup.variant.map((variant) => (
+									<>
+										<input
+											type="radio"
+											id={variant.id}
+											name={variantGroup.variant_type}
+											value={variant.variant_name}
+											data-differential={
+												variant.price_differential
+											}
+											disabled={
+												variant.enabled ? false : true
+											}
+											required
+										/>
+										<label for={variant.id}>
+											{variant.variant_name}
+										</label>
+									</>
+								))}
+							</div>
+						))}
+					</div>
+				)
+			}
+			<div class="accordion-group-w">
+				<Divider />
+				<Accordion
+					title="Description"
+					paragraph={product.long_desription}
+				/>
+			</div>
 
-      <button
-        class="snipcart-add-item"
-        id="product-atc"
-        data-item-id={product.id}
-        data-item-price={product.price}
-        data-item-price-original={product.price_original}
-        data-item-url=`/${product.slug}`
-        data-item-description={product.short_description}
-        data-item-quantity="1"
-        data-item-name={product.name}
-        data-item-image={product.image.src}
-        disabled={product.in_stock ? false : true}
-        {...variantAttributes}
-      >
-        <span>
-          <ButtonMarquee
-            firstString={product.in_stock ? "Add to Cart" : "Out of Stock"}
-            secondString={product.in_stock ? "Bag It" : "Limited Drop"}
-            {...product.in_stock ? {} : { disabled: true }}
-          />
-        </span>
-      </button>
-    </div>
-  </section>
-  <CarouselSection title="Bundle Me" subtitle="Related">
-    <ProductSlider excludedProductID={product.id} />
-  </CarouselSection>
-  <div style="height: 4rem"></div>
+			<button
+				class="snipcart-add-item"
+				id="product-atc"
+				data-item-id={product.id}
+				data-item-price={product.price}
+				data-item-price-original={product.price_original}
+				data-item-url=`/${product.slug}`
+				data-item-description={product.short_description}
+				data-item-quantity="1"
+				data-item-name={product.name}
+				data-item-image={product.image.src}
+				disabled={product.in_stock ? false : true}
+				{...variantAttributes}
+			>
+				<span>
+					<ButtonMarquee
+						firstString={product.in_stock
+							? "Add to Cart"
+							: "Out of Stock"}
+						secondString={product.in_stock
+							? "Bag It"
+							: "Limited Drop"}
+						{...product.in_stock ? {} : { disabled: true }}
+					/>
+				</span>
+			</button>
+		</div>
+	</section>
+	<CarouselSection title="Bundle Me" subtitle="Related">
+		<ProductSlider excludedProductID={product.id} />
+	</CarouselSection>
+	<div style="height: 4rem"></div>
 </Layout>
 
 <style lang="scss">
-  @use "/src/styles/vars" as *;
-  .product-template {
-    display: flex;
-    flex-direction: row;
+	@use "/src/styles/vars" as *;
+	.product-template {
+		display: flex;
+		flex-direction: row;
 
-    @media (max-width: $phablet) {
-      flex-direction: column;
-    }
+		@media (max-width: $phablet) {
+			flex-direction: column;
+		}
 
-    .product-gallery {
-      display: flex;
-      flex-grow: 1;
-      background-color: var(--smoke);
-      border-bottom-right-radius: var(--radius-large);
-      overflow: clip;
-      align-items: center;
-      justify-content: center;
-      max-height: calc(100vh - 2rem);
-      position: sticky;
-      top: 0;
+		.product-gallery {
+			display: flex;
+			flex-grow: 1;
+			background-color: var(--smoke);
+			border-bottom-right-radius: var(--radius-large);
+			overflow: clip;
+			align-items: center;
+			justify-content: center;
+			max-height: calc(100vh - 2rem);
+			position: sticky;
+			top: 0;
 
-      @media (max-width: $phablet) {
-        border-bottom-left-radius: var(--radius-large);
-        position: unset;
-        top: unset;
-      }
+			@media (max-width: $phablet) {
+				border-bottom-left-radius: var(--radius-large);
+				position: unset;
+				top: unset;
+			}
 
-      .product-img-w {
-        height: 100%;
-        width: 100%;
-        max-height: 55rem;
-        display: flex;
-        align-items: center;
+			.product-img-w {
+				height: 100%;
+				width: 100%;
+				max-height: 55rem;
+				display: flex;
+				align-items: center;
 
-        img {
-          height: 100%;
-          width: 100%;
-          top: 0;
-          left: auto;
-          right: auto;
-          bottom: auto;
-          -o-object-fit: contain;
-          object-fit: contain;
-        }
-      }
-    }
+				img {
+					height: 100%;
+					width: 100%;
+					top: 0;
+					left: auto;
+					right: auto;
+					bottom: auto;
+					-o-object-fit: contain;
+					object-fit: contain;
+				}
+			}
+		}
 
-    .product-detail {
-      width: 25rem;
-      flex-shrink: 0;
-      padding: 2rem 0 3rem;
-      margin: $navheight calc(1.75 * var(--page-margin)) 0;
-      position: sticky;
-      top: 0;
-      display: flex;
-      flex-direction: column;
+		.product-detail {
+			width: 25rem;
+			flex-shrink: 0;
+			padding: 2rem 0 3rem;
+			margin: $navheight calc(1.75 * var(--page-margin)) 0;
+			position: sticky;
+			top: 0;
+			display: flex;
+			flex-direction: column;
 
-      @media (max-width: $tablet) {
-        width: clamp(20rem, 40vw, 25rem);
-        padding: 1rem 0 3rem;
-        margin: $navheight calc(1.25 * var(--page-margin)) 0;
-      }
+			@media (max-width: $tablet) {
+				width: clamp(20rem, 40vw, 25rem);
+				padding: 1rem 0 3rem;
+				margin: $navheight calc(1.25 * var(--page-margin)) 0;
+			}
 
-      @media (max-width: $phablet) {
-        width: unset;
-        margin: 1rem var(--page-margin) 0;
-        padding: 1rem 0 2rem;
-      }
+			@media (max-width: $phablet) {
+				width: unset;
+				margin: 1rem var(--page-margin) 0;
+				padding: 1rem 0 2rem;
+			}
 
-      .heading-700 {
-        margin-bottom: 0.5em;
-      }
+			.heading-700 {
+				margin-bottom: 0.5em;
+			}
 
-      .collection {
-        margin-bottom: 0.4rem;
-      }
+			.collection {
+				margin-bottom: 0.4rem;
+			}
 
-      .short-description {
-        margin-bottom: 1.5rem;
-      }
+			.short-description {
+				margin-bottom: 1.5rem;
+			}
 
-      .price {
-        display: flex;
-        flex-direction: row;
-        gap: 0.4rem;
-        font-size: 1rem;
+			.price {
+				display: flex;
+				flex-direction: row;
+				gap: 0.4rem;
+				font-size: 1rem;
 
-        .amount {
-          margin-bottom: 1.75rem;
-        }
+				.amount {
+					margin-bottom: 1.75rem;
+				}
 
-        .strikeout {
-          opacity: 0.6;
-          text-decoration: line-through;
-        }
-      }
+				.strikeout {
+					opacity: 0.6;
+					text-decoration: line-through;
+				}
+			}
 
-      .variant-w {
-        gap: 0.5rem;
-        margin-bottom: 2rem;
-      }
+			.variant-w {
+				gap: 0.5rem;
+				margin-bottom: 2rem;
+			}
 
-      .quantity {
-        input {
-          display: none;
-        }
-      }
-    }
-  }
+			.quantity {
+				input {
+					display: none;
+				}
+			}
+		}
+	}
 
-  .variant-w {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+	.variant-w {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
 
-    &:has(> :nth-child(8)) {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
+		&:has(> :nth-child(8)) {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
 
-    input[type="radio"] {
-      display: none;
-    }
+		input[type="radio"] {
+			display: none;
+		}
 
-    :disabled + label {
-      border-color: var(--text-disabled);
-      color: var(--text-disabled);
-      pointer-events: none;
-    }
+		:disabled + label {
+			border-color: var(--text-disabled);
+			color: var(--text-disabled);
+			pointer-events: none;
+		}
 
-    label {
-      display: inline-flex;
-      width: 100%;
-      background-color: none;
-      border: 1px solid var(--divider-demi);
-      border-radius: var(--radius-circular);
-      padding: 0.75rem 1.5rem;
-      font-size: 0.875rem;
-      text-align: center !important;
-      align-items: center;
-      justify-content: center;
-      letter-spacing: 0.02em;
-      font-weight: 400;
-      transition: all 0.25s;
+		label {
+			display: inline-flex;
+			width: 100%;
+			background-color: none;
+			border: 1px solid var(--divider-demi);
+			border-radius: var(--radius-circular);
+			padding: 0.75rem 1.5rem;
+			font-size: 0.875rem;
+			text-align: center !important;
+			align-items: center;
+			justify-content: center;
+			letter-spacing: 0.02em;
+			font-weight: 400;
+			transition: all 0.25s;
 
-      &:hover {
-        border-color: var(--text);
-        cursor: pointer;
-      }
-    }
+			&:hover {
+				border-color: var(--text);
+				cursor: pointer;
+			}
+		}
 
-    input[type="radio"]:checked + label {
-      background-color: var(--button-solid-bg);
-      color: var(--button-solid-text);
-    }
-  }
+		input[type="radio"]:checked + label {
+			background-color: var(--button-solid-bg);
+			color: var(--button-solid-text);
+		}
+	}
 
-  .snipcart-add-item {
-    // Wrapper for the Add to Cart Button because WooCommerce is stubborn
-    position: relative;
-    margin-top: 2rem;
-    overflow: clip;
-    transition: all 0.25s;
-    border-radius: var(--radius-circular);
-    height: 3rem;
-    transform: translate(0);
+	.snipcart-add-item {
+		// Wrapper for the Add to Cart Button because WooCommerce is stubborn
+		position: relative;
+		margin-top: 2rem;
+		overflow: clip;
+		transition: all 0.25s;
+		border-radius: var(--radius-circular);
+		height: 3rem;
+		transform: translate(0);
 
-    &:hover {
-      opacity: 0.8;
-    }
+		&:hover {
+			opacity: 0.8;
+		}
 
-    .button--atc {
-      // WooCommerce Button
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-    }
+		.button--atc {
+			// WooCommerce Button
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+		}
 
-    .atc-foil {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      pointer-events: none;
-    }
-  }
+		.atc-foil {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: 2;
+			pointer-events: none;
+		}
+	}
 </style>
 
 <script>
-  const atcButton = document.getElementById("product-atc")!;
-  const variants = document.querySelector(".variant-w");
-  //
-  const priceWrapper = document.querySelector(".price");
-  const activePriceObject = priceWrapper?.querySelector(".amount");
-  const strikeoutPriceObject = priceWrapper?.querySelector(".strikeout");
-  //
-  const productPrice = atcButton.getAttribute("data-item-price");
-  const strikeoutPrice = atcButton.getAttribute("data-item-price-original");
+	/* Add and Remove Special Product Theme from Navbar on Scroll */
+	function themeProductNavigationBar() {
+		const navigation: HTMLElement | null =
+			document.getElementById("navigation");
 
-  if (atcButton && variants && priceWrapper && activePriceObject) {
-    // When the variant is changed adjust price on button
-    variants.addEventListener("change", function (event) {
-      const target = event.target as HTMLInputElement;
-      const variantDifferential = target.getAttribute("data-differential");
+		if (!navigation) {
+			console.log(
+				`Function "themeProductNavigationBar" tried to run, but cannot find navigation bar`
+			);
+			return;
+		}
 
-      if (productPrice && variantDifferential) {
-        const newProductPrice =
-          parseFloat(productPrice) + parseFloat(variantDifferential);
-        activePriceObject.textContent = String(`$${newProductPrice}`);
+		// Function to handle when navbar is layed on top of the product image
+		function handleIntersection(entries, observer) {
+			entries.forEach((entry: any) => {
+				if (entry.isIntersecting) {
+					navigation?.setAttribute("theme", "product");
+				} else {
+					navigation?.removeAttribute("theme");
+				}
+			});
+		}
 
-        if (strikeoutPrice) {
-          const newStrikeoutPrice =
-            parseFloat(strikeoutPrice) + parseFloat(variantDifferential);
+		// Specify a threshold of 0.5
+		let options = {
+			rootMargin: "-32px 0px 0px 0px",
+			threshold: 0,
+		};
 
-          if (strikeoutPriceObject)
-            strikeoutPriceObject.textContent = String(`$${newStrikeoutPrice}`);
-        }
-      } else {
-        console.log("Couldn't find item price or variant differential values.");
-      }
-      atcButton.setAttribute(`data-item-custom1-value`, target.value);
-    });
+		let observer = new IntersectionObserver(handleIntersection, options);
 
-    // If there are variants, select the first enabled option
-    const defaultVariant: HTMLInputElement | null = variants.querySelector(
-      "input:not([disabled])"
-    );
-    if (defaultVariant) {
-      defaultVariant.checked = true;
-      atcButton.setAttribute(`data-item-custom1-value`, defaultVariant.value);
-    }
-  }
+		let targetElement = document.querySelector(".product-gallery");
+
+		if (targetElement) {
+			observer.observe(targetElement);
+		} else {
+			console.log("Element not found");
+		}
+	}
+
+	themeProductNavigationBar();
+
+	/* Cart Form */
+	// Declaring Variables
+	const atcButton = document.getElementById("product-atc")!;
+	const variants = document.querySelector(".variant-w");
+	//
+	const priceWrapper = document.querySelector(".price");
+	const activePriceObject = priceWrapper?.querySelector(".amount");
+	const strikeoutPriceObject = priceWrapper?.querySelector(".strikeout");
+	//
+	const productPrice = atcButton.getAttribute("data-item-price");
+	const strikeoutPrice = atcButton.getAttribute("data-item-price-original");
+
+	// Update Current and Strikeout Price when variant is changed
+	if (atcButton && variants && priceWrapper && activePriceObject) {
+		// When the variant is changed adjust price on button
+		variants.addEventListener("change", function (event) {
+			const target = event.target as HTMLInputElement;
+			const variantDifferential =
+				target.getAttribute("data-differential");
+
+			if (productPrice && variantDifferential) {
+				const newProductPrice =
+					parseFloat(productPrice) + parseFloat(variantDifferential);
+				activePriceObject.textContent = String(`$${newProductPrice}`);
+
+				if (strikeoutPrice) {
+					const newStrikeoutPrice =
+						parseFloat(strikeoutPrice) +
+						parseFloat(variantDifferential);
+
+					if (strikeoutPriceObject)
+						strikeoutPriceObject.textContent = String(
+							`$${newStrikeoutPrice}`
+						);
+				}
+			} else {
+				console.log(
+					"Couldn't find item price or variant differential values."
+				);
+			}
+			atcButton.setAttribute(`data-item-custom1-value`, target.value);
+		});
+
+		// If there are variants, select the first enabled option
+		const defaultVariant: HTMLInputElement | null = variants.querySelector(
+			"input:not([disabled])"
+		);
+		if (defaultVariant) {
+			defaultVariant.checked = true;
+			atcButton.setAttribute(
+				`data-item-custom1-value`,
+				defaultVariant.value
+			);
+		}
+	}
 </script>
