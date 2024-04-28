@@ -24,12 +24,16 @@ export function onResize(passedFunction: () => void): void {
 
 /* window.addEventListener('resize', throttle(() => onResize(initMarquees), 250)); */
 
+import { lenis } from "./init";
+
 // Toggle Page Scroll
 export function togglePageScroll(enable: boolean) {
 	if (enable) {
 		document.body.style.overflow = "visible";
+		lenis.start();
 	} else {
 		document.body.style.overflow = "hidden";
+		lenis.stop();
 	}
 }
 

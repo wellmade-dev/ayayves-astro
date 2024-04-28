@@ -51,6 +51,7 @@ const buttonLabel = "Send Message";
 	// Add Event Listeners to all Contact Buttons
 	contactButtons.forEach((contactButton) => {
 		contactButton.addEventListener("click", () => {
+			togglePageScroll(false);
 			contactModal?.showModal();
 		});
 	});

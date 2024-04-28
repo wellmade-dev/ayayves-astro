@@ -125,6 +125,7 @@ export function initSnipcart() {
 	})();
 
 	document.addEventListener("snipcart.ready", function () {
+		// Add light theming and disable Lenis on cart
 		Snipcart.events.on("snipcart.initialized", function () {
 			document
 				.getElementById("snipcart")
@@ -138,6 +139,30 @@ export function initSnipcart() {
 		Snipcart.events.on("theme.routechanged", (routesChange) => {
 			if (routesChange.from === "/" && routesChange.to !== "/") {
 				togglePageScroll(false);
+
+				// Add a close event to the modal background on click
+				const snipcartContainer = document.getElementById("snipcart");
+
+				// Pause to let Snipcart add the modal and background
+				setTimeout(function () {
+					const snipcartBackground = snipcartContainer.querySelector(
+						".snipcart-modal__container"
+					);
+
+					if (snipcartBackground) {
+						snipcartBackground.addEventListener(
+							"click",
+							function (event) {
+								if (
+									event.target.classList.contains(
+										"snipcart-modal__container"
+									)
+								)
+									Snipcart.api.theme.cart.close();
+							}
+						);
+					}
+				}, 250);
 			}
 
 			if (routesChange.from !== "/" && routesChange.to === "/") {

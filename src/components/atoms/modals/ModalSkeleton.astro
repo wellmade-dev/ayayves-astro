@@ -194,6 +194,7 @@ const { title, subtitle, type } = Astro.props as Props;
 			() => {
 				modal.close();
 				modal.removeAttribute("closing");
+				togglePageScroll(true);
 			},
 			{ once: true }
 		);
