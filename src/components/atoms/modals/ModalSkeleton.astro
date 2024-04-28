@@ -8,7 +8,7 @@ interface Props {
 const { title, subtitle, type } = Astro.props as Props;
 ---
 
-<dialog class="modal" data-modal={type}>
+<dialog class="modal" data-modal={type} data-lenis-prevent>
 	<div class="modal-inner" data-theme="light">
 		{
 			title && (
@@ -184,6 +184,7 @@ const { title, subtitle, type } = Astro.props as Props;
 </style>
 
 <script>
+	import { togglePageScroll } from "../../../scripts/utils";
 	const modals = document.querySelectorAll("dialog");
 
 	function dismissModal(modal: HTMLDialogElement) {
@@ -191,6 +192,7 @@ const { title, subtitle, type } = Astro.props as Props;
 		modal.addEventListener(
 			"animationend",
 			() => {
+				togglePageScroll(true);
 				modal.close();
 				modal.removeAttribute("closing");
 			},

@@ -24,49 +24,53 @@ export function onResize(passedFunction: () => void): void {
 
 /* window.addEventListener('resize', throttle(() => onResize(initMarquees), 250)); */
 
+import { lenis } from "./init";
+
 // Toggle Page Scroll
 export function togglePageScroll(enable: boolean) {
-  if (enable) {
-    document.body.style.overflow = "";
-  } else {
-    document.body.style.overflow = "hidden";
-  }
+	if (enable) {
+		document.body.style.overflow = "visible";
+		lenis.start();
+	} else {
+		document.body.style.overflow = "hidden";
+		lenis.stop();
+	}
 }
 
 export function validateForm(form: HTMLFormElement) {
-  const submitButton: HTMLButtonElement | null = form?.querySelector(
-    'button[type="submit"]'
-  );
+	const submitButton: HTMLButtonElement | null = form?.querySelector(
+		'button[type="submit"]'
+	);
 
-  if (!submitButton) return;
+	if (!submitButton) return;
 
-  let isValid = true;
+	let isValid = true;
 
-  form
-    .querySelectorAll("input[required], select[required], textarea[required]")
-    .forEach((input) => {
-      if (!input.value.trim()) {
-        isValid = false;
-      }
-    });
+	form.querySelectorAll(
+		"input[required], select[required], textarea[required]"
+	).forEach((input) => {
+		if (!input.value.trim()) {
+			isValid = false;
+		}
+	});
 
-  submitButton.disabled = !isValid;
+	submitButton.disabled = !isValid;
 }
 
 export function handleFormError(error, errorCount) {
-  let errorMessage;
+	let errorMessage;
 
-  if (errorCount >= 1) {
-    errorMessage =
-      "Something is still wrong, maybe try emailing me. My email address is <a href='mailto:ayayves@gmail.com'>ayayves@gmail.com</a>.";
-  } else {
-    // Increment error count in the parent document
-    errorMessage =
-      "Something’s gone wrong in submitting the form. Please try again.";
-  }
+	if (errorCount >= 1) {
+		errorMessage =
+			"Something is still wrong, maybe try emailing me. My email address is <a href='mailto:ayayves@gmail.com'>ayayves@gmail.com</a>.";
+	} else {
+		// Increment error count in the parent document
+		errorMessage =
+			"Something’s gone wrong in submitting the form. Please try again.";
+	}
 
-  console.error("Form submission error:", error);
-  displayModalMessage(errorMessage, "error");
+	console.error("Form submission error:", error);
+	displayModalMessage(errorMessage, "error");
 
-  return errorCount + 1; // Return the incremented errorCount
+	return errorCount + 1; // Return the incremented errorCount
 }

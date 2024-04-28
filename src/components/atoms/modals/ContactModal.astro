@@ -10,46 +10,49 @@ const buttonLabel = "Send Message";
 ---
 
 <ModalSkeleton type="contact" title={title} subtitle={subtitle} ,>
-  <ModalForm
-    actionURL=`${STRAPI_API_URL}contact/send`
-    buttonLabel={buttonLabel}
-  >
-    <FormField
-      type="text"
-      name="name"
-      placeholder="First & Last Name *"
-      required
-    />
-    <FormField type="text" name="business" placeholder="Business Name" />
-    <FormField
-      type="email"
-      name="email"
-      placeholder="Email Address *"
-      required
-    />
-    <FormField type="number" name="phone" placeholder="Phone Number" />
-    <FormField
-      type="textarea"
-      name="message"
-      placeholder="Message *"
-      required
-    />
-  </ModalForm>
+	<ModalForm
+		actionURL=`${STRAPI_API_URL}contact/send`
+		buttonLabel={buttonLabel}
+	>
+		<FormField
+			type="text"
+			name="name"
+			placeholder="First & Last Name *"
+			required
+		/>
+		<FormField type="text" name="business" placeholder="Business Name" />
+		<FormField
+			type="email"
+			name="email"
+			placeholder="Email Address *"
+			required
+		/>
+		<FormField type="number" name="phone" placeholder="Phone Number" />
+		<FormField
+			type="textarea"
+			name="message"
+			placeholder="Message *"
+			required
+		/>
+	</ModalForm>
 </ModalSkeleton>
 
 <script>
-  // Variable Declarations
-  const contactModal: HTMLDialogElement | null = document.querySelector(
-    'dialog[data-modal="contact"]'
-  );
-  const contactButtons = document.querySelectorAll(
-    'button[data-modal="contact"]'
-  );
+	import { togglePageScroll } from "../../../scripts/utils";
 
-  // Add Event Listeners to all Contact Buttons
-  contactButtons.forEach((contactButton) => {
-    contactButton.addEventListener("click", () => {
-      contactModal?.showModal();
-    });
-  });
+	// Variable Declarations
+	const contactModal: HTMLDialogElement | null = document.querySelector(
+		'dialog[data-modal="contact"]'
+	);
+	const contactButtons = document.querySelectorAll(
+		'button[data-modal="contact"]'
+	);
+
+	// Add Event Listeners to all Contact Buttons
+	contactButtons.forEach((contactButton) => {
+		contactButton.addEventListener("click", () => {
+			togglePageScroll(false);
+			contactModal?.showModal();
+		});
+	});
 </script>

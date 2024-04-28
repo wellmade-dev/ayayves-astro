@@ -1,3 +1,5 @@
+import { togglePageScroll } from "./utils";
+
 const PUBLIC_SNIPCART_API_KEY = import.meta.env.PUBLIC_SNIPCART_API_KEY;
 
 export function initSnipcart() {
@@ -127,9 +129,17 @@ export function initSnipcart() {
 			document
 				.getElementById("snipcart")
 				.setAttribute("data-theme", "light");
+
+			document
+				.getElementById("snipcart")
+				.setAttribute("data-lenis-prevent", true);
 		});
 
 		Snipcart.events.on("theme.routechanged", (routesChange) => {
+			if (routesChange.from === "/" && routesChange.to !== "/") {
+				togglePageScroll(false);
+			}
+
 			if (routesChange.from !== "/" && routesChange.to === "/") {
 				const snipcart = document.getElementById("snipcart");
 
@@ -142,8 +152,8 @@ export function initSnipcart() {
 				if (snipcartModal && snipcartModalBackground) {
 					snipcartModal.setAttribute("closing", "true");
 					snipcartModalBackground.setAttribute("closing", "true");
+					togglePageScroll(true);
 				}
-				console.log("cart closed");
 			}
 
 			if (
