@@ -162,19 +162,23 @@ const { title, subtitle, type } = Astro.props as Props;
 
 	@keyframes fade-in {
 		0% {
-			opacity: 0;
+			background-color: rgba(0, 0, 0, 0);
+			backdrop-filter: blur(0px);
 		}
 		100% {
-			opacity: 1;
+			background-color: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(7.5px);
 		}
 	}
 
 	@keyframes fade-out {
 		0% {
-			opacity: 1;
+			background-color: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(7.5px);
 		}
 		100% {
-			opacity: 0;
+			background-color: rgba(0, 0, 0, 0);
+			backdrop-filter: blur(0px);
 		}
 	}
 </style>

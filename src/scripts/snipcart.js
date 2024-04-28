@@ -129,6 +129,37 @@ export function initSnipcart() {
 				.setAttribute("data-theme", "light");
 		});
 
+		Snipcart.events.on("theme.routechanged", (routesChange) => {
+			if (routesChange.from !== "/" && routesChange.to === "/") {
+				const snipcart = document.getElementById("snipcart");
+
+				const snipcartModal =
+					snipcart?.querySelector(".snipcart-modal");
+				const snipcartModalBackground = snipcart?.querySelector(
+					".snipcart-modal__container"
+				);
+
+				if (snipcartModal && snipcartModalBackground) {
+					snipcartModal.setAttribute("closing", "true");
+					snipcartModalBackground.setAttribute("closing", "true");
+				}
+				console.log("cart closed");
+			}
+
+			if (
+				routesChange.from === "/cart" &&
+				routesChange.to === "/checkout"
+			) {
+				const snipcart = document.getElementById("snipcart");
+
+				const snipcartModal =
+					snipcart?.querySelector(".snipcart-modal");
+
+				if (snipcartModal)
+					snipcartModal.setAttribute("closing", "true");
+			}
+		});
+
 		Snipcart.api.session.setLanguage("en", {
 			// Message for too many items for the amount of stock
 			errors: {
