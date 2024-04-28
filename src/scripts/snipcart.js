@@ -152,7 +152,13 @@ export function initSnipcart() {
 				if (snipcartModal && snipcartModalBackground) {
 					snipcartModal.setAttribute("closing", "true");
 					snipcartModalBackground.setAttribute("closing", "true");
-					togglePageScroll(true);
+					snipcartModal.addEventListener(
+						"animationend",
+						() => {
+							togglePageScroll(true);
+						},
+						{ once: true }
+					);
 				}
 			}
 

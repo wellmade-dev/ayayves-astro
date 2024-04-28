@@ -53,7 +53,6 @@ const buttonLabel = "Sign Up";
 	// Add Event Listeners to all Contact Buttons
 	mailchimpButtons.forEach((mailchimpButton) => {
 		mailchimpButton.addEventListener("click", () => {
-			togglePageScroll(false);
 			mailchimpModal?.showModal();
 		});
 	});

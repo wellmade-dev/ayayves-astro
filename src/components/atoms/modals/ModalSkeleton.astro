@@ -192,7 +192,6 @@ const { title, subtitle, type } = Astro.props as Props;
 		modal.addEventListener(
 			"animationend",
 			() => {
-				togglePageScroll(true);
 				modal.close();
 				modal.removeAttribute("closing");
 			},
