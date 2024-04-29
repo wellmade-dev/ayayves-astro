@@ -9,191 +9,191 @@ const ariaLabel = `Learn more about ${release.title}`;
 ---
 
 <div class="release-w">
-  <a
-    class="release-card"
-    role="button"
-    href=`/catalogue/${release.slug}`
-    aria-label={ariaLabel}
-  >
-    <div class="bg-tint"></div>
-    <div class="bg-gradient"></div>
-    <ImageWellmade image={release.coverImage} sizes="360px" />
-    <div class="desc-w">
-      <div class="heading-300">{release.title}</div>
-      <div class="p2">{release.subtitle}</div>
-      <div class="listen-button-w">
-        <div class="button--listen" style="opacity: 1;">
-          <div
-            class="label"
-            style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"
-          >
-            Stream
-          </div>
-          <div class="arrow-w">
-            <DiagonalArrowSVG />
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-  <CatalogueModal release={release} />
+	<a
+		class="release-card"
+		role="button"
+		href=`/catalogue/${release.slug}`
+		aria-label={ariaLabel}
+	>
+		<div class="bg-tint"></div>
+		<div class="bg-gradient"></div>
+		<ImageWellmade image={release.coverImage} sizes="360px" />
+		<div class="desc-w">
+			<div class="heading-300">{release.title}</div>
+			<div class="p2">{release.subtitle}</div>
+			<div class="listen-button-w">
+				<div class="button--listen" style="opacity: 1;">
+					<div
+						class="label"
+						style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px);"
+					>
+						Stream
+					</div>
+					<div class="arrow-w">
+						<DiagonalArrowSVG />
+					</div>
+				</div>
+			</div>
+		</div>
+	</a>
+	<CatalogueModal release={release} />
 </div>
 
 <style lang="scss">
-  @use "../../../styles/vars" as *;
+	@use "../../../styles/vars" as *;
 
-  .release-w {
-    height: 100%;
-  }
+	.release-w {
+		height: 100%;
+	}
 
-  .release-card {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    position: relative;
-    justify-content: flex-end;
-    flex-grow: 0;
-    border-radius: var(--radius-small);
-    overflow: clip;
-    padding: 1.375rem 1.25rem;
-    transition: all 0.5s;
-    transform: translate(0);
+	.release-card {
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		position: relative;
+		justify-content: flex-end;
+		flex-grow: 0;
+		border-radius: var(--radius-small);
+		overflow: clip;
+		padding: 1.375rem 1.25rem;
+		transition: all 0.5s;
+		transform: translate(0);
 
-    .desc-w,
-    .bg-tint,
-    .bg-gradient {
-      transition: all 0.5s var(--easing-small);
-    }
+		.desc-w,
+		.bg-tint,
+		.bg-gradient {
+			transition: all 0.5s var(--easing-small);
+		}
 
-    &:hover {
-      img {
-        scale: 1;
-      }
+		&:hover {
+			img {
+				scale: 1;
+			}
 
-      .desc-w {
-        transform: translateY(0);
-      }
+			.desc-w {
+				transform: translateY(0);
+			}
 
-      .bg-tint {
-        opacity: 0.4;
-      }
+			.bg-tint {
+				opacity: 0.4;
+			}
 
-      .bg-gradient {
-        opacity: 1;
-      }
-    }
+			.bg-gradient {
+				opacity: 1;
+			}
+		}
 
-    .desc-w {
-      gap: 0.2rem;
-      z-index: 4;
-      display: flex;
-      flex-direction: column;
-      padding-right: 0.75rem;
-      transform: translateY(2.5rem);
+		.desc-w {
+			gap: 0.2rem;
+			z-index: 4;
+			display: flex;
+			flex-direction: column;
+			padding-right: 0.75rem;
+			transform: translateY(2.875rem);
 
-      .heading-300 {
-        font-size: 1rem;
-        text-wrap: pretty;
-      }
+			.heading-300 {
+				font-size: 1rem;
+				text-wrap: pretty;
+			}
 
-      .p2 {
-        color: var(--text-secondary);
-      }
+			.p2 {
+				color: var(--text-secondary);
+			}
 
-      .listen-button-w {
-        display: flex;
-        padding-top: 0.5rem;
-        justify-items: flex-start;
-        transition: opacity 0.3s var(--easing-small);
+			.listen-button-w {
+				display: flex;
+				padding-top: 0.5rem;
+				justify-items: flex-start;
+				transition: opacity 0.3s var(--easing-small);
 
-        &:hover {
-          opacity: 0.825;
+				&:hover {
+					opacity: 0.825;
 
-          .arrow-w {
-            transform: translate(2px, -2px);
-          }
-        }
+					.arrow-w {
+						transform: translate(2px, -2px);
+					}
+				}
 
-        .button--listen {
-          display: flex;
-          flex-direction: row;
-          gap: 0.625rem;
-          align-items: center;
-          margin-left: -1rem;
-          margin-bottom: -1rem;
-          width: 100%;
-          padding: 1rem;
+				.button--listen {
+					display: flex;
+					flex-direction: row;
+					gap: 0.625rem;
+					align-items: center;
+					margin-left: -1rem;
+					margin-bottom: -1rem;
+					width: 100%;
+					padding: 1rem;
 
-          .label {
-            font-size: 1rem;
-          }
+					.label {
+						font-size: 1rem;
+					}
 
-          .arrow-w {
-            transition: transform 0.3s var(--easing-small);
-          }
-        }
-      }
-    }
+					.arrow-w {
+						transition: transform 0.3s var(--easing-small);
+					}
+				}
+			}
+		}
 
-    img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: auto;
-      right: 0;
-      height: 120%;
-      width: 100%;
-      z-index: 1;
-      -o-object-fit: cover;
-      object-fit: cover;
-      scale: 1.025;
-      transition: scale 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
-    }
+		img {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: auto;
+			right: 0;
+			height: 120%;
+			width: 100%;
+			z-index: 1;
+			-o-object-fit: cover;
+			object-fit: cover;
+			scale: 1.025;
+			transition: scale 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
+		}
 
-    .bg-tint {
-      background-color: black;
-      opacity: 0.3;
-      z-index: 2;
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
+		.bg-tint {
+			background-color: black;
+			opacity: 0.3;
+			z-index: 2;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			pointer-events: none;
+		}
 
-    .bg-gradient {
-      background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.4) 100%
-      );
-      opacity: 0;
-      z-index: 3;
-      height: 10rem;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      pointer-events: none;
-    }
-  }
+		.bg-gradient {
+			background: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0) 0%,
+				rgba(0, 0, 0, 0.4) 100%
+			);
+			opacity: 0;
+			z-index: 3;
+			height: 10rem;
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			pointer-events: none;
+		}
+	}
 </style>
 
 <script>
-  if (!window.initCatalogueModals) {
-    const releaseCards = document.querySelectorAll(".release-w");
+	if (!window.initCatalogueModals) {
+		const releaseCards = document.querySelectorAll(".release-w");
 
-    releaseCards.forEach((releaseCard) => {
-      const card = releaseCard.querySelector(".release-card");
-      const dialog = releaseCard.querySelector("dialog");
+		releaseCards.forEach((releaseCard) => {
+			const card = releaseCard.querySelector(".release-card");
+			const dialog = releaseCard.querySelector("dialog");
 
-      if (card && dialog) {
-        card.addEventListener("click", (event) => {
-          event?.preventDefault();
-          dialog.showModal();
-        });
-      }
-    });
-  }
+			if (card && dialog) {
+				card.addEventListener("click", (event) => {
+					event?.preventDefault();
+					dialog.showModal();
+				});
+			}
+		});
+	}
 </script>
