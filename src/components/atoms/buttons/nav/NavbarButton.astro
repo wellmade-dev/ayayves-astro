@@ -1,82 +1,82 @@
 ---
 interface Props {
-  label: string;
-  ariaLabel: string;
-  modal: string;
+	label: string;
+	ariaLabel: string;
+	modal: string;
 }
 
 const { label, ariaLabel, modal } = Astro.props;
 ---
 
 <button class="navigation-link" aria-label={ariaLabel} data-modal={modal}>
-  <span>
-    <div class="label">
-      {label}
-      {
-        modal === "cart" && (
-          <div class="cart-counter-w">
-            <div>(</div>
-            <div>0</div>
-            <div>)</div>
-          </div>
-        )
-      }
-    </div>
-    <div class="label duplicated-label">
-      {label}
-      {
-        modal === "cart" && (
-          <div class="cart-counter-w">
-            <div>(</div>
-            <div>0</div>
-            <div>)</div>
-          </div>
-        )
-      }
-    </div>
-  </span>
+	<span>
+		<div class="label">
+			{label}
+			{
+				modal === "cart" && (
+					<div class="cart-counter-w" style="display: none">
+						<div>(</div>
+						<div class="cart-counter" />
+						<div>)</div>
+					</div>
+				)
+			}
+		</div>
+		<div class="label duplicated-label">
+			{label}
+			{
+				modal === "cart" && (
+					<div class="cart-counter-w" style="display: none">
+						<div>(</div>
+						<div class="cart-counter" />
+						<div>)</div>
+					</div>
+				)
+			}
+		</div>
+	</span>
 </button>
 
 <style>
-  .navigation-link {
-    font-size: 0.925rem;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
+	.navigation-link {
+		font-size: 0.925rem;
+		font-weight: 400;
+		letter-spacing: 0.02em;
+		cursor: pointer;
+		overflow: hidden;
+		position: relative;
 
-    &:hover {
-      .label {
-        transform: translateY(-100%);
+		&:hover {
+			.label {
+				transform: translateY(-100%);
 
-        &.duplicated-label {
-          transform: translateY(0%);
-        }
-      }
-    }
+				&.duplicated-label {
+					transform: translateY(0%);
+				}
+			}
+		}
 
-    .label {
-      display: flex;
-      flex-direction: row;
-      gap: 0.25rem;
-      padding: 0.25rem 0.75rem;
-      pointer-events: none;
-      will-change: transform;
-      transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		.label {
+			display: flex;
+			flex-direction: row;
+			gap: 0.25rem;
+			padding: 0.25rem 0.75rem;
+			pointer-events: none;
+			will-change: transform;
+			transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-      &.duplicated-label {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translateY(100%);
-      }
-    }
+			&.duplicated-label {
+				position: absolute;
+				top: 0;
+				left: 0;
+				transform: translateY(100%);
+			}
+		}
+	}
 
-    .cart-counter-w {
-      display: flex;
-      flex-direction: row;
-      gap: 0.075rem;
-    }
-  }
+	.cart-counter-w {
+		display: flex;
+		flex-direction: row;
+		gap: 0.075rem;
+	}
 </style>

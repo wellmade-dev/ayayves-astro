@@ -124,6 +124,48 @@ export function initSnipcart() {
 		}
 	})();
 
+	const itemCountWrapper = document.querySelectorAll(".cart-counter-w");
+
+	const updateItemCount = () => {
+		if (window.Snipcart) {
+			// Retrieve item count from sessionStorage
+			let itemCount = sessionStorage.getItem("snipcartItemCount");
+			const storageCount = itemCount;
+
+			function setItemCounter() {
+				if (itemCount > 0) {
+					itemCountWrapper.forEach((wrapper) => {
+						wrapper.style.display = "flex";
+						wrapper
+							.querySelectorAll(".cart-counter")
+							.forEach((counter) => {
+								counter.textContent = itemCount;
+							});
+					});
+				} else {
+					itemCountWrapper.forEach((wrapper) => {
+						wrapper.style.display = "none";
+					});
+				}
+			}
+
+			if (itemCount) {
+				setItemCounter();
+			}
+
+			// Get the cart item count from Snipcart
+			itemCount = Snipcart.store.getState().cart.items.count;
+
+			if (itemCount !== storageCount) {
+				// Store the item count in session storage
+				sessionStorage.setItem("snipcartItemCount", itemCount);
+
+				// Run setItemCounter
+				setItemCounter();
+			}
+		}
+	};
+
 	document.addEventListener("snipcart.ready", function () {
 		// Add light theming and disable Lenis on cart
 		Snipcart.events.on("snipcart.initialized", function () {
@@ -134,6 +176,21 @@ export function initSnipcart() {
 			document
 				.getElementById("snipcart")
 				.setAttribute("data-lenis-prevent", true);
+
+			// Update cart item count in Navbar
+			updateItemCount();
+		});
+
+		Snipcart.events.on("item.added", () => {
+			updateItemCount();
+		});
+
+		Snipcart.events.on("item.updated", () => {
+			updateItemCount();
+		});
+
+		Snipcart.events.on("item.removed", () => {
+			updateItemCount();
 		});
 
 		Snipcart.events.on("theme.routechanged", (routesChange) => {
@@ -198,18 +255,6 @@ export function initSnipcart() {
 
 				if (snipcartModal)
 					snipcartModal.setAttribute("closing", "true");
-
-				if (snipcartModal && snipcartModalBackground) {
-					snipcartModal.setAttribute("closing", "true");
-					snipcartModalBackground.setAttribute("closing", "true");
-					snipcartModal.addEventListener(
-						"animationend",
-						() => {
-							togglePageScroll(true);
-						},
-						{ once: true }
-					);
-				}
 			}
 		});
 
