@@ -46,9 +46,10 @@ export function validateForm(form: HTMLFormElement) {
 
 	let isValid = true;
 
-	form.querySelectorAll(
+	const formFields: NodeListOf<HTMLInputElement> = form.querySelectorAll(
 		"input[required], select[required], textarea[required]"
-	).forEach((input) => {
+	);
+	formFields.forEach((input) => {
 		if (!input.value.trim()) {
 			isValid = false;
 		}
@@ -57,7 +58,7 @@ export function validateForm(form: HTMLFormElement) {
 	submitButton.disabled = !isValid;
 }
 
-export function handleFormError(error, errorCount) {
+export function handleFormError(error: Error, errorCount: number) {
 	let errorMessage;
 
 	if (errorCount >= 1) {

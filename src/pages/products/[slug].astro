@@ -59,9 +59,12 @@ if (variantGroups && variantGroups.length > 0) {
 			</div>
 			{
 				variantGroups && variantGroups.length > 0 && (
-					<div>
+					<div class="variant-group-w">
 						{variantGroups.map((variantGroup: VariantGroupData) => (
-							<div class="variant-w">
+							<div
+								class="variant-w"
+								data-variant={variantGroup.variant_type}
+							>
 								{variantGroup.variant.map((variant) => (
 									<>
 										<input
@@ -71,9 +74,6 @@ if (variantGroups && variantGroups.length > 0) {
 											value={variant.variant_name}
 											data-differential={
 												variant.price_differential
-											}
-											disabled={
-												variant.enabled ? false : true
 											}
 											required
 										/>
@@ -106,18 +106,12 @@ if (variantGroups && variantGroups.length > 0) {
 				data-item-quantity="1"
 				data-item-name={product.name}
 				data-item-image={product.image.src}
-				disabled={product.in_stock ? false : true}
 				{...variantAttributes}
 			>
 				<span>
 					<ButtonMarquee
-						firstString={product.in_stock
-							? "Add to Cart"
-							: "Out of Stock"}
-						secondString={product.in_stock
-							? "Bag It"
-							: "Limited Drop"}
-						{...product.in_stock ? {} : { disabled: true }}
+						firstString="Add to Cart"
+						secondString="Bag It"
 					/>
 				</span>
 			</button>
@@ -288,7 +282,6 @@ if (variantGroups && variantGroups.length > 0) {
 	}
 
 	.snipcart-add-item {
-		// Wrapper for the Add to Cart Button because WooCommerce is stubborn
 		position: relative;
 		margin-top: 2rem;
 		overflow: clip;
@@ -300,31 +293,30 @@ if (variantGroups && variantGroups.length > 0) {
 		&:hover {
 			opacity: 0.8;
 		}
-
-		.button--atc {
-			// WooCommerce Button
-			width: 100%;
-			height: 100%;
-			opacity: 0;
-		}
-
-		.atc-foil {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			top: 0;
-			left: 0;
-			z-index: 2;
-			pointer-events: none;
-		}
 	}
 </style>
 
 <script>
+	import type { SnipcartProductStockData } from "../../types/strapi-attributes";
+
+	const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
+	// Declaring Variables
+	const atcButton = document.getElementById(
+		"product-atc"
+	)! as HTMLButtonElement;
+	const variants = document.querySelector(".variant-w")!;
+	const variantRadioWrappers = document.querySelectorAll(".variant-w")!;
+	//
+	const priceWrapper = document.querySelector(".price");
+	const activePriceObject = priceWrapper?.querySelector(".amount");
+	const strikeoutPriceObject = priceWrapper?.querySelector(".strikeout");
+	//
+	const productPrice = atcButton.getAttribute("data-item-price");
+	const strikeoutPrice = atcButton.getAttribute("data-item-price-original");
+
 	/* Add and Remove Special Product Theme from Navbar on Scroll */
-	function themeProductNavigationBar() {
-		const navigation: HTMLElement | null =
-			document.getElementById("navigation");
+	(function themeProductNavigationBar() {
+		const navigation = document.getElementById("navigation");
 
 		if (!navigation) {
 			console.log(
@@ -333,9 +325,11 @@ if (variantGroups && variantGroups.length > 0) {
 			return;
 		}
 
-		// Function to handle when navbar is layed on top of the product image
-		function handleIntersection(entries, observer) {
-			entries.forEach((entry: any) => {
+		function handleIntersection(
+			entries: IntersectionObserverEntry[],
+			observer: IntersectionObserver
+		) {
+			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					navigation?.setAttribute("theme", "product");
 				} else {
@@ -344,36 +338,131 @@ if (variantGroups && variantGroups.length > 0) {
 			});
 		}
 
-		// Specify a threshold of 0.5
-		let options = {
+		const options = {
 			rootMargin: "-32px 0px 0px 0px",
 			threshold: 0,
 		};
 
-		let observer = new IntersectionObserver(handleIntersection, options);
-
-		let targetElement = document.querySelector(".product-gallery");
+		const observer = new IntersectionObserver(handleIntersection, options);
+		const targetElement = document.querySelector(".product-gallery");
 
 		if (targetElement) {
 			observer.observe(targetElement);
 		} else {
 			console.log("Element not found");
 		}
+	})();
+
+	/* Variant and Add to Cart Button Stock Check */
+	async function fetchProductStockLevels() {
+		try {
+			// Find Product ID
+			const buttonAddToCart = document.getElementById("product-atc");
+			const productID = buttonAddToCart?.getAttribute("data-item-id");
+
+			if (productID) {
+				// Fetch Product Data from Snipcart
+				const response = await fetch(
+					`${PUBLIC_STRAPI_API_URL}snipcart/product/stock/${productID}`
+				);
+
+				// Check if the response status code is 200 (OK)
+				if (response.status === 200) {
+					const snipcartStockData: SnipcartProductStockData =
+						await response.json();
+
+					// If total stock is zero, disable the Cart Button
+					if (snipcartStockData.totalStock === 0) {
+						disableCartForm();
+					}
+
+					if (snipcartStockData.variants) {
+						// For each Variant Radio Wrapper
+						variantRadioWrappers.forEach((variantGroupWrapper) => {
+							// Find variant group name from HTML Attribute
+							const variantGroupWrapperName = variantGroupWrapper
+								.getAttribute("data-variant")
+								?.toLowerCase();
+
+							// Find variant group stock data from Snipcart
+							const snipcartVariantGroupData =
+								snipcartStockData.variants.find(
+									(snipcartVariantGroup) =>
+										snipcartVariantGroup.name ===
+										variantGroupWrapperName
+								);
+
+							// If snipcart data cannot be found, disable all radios in that group
+							if (!snipcartVariantGroupData) {
+								variantGroupWrapper
+									.querySelectorAll("input")
+									.forEach((input) => {
+										input.setAttribute("disabled", "true");
+										input.checked = false;
+									});
+							} else {
+								// If snipcart data is found, selectly enable radios with stock
+								variantGroupWrapper
+									.querySelectorAll("input")
+									.forEach((input) => {
+										const matchingOption =
+											snipcartVariantGroupData.options.find(
+												(option) =>
+													option.variation ===
+													input.value
+											);
+
+										if (
+											!matchingOption ||
+											matchingOption.stock === 0
+										) {
+											input.disabled = true;
+										}
+									});
+							}
+						});
+					}
+				} else {
+					// If an error occurred during the fetch, log and error message and disable all cart form buttons
+					disableCartForm();
+				}
+			}
+		} catch (error: any) {
+			// If an error occurred during the fetch, log and error message and run disableCartForm
+			console.log("There was an error:", error.message);
+			disableCartForm();
+		}
 	}
 
-	themeProductNavigationBar();
+	fetchProductStockLevels();
 
 	/* Cart Form */
-	// Declaring Variables
-	const atcButton = document.getElementById("product-atc")!;
-	const variants = document.querySelector(".variant-w");
-	//
-	const priceWrapper = document.querySelector(".price");
-	const activePriceObject = priceWrapper?.querySelector(".amount");
-	const strikeoutPriceObject = priceWrapper?.querySelector(".strikeout");
-	//
-	const productPrice = atcButton.getAttribute("data-item-price");
-	const strikeoutPrice = atcButton.getAttribute("data-item-price-original");
+	// Function to disable all cart form elements
+	function disableCartForm() {
+		atcButton.disabled = true;
+		const atcMarquee = atcButton.querySelector(".button--marquee");
+		if (atcMarquee) {
+			atcMarquee.classList.add("disabled");
+			const textStringsFirst = atcMarquee.querySelectorAll(
+				".marquee-text.first"
+			);
+			const textStringsSecond = atcMarquee.querySelectorAll(
+				".marquee-text.second"
+			);
+			textStringsFirst.forEach((string) => {
+				string.innerHTML = "Out of Stock";
+			});
+			textStringsSecond.forEach((string) => {
+				string.innerHTML = "Limited Drop";
+			});
+		}
+		variantRadioWrappers.forEach((wrapper) => {
+			wrapper.querySelectorAll("input").forEach((radio) => {
+				radio.setAttribute("disabled", "true");
+				radio.checked = false;
+			});
+		});
+	}
 
 	// Update Current and Strikeout Price when variant is changed
 	if (atcButton && variants && priceWrapper && activePriceObject) {

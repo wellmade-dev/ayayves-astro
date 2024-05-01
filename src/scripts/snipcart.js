@@ -198,6 +198,18 @@ export function initSnipcart() {
 
 				if (snipcartModal)
 					snipcartModal.setAttribute("closing", "true");
+
+				if (snipcartModal && snipcartModalBackground) {
+					snipcartModal.setAttribute("closing", "true");
+					snipcartModalBackground.setAttribute("closing", "true");
+					snipcartModal.addEventListener(
+						"animationend",
+						() => {
+							togglePageScroll(true);
+						},
+						{ once: true }
+					);
+				}
 			}
 		});
 

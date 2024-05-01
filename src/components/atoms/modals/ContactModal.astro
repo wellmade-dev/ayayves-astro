@@ -2,7 +2,7 @@
 import ModalSkeleton from "./ModalSkeleton.astro";
 import FormField from "./FormField.astro";
 import ModalForm from "./ModalForm.astro";
-const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
+const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
 
 const title = "Contact";
 const subtitle = "Fill in your details and I'll be in touch.";
@@ -11,7 +11,7 @@ const buttonLabel = "Send Message";
 
 <ModalSkeleton type="contact" title={title} subtitle={subtitle} ,>
 	<ModalForm
-		actionURL=`${STRAPI_API_URL}contact/send`
+		actionURL=`${PUBLIC_STRAPI_API_URL}contact/send`
 		buttonLabel={buttonLabel}
 	>
 		<FormField

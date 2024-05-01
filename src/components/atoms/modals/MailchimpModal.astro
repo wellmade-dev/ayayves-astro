@@ -2,7 +2,7 @@
 import ModalSkeleton from "./ModalSkeleton.astro";
 import FormField from "./FormField.astro";
 import ModalForm from "./ModalForm.astro";
-const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
+const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
 
 const title = "Stay in the Loop";
 const subtitle = "Get updates on new music and upcoming gigs.";
@@ -11,7 +11,7 @@ const buttonLabel = "Sign Up";
 
 <ModalSkeleton type="mailchimp" title={title} subtitle={subtitle}>
 	<ModalForm
-		actionURL=`${STRAPI_API_URL}mailchimp/submit`
+		actionURL=`${PUBLIC_STRAPI_API_URL}mailchimp/submit`
 		buttonLabel={buttonLabel}
 	>
 		<FormField

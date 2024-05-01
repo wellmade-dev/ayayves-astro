@@ -1,20 +1,16 @@
 import type {
-	ImageAPI,
 	ProductAPI,
 	CatalogueAPI,
 	ImageData,
 	EventAPI,
-	VariantGroupAPI,
-	VariantAPI,
 	ProductData,
-	ProductsSnipcartAPI,
 	VariantGroupData,
 } from "../types/strapi-attributes";
 
 import { format } from "date-fns";
 
 const STRAPI_URL = import.meta.env.STRAPI_URL;
-const STRAPI_API_URL = import.meta.env.STRAPI_API_URL;
+const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
 const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
 const SECRET_KEY = import.meta.env.SECRET_SNIPCART_API_KEY + ":";
 
@@ -38,7 +34,7 @@ export async function fetchStrapiData(query: string, bypassCache?: boolean) {
 	}
 
 	// If not in cache or bypassCache is true, fetch from the API
-	const response = await fetch(`${STRAPI_API_URL}${query}`, {
+	const response = await fetch(`${PUBLIC_STRAPI_API_URL}${query}`, {
 		headers: strapiHeaders,
 	});
 	const data = await response.json();
@@ -118,28 +114,11 @@ export async function fetchProducts() {
 	);
 	const strapiData: ProductAPI[] = strapiResponse.data;
 
-	const snipcartResponse = await fetch(
-		`https://app.snipcart.com/api/products/`,
-		{
-			headers: {
-				Authorization: `Basic ${btoa(SECRET_KEY)}`,
-				Accept: "application/json",
-			},
-		}
-	);
-	const snipcartData = await snipcartResponse.json();
-	console.log(snipcartData);
-
-	const products = strapiData.map((product) =>
-		createProductObject(product, snipcartData)
-	);
+	const products = strapiData.map((product) => createProductObject(product));
 	return products;
 }
 
-export function createProductObject(
-	strapiProductData: ProductAPI,
-	snipcartData: ProductsSnipcartAPI
-) {
+export function createProductObject(strapiProductData: ProductAPI) {
 	let variantTypes: VariantGroupData[] | undefined =
 		strapiProductData.attributes.variants;
 
@@ -167,46 +146,6 @@ export function createProductObject(
 		});
 	}
 
-	// Add enabled flags to each variant with stock
-	const snipcartProductIndex = snipcartData.items.findIndex(
-		(item) => item.userDefinedId === String(strapiProductData.id)
-	);
-	const snipcartProduct = snipcartData.items[snipcartProductIndex];
-
-	let productInStock = false;
-
-	// If product is found to have a snipcart entry, and the total stock is above 0, flag as in stock
-	if (snipcartProduct && snipcartProduct.totalStock > 0) {
-		productInStock = true;
-
-		if (snipcartProduct.variants && snipcartProduct.variants.length > 0) {
-			snipcartProduct.variants.forEach((variant) => {
-				if (variant.stock > 0) {
-					const snipcartVariantGroup = variant.variation[0].name; // Snipcart Group Name, "Size"
-					const snipcartVariantOption = variant.variation[0].option; // Snipcart Variant Name, "Small"
-
-					const productVariantGroup = variantTypes?.find(
-						// Find the Product Variant Group that matches the Snipcart Variant Group
-						(variantGroup) =>
-							variantGroup.variant_type === snipcartVariantGroup
-					);
-
-					if (!productVariantGroup) return;
-
-					const productVariantOption =
-						productVariantGroup.variant.find(
-							(variant) =>
-								variant.variant_name === snipcartVariantOption
-						);
-
-					if (!productVariantOption) return;
-
-					productVariantOption.enabled = true;
-				}
-			});
-		}
-	}
-
 	const product: ProductData = {
 		id: strapiProductData.id,
 		name: strapiProductData.attributes.name,
@@ -216,7 +155,6 @@ export function createProductObject(
 		long_desription: strapiProductData.attributes.long_description,
 		price: strapiProductData.attributes.price,
 		price_original: strapiProductData.attributes.price_original,
-		in_stock: productInStock,
 		variants: variantTypes,
 		image: createImageObject(strapiProductData.attributes.product_image),
 	};

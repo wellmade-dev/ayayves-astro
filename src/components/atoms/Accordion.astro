@@ -1,133 +1,133 @@
 ---
 import Divider from "./Divider.astro";
 interface Props {
-  title: string;
-  paragraph: string;
+	title: string;
+	paragraph: string;
 }
 
 const { title, paragraph } = Astro.props as Props;
 ---
 
 <div class="accordion" aria-expanded="false">
-  <div class="accordion-button" role="button" aria-expanded="false">
-    <div class="heading-300">{title}</div>
-    <div class="disclosure-icon">
-      <div
-        class="line"
-        style="translate: none; rotate: none; scale: none; transform: translate(0%, -50%);"
-      >
-      </div>
-      <div
-        class="line"
-        style="perspective: 0px; translate: none; rotate: none; scale: none; transform: translate(-50%, 0%);"
-      >
-      </div>
-    </div>
-  </div>
-  <div class="content" style="height: 0px;">
-    <p>{paragraph}</p>
-  </div>
-  <Divider />
+	<div class="accordion-button" role="button" aria-expanded="false">
+		<div class="heading-300">{title}</div>
+		<div class="disclosure-icon">
+			<div
+				class="line"
+				style="translate: none; rotate: none; scale: none; transform: translate(0%, -50%);"
+			>
+			</div>
+			<div
+				class="line"
+				style="perspective: 0px; translate: none; rotate: none; scale: none; transform: translate(-50%, 0%);"
+			>
+			</div>
+		</div>
+	</div>
+	<div class="content" style="height: 0px;">
+		<p>{paragraph}</p>
+	</div>
+	<Divider />
 </div>
 
 <style lang="scss">
-  .accordion {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+	.accordion {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
 
-    .accordion-button {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      align-items: center;
-      padding: 1.25rem 0rem;
-      cursor: pointer;
+		.accordion-button {
+			display: flex;
+			justify-content: space-between;
+			position: relative;
+			align-items: center;
+			padding: 1.25rem 0rem;
+			cursor: pointer;
 
-      .heading {
-        font-size: 1rem;
-        letter-spacing: 0.02em;
-      }
+			.heading {
+				font-size: 1rem;
+				letter-spacing: 0.02em;
+			}
 
-      .disclosure-icon {
-        width: 0.875rem;
-        aspect-ratio: 1 / 1;
-        position: relative;
+			.disclosure-icon {
+				width: 0.875rem;
+				aspect-ratio: 1 / 1;
+				position: relative;
 
-        .line {
-          background-color: var(--divider-full);
-          position: absolute;
+				.line {
+					background-color: var(--divider-full);
+					position: absolute;
 
-          &:nth-child(1) {
-            width: 100%;
-            height: 2px;
-            top: 50%;
-            transform: translateY(-50%);
-          }
+					&:nth-child(1) {
+						width: 100%;
+						height: 2px;
+						top: 50%;
+						transform: translateY(-50%);
+					}
 
-          &:nth-child(2) {
-            height: 100%;
-            width: 2px;
-            left: 50%;
-            transform: translateX(-50%);
-          }
-        }
-      }
-    }
+					&:nth-child(2) {
+						height: 100%;
+						width: 2px;
+						left: 50%;
+						transform: translateX(-50%);
+					}
+				}
+			}
+		}
 
-    .content {
-      height: 0rem;
+		.content {
+			height: 0rem;
 
-      p {
-        padding-bottom: 1.5rem;
-      }
-    }
-  }
+			p {
+				padding-bottom: 1.5rem;
+			}
+		}
+	}
 </style>
 
 <script>
-  import gsap from "gsap";
-  import { easingSmall } from "../../scripts/init";
+	import gsap from "gsap";
+	import { easingSmall } from "../../scripts/init";
 
-  if (!window.initAccordions) {
-    const accordions: NodeListOf<HTMLElement> =
-      document.querySelectorAll(".accordion");
+	if (!window.initAccordions) {
+		const accordions: NodeListOf<HTMLElement> =
+			document.querySelectorAll(".accordion");
 
-    accordions?.forEach((accordion) => {
-      const button: HTMLElement = accordion.querySelector(".accordion-button")!;
-      button.addEventListener("click", () => {
-        console.log("clicked");
-        toggleAccordion(accordion, button);
-      });
-    });
-  }
+		accordions?.forEach((accordion) => {
+			const button: HTMLElement =
+				accordion.querySelector(".accordion-button")!;
+			button.addEventListener("click", () => {
+				toggleAccordion(accordion, button);
+			});
+		});
+	}
 
-  function toggleAccordion(accordion: HTMLElement, button: HTMLElement) {
-    const content = accordion.querySelector(".content");
-    const horizontalLine = accordion.querySelector(".line:nth-child(1)");
-    const verticalLine = accordion.querySelector(".line:nth-child(2)");
+	function toggleAccordion(accordion: HTMLElement, button: HTMLElement) {
+		const content = accordion.querySelector(".content");
+		const horizontalLine = accordion.querySelector(".line:nth-child(1)");
+		const verticalLine = accordion.querySelector(".line:nth-child(2)");
 
-    const duration = 0.8;
+		const duration = 0.8;
 
-    const isExpanded = button.getAttribute("aria-expanded") === "true";
-    button.setAttribute("aria-expanded", String(!isExpanded));
+		const isExpanded = button.getAttribute("aria-expanded") === "true";
+		button.setAttribute("aria-expanded", String(!isExpanded));
 
-    // Animate the expansion
-    gsap.to(content, {
-      height: isExpanded ? "0px" : "auto",
-      duration: duration,
-      ease: easingSmall,
-    });
-    gsap.to(horizontalLine, {
-      rotation: isExpanded ? 0 : 180,
-      duration: duration,
-      ease: easingSmall,
-    });
-    gsap.to(verticalLine, {
-      rotation: isExpanded ? 0 : 90,
-      duration: duration,
-      ease: easingSmall,
-    });
-  }
+		// Animate the expansion
+		gsap.to(content, {
+			height: isExpanded ? "0px" : "auto",
+			duration: duration,
+			ease: easingSmall,
+		});
+		gsap.to(horizontalLine, {
+			rotation: isExpanded ? 0 : 180,
+			duration: duration,
+			ease: easingSmall,
+		});
+		gsap.to(verticalLine, {
+			rotation: isExpanded ? 0 : 90,
+			duration: duration,
+			ease: easingSmall,
+		});
+	}
 </script>
