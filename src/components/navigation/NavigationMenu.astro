@@ -6,8 +6,8 @@ import { fetchStrapiData, createImageObject } from "../../scripts/fetch";
 const data = await fetchStrapiData("navigation?populate=*", true);
 
 const imageDataArray = [
-  data.data.attributes.image_back,
-  data.data.attributes.image_front,
+	data.data.attributes.image_back,
+	data.data.attributes.image_front,
 ];
 
 const images = imageDataArray.map((image) => createImageObject(image));
@@ -15,256 +15,266 @@ const images = imageDataArray.map((image) => createImageObject(image));
 const siteLinks = data.data.attributes.site_links;
 const streamingLinks = data.data.attributes.stream_links;
 const socialLinks = data.data.attributes.social_links;
+
+const currentYear = new Date().getFullYear();
 ---
 
 <div
-  class="navigation-menu"
-  id="navigation-menu"
-  aria-labelledby="menu-button"
-  aria-label="Expanded Navigation Menu"
-  aria-modal="true"
-  role="dialog"
+	class="navigation-menu"
+	id="navigation-menu"
+	aria-labelledby="menu-button"
+	aria-label="Expanded Navigation Menu"
+	aria-modal="true"
+	role="dialog"
 >
-  <div class="menu-content">
-    <div class="image-col" aria-hidden="true">
-      {
-        images.map((image: ImageData) => (
-          <div class="img-w">
-            <ImageWellmade
-              image={image}
-              sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
-              eagerLoading
-            />
-          </div>
-        ))
-      }
-    </div>
-    <div class="links-col">
-      <ul class="primary-links-w">
-        {
-          siteLinks.map((link: any) => (
-            <li>
-              {link.url && !link.modal && (
-                <a class="primary-link" href={link.url}>
-                  <div class="label">{link.title}</div>
-                </a>
-              )}
-              {link.modal && (
-                <button
-                  class="primary-link"
-                  aria-label={link.title}
-                  data-modal={link.modal_type}
-                >
-                  <span>
-                    <div class="label">{link.title}</div>
-                  </span>
-                </button>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-      <div class="secondary-links-w">
-        <ul class="streaming-links-w">
-          {
-            streamingLinks.map((link: any) => (
-              <li>
-                <a class="secondary-link" href={link.url} target="_blank">
-                  <div class="label">{link.title}</div>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-        <ul class="social-links-w">
-          {
-            socialLinks.map((link: any) => (
-              <li>
-                <a class="secondary-link" href={link.url} target="_blank">
-                  <div class="label">{link.title}</div>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="menu-footer" aria-hidden="true">
-    <div class="p2">Aya Yve 2024</div>
-    <div class="p2">Site by Wellmade</div>
-  </div>
+	<div class="menu-content">
+		<div class="image-col" aria-hidden="true">
+			{
+				images.map((image: ImageData) => (
+					<div class="img-w">
+						<ImageWellmade
+							image={image}
+							sizes="(min-width: 990px) 420px, (min-width: 800px) 36vw, 0px"
+							eagerLoading
+						/>
+					</div>
+				))
+			}
+		</div>
+		<div class="links-col">
+			<ul class="primary-links-w">
+				{
+					siteLinks.map((link: any) => (
+						<li>
+							{link.url && !link.modal && (
+								<a class="primary-link" href={link.url}>
+									<div class="label">{link.title}</div>
+								</a>
+							)}
+							{link.modal && (
+								<button
+									class="primary-link"
+									aria-label={link.title}
+									data-modal={link.modal_type}
+								>
+									<span>
+										<div class="label">{link.title}</div>
+									</span>
+								</button>
+							)}
+						</li>
+					))
+				}
+			</ul>
+			<div class="secondary-links-w">
+				<ul class="streaming-links-w">
+					{
+						streamingLinks.map((link: any) => (
+							<li>
+								<a
+									class="secondary-link"
+									href={link.url}
+									target="_blank"
+								>
+									<div class="label">{link.title}</div>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+				<ul class="social-links-w">
+					{
+						socialLinks.map((link: any) => (
+							<li>
+								<a
+									class="secondary-link"
+									href={link.url}
+									target="_blank"
+								>
+									<div class="label">{link.title}</div>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="menu-footer" aria-hidden="true">
+		<div class="p2">Aya Yves {currentYear}</div>
+		<div class="p2">Site by Wellmade</div>
+	</div>
 
-  <style lang="scss">
-    @use "../../styles/vars" as *;
-    .navigation-menu {
-      display: flex;
-      position: fixed;
-      flex-direction: column;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--bg-dark);
-      padding-top: calc($navheight - 0.5rem);
-      clip-path: inset(0 0 100% 0);
-      z-index: 10;
+	<style lang="scss">
+		@use "../../styles/vars" as *;
+		.navigation-menu {
+			display: flex;
+			position: fixed;
+			flex-direction: column;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--bg-dark);
+			padding-top: calc($navheight - 0.5rem);
+			clip-path: inset(0 0 100% 0);
+			z-index: 10;
 
-      .menu-content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: clamp(6rem, 7.5vw, 8rem);
-        padding: 0 var(--page-margin);
-        flex-grow: 1;
+			.menu-content {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: clamp(6rem, 7.5vw, 8rem);
+				padding: 0 var(--page-margin);
+				flex-grow: 1;
 
-        @media (max-width: $tablet) {
-          gap: clamp(4rem, 7.5vw, 6rem);
-        }
+				@media (max-width: $tablet) {
+					gap: clamp(4rem, 7.5vw, 6rem);
+				}
 
-        @media (max-width: $phablet) {
-          justify-content: start;
-          align-items: start;
-          padding-top: 1.25rem;
-        }
+				@media (max-width: $phablet) {
+					justify-content: start;
+					align-items: start;
+					padding-top: 1.25rem;
+				}
 
-        .image-col {
-          --corner-gap: 3.5rem;
-          --card-height: clamp(25rem, 60vh, 35rem);
-          --card-width: calc(var(--card-height) * 0.725);
-          display: flex;
-          position: relative;
-          justify-content: center;
-          align-items: center;
-          width: calc(var(--corner-gap) + var(--card-width));
-          height: calc(var(--corner-gap) + var(--card-height));
-          max-height: calc(100vh - (2 * var(--nav-height)));
+				.image-col {
+					--corner-gap: 3.5rem;
+					--card-height: clamp(25rem, 60vh, 35rem);
+					--card-width: calc(var(--card-height) * 0.725);
+					display: flex;
+					position: relative;
+					justify-content: center;
+					align-items: center;
+					width: calc(var(--corner-gap) + var(--card-width));
+					height: calc(var(--corner-gap) + var(--card-height));
+					max-height: calc(100vh - (2 * var(--nav-height)));
 
-          @media (max-width: $tablet) {
-            --corner-gap: 2rem;
-            --card-height: 50vw;
-            --card-width: calc(var(--card-height) * 0.725);
-          }
+					@media (max-width: $tablet) {
+						--corner-gap: 2rem;
+						--card-height: 50vw;
+						--card-width: calc(var(--card-height) * 0.725);
+					}
 
-          @media (max-width: $phablet) {
-            display: none;
-          }
+					@media (max-width: $phablet) {
+						display: none;
+					}
 
-          .img-w {
-            height: 100%;
-            border-radius: var(--radius-small);
-            overflow: hidden;
-            width: var(--card-width);
-            height: var(--card-height);
-            position: absolute;
-            max-height: 100%;
+					.img-w {
+						height: 100%;
+						border-radius: var(--radius-small);
+						overflow: hidden;
+						width: var(--card-width);
+						height: var(--card-height);
+						position: absolute;
+						max-height: 100%;
 
-            &:nth-child(1) {
-              bottom: var(--corner-gap);
-              left: var(--corner-gap);
-            }
+						&:nth-child(1) {
+							bottom: var(--corner-gap);
+							left: var(--corner-gap);
+						}
 
-            &:nth-child(2) {
-              bottom: 0;
-              left: 0;
-            }
+						&:nth-child(2) {
+							bottom: 0;
+							left: 0;
+						}
 
-            img {
-              height: 100%;
-              width: 100%;
-              -o-object-fit: cover;
-              object-fit: cover;
-            }
-          }
-        }
+						img {
+							height: 100%;
+							width: 100%;
+							-o-object-fit: cover;
+							object-fit: cover;
+						}
+					}
+				}
 
-        .links-col {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          padding-bottom: 2rem;
-          padding-right: 4rem;
+				.links-col {
+					display: flex;
+					flex-direction: column;
+					gap: 1.5rem;
+					padding-bottom: 2rem;
+					padding-right: 4rem;
 
-          @media (max-width: $tablet) {
-            gap: 1.25rem;
-            padding-right: 3rem;
-          }
+					@media (max-width: $tablet) {
+						gap: 1.25rem;
+						padding-right: 3rem;
+					}
 
-          .primary-links-w {
-            display: flex;
-            flex-direction: column;
+					.primary-links-w {
+						display: flex;
+						flex-direction: column;
 
-            &:hover > :not(:hover),
-            &:focus > :not(:focus) {
-              --link-opacity: 0.5;
-            }
+						&:hover > :not(:hover),
+						&:focus > :not(:focus) {
+							--link-opacity: 0.5;
+						}
 
-            li {
-              opacity: var(--link-opacity);
-              transition: opacity 0.05s ease-out;
+						li {
+							opacity: var(--link-opacity);
+							transition: opacity 0.05s ease-out;
 
-              &:nth-child(1),
-              &:nth-child(2) {
-                padding-bottom: 0.35rem;
-              }
-            }
+							&:nth-child(1),
+							&:nth-child(2) {
+								padding-bottom: 0.35rem;
+							}
+						}
 
-            .primary-link {
-              font-size: 3.5rem;
-              cursor: pointer;
-              overflow: hidden;
-              text-align: left;
+						.primary-link {
+							font-size: 3.5rem;
+							cursor: pointer;
+							overflow: hidden;
+							text-align: left;
 
-              @media (max-width: $tablet) {
-                font-size: 3rem;
-              }
+							@media (max-width: $tablet) {
+								font-size: 3rem;
+							}
 
-              .label {
-                padding-bottom: 0.15rem;
-                pointer-events: none;
-              }
-            }
-          }
+							.label {
+								padding-bottom: 0.15rem;
+								pointer-events: none;
+							}
+						}
+					}
 
-          .secondary-links-w {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-auto-flow: row;
-            -moz-column-gap: 4rem;
-            column-gap: 4rem;
-          }
+					.secondary-links-w {
+						display: grid;
+						grid-template-columns: 1fr 1fr;
+						grid-auto-flow: row;
+						-moz-column-gap: 4rem;
+						column-gap: 4rem;
+					}
 
-          .streaming-links-w,
-          .social-links-w {
-            .secondary-link {
-              font-size: 1rem;
-              letter-spacing: 0.01em;
-              color: var(--text);
-              position: relative;
-              cursor: pointer;
-              overflow: hidden;
-              transition: opacity 0.05s ease-out;
-              opacity: 0.6;
+					.streaming-links-w,
+					.social-links-w {
+						.secondary-link {
+							font-size: 1rem;
+							letter-spacing: 0.01em;
+							color: var(--text);
+							position: relative;
+							cursor: pointer;
+							overflow: hidden;
+							transition: opacity 0.05s ease-out;
+							opacity: 0.6;
 
-              &:hover,
-              &:focus {
-                opacity: 1;
-              }
+							&:hover,
+							&:focus {
+								opacity: 1;
+							}
 
-              .label {
-                padding: 0.45rem 0;
-                pointer-events: none;
-              }
-            }
-          }
-        }
-      }
-    }
+							.label {
+								padding: 0.45rem 0;
+								pointer-events: none;
+							}
+						}
+					}
+				}
+			}
+		}
 
-    .menu-footer {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 var(--page-margin) 2.25rem;
-    }
-  </style>
+		.menu-footer {
+			display: flex;
+			justify-content: space-between;
+			padding: 0 var(--page-margin) 2.25rem;
+		}
+	</style>
 </div>
