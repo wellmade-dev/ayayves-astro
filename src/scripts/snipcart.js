@@ -166,12 +166,54 @@ export function initSnipcart() {
 		}
 	};
 
+	function setModalTheme() {
+		document.getElementById("snipcart").setAttribute("data-theme", "light");
+	}
+
+	function setBackdropEventListeners() {
+		setTimeout(function () {
+			const snipcartContainer = document.getElementById("snipcart");
+			const snipcartBackground = snipcartContainer.querySelector(
+				".snipcart-modal__container"
+			);
+
+			function closeModal() {
+				Snipcart.api.theme.cart.close();
+				document.removeEventListener("keydown", handleEscapeClick);
+				snipcartBackground.removeEventListener(
+					"click",
+					handleBackgroundClick
+				);
+			}
+
+			function handleEscapeClick(event) {
+				if (event.key === "Escape") closeModal();
+			}
+
+			function handleBackgroundClick(event) {
+				if (
+					event.target.classList.contains("snipcart-modal__container")
+				)
+					closeModal();
+			}
+
+			if (snipcartBackground) {
+				// Add ESC key event listener
+				document.addEventListener("keydown", handleEscapeClick);
+
+				// Add click on background event listener
+				snipcartBackground.addEventListener(
+					"click",
+					handleBackgroundClick
+				);
+			}
+		}, 800);
+	}
+
 	document.addEventListener("snipcart.ready", function () {
 		// Add light theming and disable Lenis on cart
 		Snipcart.events.on("snipcart.initialized", function () {
-			document
-				.getElementById("snipcart")
-				.setAttribute("data-theme", "light");
+			setModalTheme();
 
 			document
 				.getElementById("snipcart")
@@ -195,31 +237,9 @@ export function initSnipcart() {
 
 		Snipcart.events.on("theme.routechanged", (routesChange) => {
 			if (routesChange.from === "/" && routesChange.to !== "/") {
+				setModalTheme();
 				togglePageScroll(false);
-
-				// Add a close event to the modal background on click
-				const snipcartContainer = document.getElementById("snipcart");
-
-				// Pause to let Snipcart add the modal and background
-				setTimeout(function () {
-					const snipcartBackground = snipcartContainer.querySelector(
-						".snipcart-modal__container"
-					);
-
-					if (snipcartBackground) {
-						snipcartBackground.addEventListener(
-							"click",
-							function (event) {
-								if (
-									event.target.classList.contains(
-										"snipcart-modal__container"
-									)
-								)
-									Snipcart.api.theme.cart.close();
-							}
-						);
-					}
-				}, 250);
+				setBackdropEventListeners();
 			}
 
 			if (routesChange.from !== "/" && routesChange.to === "/") {
@@ -232,6 +252,7 @@ export function initSnipcart() {
 				);
 
 				if (snipcartModal && snipcartModalBackground) {
+					setBackdropEventListeners();
 					snipcartModal.setAttribute("closing", "true");
 					snipcartModalBackground.setAttribute("closing", "true");
 					snipcartModal.addEventListener(
@@ -248,26 +269,43 @@ export function initSnipcart() {
 				routesChange.from === "/cart" &&
 				routesChange.to === "/checkout"
 			) {
+				setModalTheme();
 				const snipcart = document.getElementById("snipcart");
+
+				setTimeout(function () {
+					const snipcartTest = snipcart.querySelectorAll(
+						".snipcart-modal__container"
+					);
+					console.log(snipcartTest);
+				}, 100);
 
 				const snipcartModal =
 					snipcart?.querySelector(".snipcart-modal");
+				const snipcartBackground = snipcart?.querySelector(
+					".snipcart-modal__container"
+				);
 
-				if (snipcartModal)
+				if (snipcartModal) {
+					setBackdropEventListeners();
 					snipcartModal.setAttribute("closing", "true");
+					snipcartBackground?.setAttribute("closing", "true");
+				}
 			}
 
 			if (
 				routesChange.from === "/checkout" &&
 				routesChange.to === "/order"
 			) {
+				setModalTheme();
 				const snipcart = document.getElementById("snipcart");
 
 				const snipcartModal =
 					snipcart?.querySelector(".snipcart-modal");
 
-				if (snipcartModal)
+				if (snipcartModal) {
+					setBackdropEventListeners();
 					snipcartModal.setAttribute("closing", "true");
+				}
 			}
 		});
 
