@@ -11,7 +11,7 @@ async function fetchHeroRelease() {
 
   for (const release of catalogue) {
     if (release.released || release.presaveLive) {
-      return release as CatalogueData;
+      return release;
     }
   }
   return null;
@@ -95,7 +95,7 @@ const release = await fetchHeroRelease();
             )}
             <div class="p1" data-release-date>
               {release.released ? "Released " : "Releasing "}
-              {release.releaseDate}
+              {release.releaseDatePretty}
             </div>
           </div>
         </div>

@@ -13,6 +13,8 @@ export interface CatalogueData {
 	releaseType: string;
 	released: boolean;
 	releaseDate: string;
+	releaseDatePretty: string;
+	releaseMonth: string;
 	presaveDate?: string;
 	presaveLive?: boolean;
 	presaveLink?: string;

@@ -12,7 +12,6 @@ import { format } from "date-fns";
 const STRAPI_URL = import.meta.env.STRAPI_URL;
 const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
 const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
-const SECRET_KEY = import.meta.env.SECRET_SNIPCART_API_KEY + ":";
 
 // Set up Strapi Auth Headers
 const strapiHeaders = {
@@ -188,8 +187,6 @@ export function createReleaseObject(object: CatalogueAPI) {
 		);
 	}
 
-	const formattedReleaseDate = format(releaseDate, "EEE d MMM");
-
 	const release = {
 		id: object.id,
 		title: attributes.title,
@@ -205,7 +202,9 @@ export function createReleaseObject(object: CatalogueAPI) {
 			: null,
 		releaseType: attributes.release_type,
 		released: currentDate > releaseDate,
-		releaseDate: attributes.release_date,
+		releaseDate: releaseDate,
+		releaseDatePretty: format(releaseDate, "MMM d, yyyy"),
+		releaseMonth: format(releaseDate, "MMM yyyy"),
 		presaveDate: attributes.presave_date,
 		presaveLive: presaveLive,
 		presaveLink: attributes.presave_link,
