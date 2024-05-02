@@ -1038,9 +1038,7 @@
 		display: none;
 	}
 
-	/* 	.snipcart-order__box__header {
-		margin-top: 1rem;
-
+	.snipcart-order__box__header {
 		h1 {
 			@include cart-header;
 		}
@@ -1048,6 +1046,32 @@
 		.snipcart-order__invoice-number--highlight {
 			@include cart-paragraph;
 			margin-top: 0.125rem;
+
+			em {
+				font-style: normal !important;
+			}
 		}
-	} */
+	}
+
+	.snipcart-order__details__content {
+		.snipcart-order__details-title,
+		h1 {
+			@include cart-header;
+			text-transform: capitalize;
+		}
+
+		.snipcart-cart-summary-items-list {
+			margin-top: 0.25rem;
+
+			.snipcart-cart-summary-expanded-item__name {
+				@include cart-subheading;
+				margin-bottom: 0.25rem;
+			}
+
+			.snipcart-cart-summary-expanded-item--secondary {
+				@include cart-paragraph;
+				opacity: 0.7;
+			}
+		}
+	}
 }
