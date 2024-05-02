@@ -1033,6 +1033,11 @@
 	}
 }
 
+.snipcart-scroll {
+	@include modal-scrollbar;
+	overflow-y: auto;
+}
+
 .snipcart-order__details {
 	svg {
 		display: none;

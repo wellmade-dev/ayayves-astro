@@ -256,6 +256,20 @@ export function initSnipcart() {
 				if (snipcartModal)
 					snipcartModal.setAttribute("closing", "true");
 			}
+
+			if (
+				routesChange.from === "/checkout" &&
+				routesChange.to === "/order"
+			) {
+				const snipcart = document.getElementById("snipcart");
+				const snipcartLayoutContent = snipcart?.querySelector(
+					".snipcart-layout__content"
+				);
+
+				snipcartLayoutContent?.children[0].classList.add(
+					"snipcart-scroll"
+				);
+			}
 		});
 
 		Snipcart.api.session.setLanguage("en", {
