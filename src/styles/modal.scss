@@ -495,28 +495,28 @@
 		// I am unsure of how this displays
 		display: none;
 	}
+}
 
-	.snipcart-summary-fees {
+.snipcart-summary-fees {
+	display: flex;
+	flex-direction: column;
+	gap: 0.55rem;
+
+	.snipcart-summary-fees__notice {
+		font-size: 0.925rem;
+		margin-bottom: 0.1rem;
+	}
+
+	.snipcart-summary-fees__item {
 		display: flex;
-		flex-direction: column;
-		gap: 0.55rem;
+		flex-direction: row;
+		justify-content: space-between;
+		font-size: 0.925rem;
+		opacity: 0.5;
 
-		.snipcart-summary-fees__notice {
-			font-size: 0.925rem;
-			margin-bottom: 0.1rem;
-		}
-
-		.snipcart-summary-fees__item {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			font-size: 0.925rem;
-			opacity: 0.5;
-
-			&.snipcart-summary-fees__total {
-				opacity: 1;
-				font-weight: 500;
-			}
+		&.snipcart-summary-fees__total {
+			opacity: 1;
+			font-weight: 500;
 		}
 	}
 }
@@ -1065,15 +1065,23 @@
 			text-transform: capitalize;
 		}
 
+		.snipcart-cart-summary-expanded-item {
+			margin-top: 0.375rem;
+		}
+
 		.snipcart-cart-summary-items-list {
 			margin-top: 0.25rem;
+			gap: 0.5rem;
+			display: flex;
+			flex-direction: column;
 
 			.snipcart-cart-summary-expanded-item__name {
 				@include cart-subheading;
-				margin-bottom: 0.25rem;
+				display: block;
 			}
 
-			.snipcart-cart-summary-expanded-item--secondary {
+			.snipcart-cart-summary-expanded-item--secondary,
+			.snipcart-cart-summary-expanded-item__custom-fields {
 				@include cart-paragraph;
 				opacity: 0.7;
 			}
