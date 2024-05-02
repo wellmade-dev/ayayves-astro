@@ -72,6 +72,27 @@
 	opacity: 0.625;
 }
 
+@mixin cart-header {
+	font-size: 1.25rem;
+	font-weight: 500;
+	letter-spacing: 0.01em;
+}
+
+@mixin cart-subheading {
+	font-size: 0.925rem;
+	margin-bottom: 0.25rem;
+	text-transform: capitalize;
+	letter-spacing: 0.02em;
+	font-weight: 500;
+}
+
+@mixin cart-paragraph {
+	font-size: 0.9rem;
+	line-height: 140%;
+	letter-spacing: 0.02em;
+	opacity: var(--text-secondary-opacity);
+}
+
 // Snipcart Modals
 .snipcart-modal__container {
 	// display: none; // This is here to allow for Javascript to animate the modal and background in
@@ -571,457 +592,462 @@
 				border-bottom: none;
 			}
 		}
+	}
+}
 
-		.snipcart__box--badge {
-			display: none;
+.snipcart__box {
+	// Billing, Shipping Block etc Wrapper
+	padding: 1.25rem 0 1.25rem;
+	margin: 0;
+	background-color: transparent;
+	border-bottom: 1px solid var(--divider-partial);
+
+	&.snipcart__box--slim {
+		padding: 1.25rem 0 0.5rem;
+
+		.snipcart__box--header {
+			opacity: 0.25;
+		}
+	}
+
+	.snipcart__box--badge {
+		display: none;
+	}
+
+	// Field Section Header, e.g. Billing, Shipping
+	.snipcart__box--header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.875rem;
+
+		h1 {
+			@include cart-header;
 		}
 
-		.snipcart__box {
-			// Billing, Shipping Block etc Wrapper
-			padding: 1.25rem 0 1.25rem;
-			margin: 0;
-			background-color: transparent;
-			border-bottom: 1px solid var(--divider-partial);
+		.snipcart-button-link {
+			display: inline-block;
+			font-size: 0.875rem;
+			font-weight: 500;
+			cursor: pointer;
+			border-bottom: 1px solid;
+			letter-spacing: 0.01em;
+			opacity: 0.625;
+			transition: 0.1s ease;
 
-			&.snipcart__box--slim {
-				padding: 1.25rem 0 0.5rem;
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
 
-				.snipcart__box--header {
-					opacity: 0.25;
-				}
+	// Specifically for the "Shipping to:" string near the header in the Shipping Sddress section
+	.snipcart-shipping-address__subtitle {
+		display: none;
+	}
+
+	// Component that confirms shipping address in Shipping section
+	.snipcart-shipping-address__address-field {
+		font-size: 0.9rem;
+		opacity: var(--text-secondary-opacity);
+		line-height: 125%;
+		text-wrap: pretty;
+
+		.snipcart__notice--with-icon {
+			font-weight: 400;
+			letter-spacing: 0.01em;
+		}
+
+		svg {
+			display: none;
+		}
+	}
+
+	.snipcart-shipping-rates-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		margin-top: 0.75rem;
+		font-size: 0.9rem;
+
+		.snipcart-shipping-rates-list-item {
+			display: grid;
+			grid-template-columns: 80% 20%;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem;
+			background-color: var(--field-background);
+			border-radius: 0.25rem;
+			opacity: 0.75;
+			box-sizing: border-box;
+			border: 1px solid var(--field-background);
+
+			&.snipcart-shipping-rates-list-item--highlight {
+				background-color: var(--field-background-hover);
+				border: 1px solid var(--divider-demi);
+				opacity: 1;
 			}
 
-			// Field Section Header, e.g. Billing, Shipping
-			.snipcart__box--header {
+			.snipcart-form-radio {
+				position: absolute;
+				opacity: 0;
+				appearance: none;
+			}
+
+			label {
+				position: relative;
+				cursor: pointer;
+			}
+
+			.snipcart-form-radio__label {
 				display: flex;
-				justify-content: space-between;
 				align-items: center;
-				margin-bottom: 0.875rem;
+				position: relative;
+				cursor: pointer;
+				padding: 0;
 
-				h1 {
-					font-size: 1.25rem;
-					font-weight: 500;
-					letter-spacing: 0.01em;
-				}
-
-				.snipcart-button-link {
-					display: inline-block;
+				span {
 					font-size: 0.875rem;
 					font-weight: 500;
-					cursor: pointer;
-					border-bottom: 1px solid;
+					width: 100%;
 					letter-spacing: 0.01em;
-					opacity: 0.625;
-					transition: 0.1s ease;
 
-					&:hover {
-						opacity: 1;
+					&.snipcart-shipping-rates-list-item--guaranteed_days {
+						display: block;
+						margin-top: 0.25rem;
+						opacity: var(--text-secondary-opacity);
+						font-weight: 400;
+						line-height: 125%;
+						text-wrap: pretty;
 					}
 				}
 			}
 
-			// Specifically for the "Shipping to:" string near the header in the Shipping Sddress section
-			.snipcart-shipping-address__subtitle {
+			.snipcart-shipping-rates-list-item__price {
+				pointer-events: none;
+			}
+		}
+	}
+
+	// Step Inner Content Wrapper
+	.snipcart-checkout-step__cols {
+		display: flex;
+		flex-direction: column;
+		gap: 1.125rem;
+
+		.snipcart-checkout-step__col {
+			// Sub-Step Wrapper
+			h3 {
+				@include cart-subheading;
+			}
+
+			svg {
 				display: none;
 			}
 
-			// Component that confirms shipping address in Shipping section
-			.snipcart-shipping-address__address-field {
-				font-size: 0.9rem;
-				opacity: var(--text-secondary-opacity);
-				line-height: 125%;
-				text-wrap: pretty;
+			.snipcart-billing-completed__information,
+			.snipcart-shipping-completed__information {
+				@include cart-paragraph;
+			}
+		}
+	}
 
-				.snipcart__notice--with-icon {
+	// Fieldset, Groups of Fields
+	fieldset {
+		border: none;
+		margin: unset;
+		padding: unset;
+		margin-bottom: -0.5rem;
+	}
+
+	// Form Field Row
+	.snipcart-form__row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 0.75rem;
+
+		// Large Field in Row
+		.snipcart-form__cell--large {
+			width: 100%;
+		}
+
+		// Small Field in Row
+		.snipcart-form__cell--tidy {
+			min-width: 6rem;
+		}
+	}
+
+	// Default Form Dividers
+	.snipcart-form__separator {
+		display: none;
+	}
+
+	// Form Field Component
+	.snipcart-form__field {
+		padding: 0.25rem 0 1rem;
+		text-transform: capitalize;
+
+		label {
+			@include cart-form-label;
+		}
+
+		.snipcart-field-error {
+			margin-top: 0.5rem;
+			font-weight: 500;
+			font-size: 0.825rem;
+			color: rgb(160, 0, 0);
+		}
+
+		// Regular Text Input
+		.snipcart-input {
+			line-height: 100%;
+			height: var(--field-height);
+			border: none;
+			width: 100%;
+			background-color: transparent;
+
+			input {
+				flex: 1;
+				outline: none;
+				max-width: 100%;
+				border: 1px solid var(--divider-partial);
+				width: 100%;
+				height: 100%;
+				padding: var(--field-padding);
+				font-size: 0.925rem;
+				transition: 0.05s ease-out;
+				color: var(--text);
+				background-color: var(--field-background);
+				border-radius: var(--field-border-radius);
+				letter-spacing: 0.02em;
+
+				&:hover,
+				&:active {
+					border-color: var(--divider-demi);
+					background-color: var(--field-background-hover);
+				}
+			}
+		}
+
+		// Field Textbox
+		.snipcart-textbox {
+			display: flex;
+			align-items: center;
+			justify-items: flex-start;
+			appearance: none;
+			height: var(--field-height);
+			min-height: unset;
+			background-image: none;
+			width: 100%;
+		}
+
+		// Select Field Wrapper
+		.snipcart-form__select-wrapper,
+		.snipcart-form__address-autocomplete {
+			position: relative;
+
+			// Select Field
+			.snipcart-form__select {
+				height: var(--field-height);
+				border: 1px solid var(--divider-partial);
+				transition: 0.1s ease-out;
+				padding: var(--field-padding);
+				font-size: 0.925rem;
+				background-color: rgba(255, 255, 255, 0.325);
+				border-radius: var(--field-border-radius);
+				width: 100%;
+				appearance: none;
+
+				&:hover,
+				&:active {
+					border-color: var(--divider-demi);
+					background-color: rgba(255, 255, 255, 0.625);
+				}
+
+				// Option Dialogs
+				&select {
+					height: 2rem;
+					border: 1px solid var(--almostblack-10);
+					border-radius: var(--field-border-radius);
+					padding: 0.25rem 0.75rem;
+					width: 100%;
+					font-size: 0.875rem;
 					font-weight: 400;
-					letter-spacing: 0.01em;
+					background-color: unset;
+					box-shadow: unset;
+					transition: 0.1s ease-out;
+					font-family: var(--neue-montreal);
+					letter-spacing: 0.02em;
+					appearance: none; // Disables the default chevron
+
+					&:hover,
+					&:focus-within {
+						background-color: var(--smoke-25);
+						border-color: var(--almostblack-50);
+						box-shadow: unset;
+					}
 				}
 
 				svg {
-					display: none;
+					height: 100%;
+					pointer-events: none;
+					position: absolute;
+					right: 0.375rem;
+					width: 1.25rem;
+					color: var(--almost-black);
+					transition: 0.2s ease-out;
+					transition-property: transform, color;
 				}
 			}
+		}
 
-			.snipcart-shipping-rates-list {
-				display: flex;
-				flex-direction: column;
-				gap: 0.375rem;
-				margin-top: 0.75rem;
-				font-size: 0.9rem;
+		// Checkbox Field
+		.snipcart-form__field-checkbox {
+			display: flex;
+			flex-direction: row;
+			gap: 0.5rem;
+			justify-content: flex-start;
+			align-items: center;
+			margin: 0.375rem 0 0;
 
-				.snipcart-shipping-rates-list-item {
-					display: grid;
-					grid-template-columns: 80% 20%;
-					justify-content: space-between;
-					align-items: center;
-					padding: 1rem;
-					background-color: var(--field-background);
-					border-radius: 0.25rem;
-					opacity: 0.75;
-					box-sizing: border-box;
-					border: 1px solid var(--field-background);
-
-					&.snipcart-shipping-rates-list-item--highlight {
-						background-color: var(--field-background-hover);
-						border: 1px solid var(--divider-demi);
-						opacity: 1;
-					}
-
-					.snipcart-form-radio {
-						position: absolute;
-						opacity: 0;
-						appearance: none;
-					}
-
-					label {
-						position: relative;
-						cursor: pointer;
-					}
-
-					.snipcart-form-radio__label {
-						display: flex;
-						align-items: center;
-						position: relative;
-						cursor: pointer;
-						padding: 0;
-
-						span {
-							font-size: 0.875rem;
-							font-weight: 500;
-							width: 100%;
-							letter-spacing: 0.01em;
-
-							&.snipcart-shipping-rates-list-item--guaranteed_days {
-								display: block;
-								margin-top: 0.25rem;
-								opacity: var(--text-secondary-opacity);
-								font-weight: 400;
-								line-height: 125%;
-								text-wrap: pretty;
-							}
-						}
-					}
-
-					.snipcart-shipping-rates-list-item__price {
-						pointer-events: none;
-					}
-				}
+			.snipcart-form__label {
+				margin-bottom: unset;
 			}
+		}
 
-			// Step Inner Content Wrapper
-			.snipcart-checkout-step__cols {
-				display: flex;
-				flex-direction: column;
-				gap: 1.125rem;
+		.snipcart-payment-card-form {
+			min-height: 168px; // This is to prevent the modal from collapsing when the modal is dismissed
+		}
 
-				.snipcart-checkout-step__col {
-					// Sub-Step Wrapper
-					h3 {
-						font-size: 0.925rem;
-						margin-bottom: 0.25rem;
-						text-transform: capitalize;
-						letter-spacing: 0.03em;
-						font-weight: 500;
-					}
+		iframe {
+			border: none;
+			width: 100%;
+		}
+	}
 
-					svg {
-						display: none;
-					}
+	// Form Address Field
+	.snipcart-form__address-autocomplete,
+	.snipcart-typeahead__input,
+	.snipcart-typeahead {
+		width: 100%;
 
-					.snipcart-billing-completed__information,
-					.snipcart-shipping-completed__information {
-						font-size: 0.9rem;
-						line-height: 140%;
-						letter-spacing: 0.02em;
-						opacity: var(--text-secondary-opacity);
-					}
-				}
-			}
-
-			// Fieldset, Groups of Fields
-			fieldset {
+		.snipcart-textbox {
+			// Hidden input inside of a textbox, e.g. Street Address
+			.snipcart-textbox--hidden {
 				border: none;
-				margin: unset;
-				padding: unset;
-				margin-bottom: -0.5rem;
-			}
+				background-color: transparent;
+				width: 100%;
+				padding: 0;
 
-			// Form Field Row
-			.snipcart-form__row {
-				display: flex;
-				align-items: flex-start;
-				justify-content: space-between;
-				gap: 0.75rem;
-
-				// Large Field in Row
-				.snipcart-form__cell--large {
-					width: 100%;
-				}
-
-				// Small Field in Row
-				.snipcart-form__cell--tidy {
-					min-width: 6rem;
+				&:focus {
+					outline: none;
 				}
 			}
+		}
 
-			// Default Form Dividers
-			.snipcart-form__separator {
-				display: none;
+		&.snipcart-form__address-autocomplete {
+			.snipcart-typeahead__select {
+				height: 0;
+				opacity: 0;
+			}
+		}
+
+		.snipcart-typeahead__select,
+		.snipcart-form__select-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+
+			&.snipcart-typeahead__select--focus {
+				height: unset;
+				opacity: 1;
 			}
 
-			// Form Field Component
-			.snipcart-form__field {
-				padding: 0.25rem 0 1rem;
-				text-transform: capitalize;
-
-				label {
-					@include cart-form-label;
-				}
-
-				.snipcart-field-error {
-					margin-top: 0.5rem;
-					font-weight: 500;
-					font-size: 0.825rem;
-					color: rgb(160, 0, 0);
-				}
-
-				// Regular Text Input
-				.snipcart-input {
-					line-height: 100%;
-					height: var(--field-height);
-					border: none;
-					width: 100%;
-					background-color: transparent;
-
-					input {
-						flex: 1;
-						outline: none;
-						max-width: 100%;
-						border: 1px solid var(--divider-partial);
-						width: 100%;
-						height: 100%;
-						padding: var(--field-padding);
-						font-size: 0.925rem;
-						transition: 0.05s ease-out;
-						color: var(--text);
-						background-color: var(--field-background);
-						border-radius: var(--field-border-radius);
-						letter-spacing: 0.02em;
-
-						&:hover,
-						&:active {
-							border-color: var(--divider-demi);
-							background-color: var(--field-background-hover);
-						}
-					}
-				}
-
-				// Field Textbox
-				.snipcart-textbox {
-					display: flex;
-					align-items: center;
-					justify-items: flex-start;
-					appearance: none;
-					height: var(--field-height);
-					min-height: unset;
-					background-image: none;
-					width: 100%;
-				}
-
-				// Select Field Wrapper
-				.snipcart-form__select-wrapper,
-				.snipcart-form__address-autocomplete {
-					position: relative;
-
-					// Select Field
-					.snipcart-form__select {
-						height: var(--field-height);
-						border: 1px solid var(--divider-partial);
-						transition: 0.1s ease-out;
-						padding: var(--field-padding);
-						font-size: 0.925rem;
-						background-color: rgba(255, 255, 255, 0.325);
-						border-radius: var(--field-border-radius);
-						width: 100%;
-						appearance: none;
-
-						&:hover,
-						&:active {
-							border-color: var(--divider-demi);
-							background-color: rgba(255, 255, 255, 0.625);
-						}
-
-						// Option Dialogs
-						&select {
-							height: 2rem;
-							border: 1px solid var(--almostblack-10);
-							border-radius: var(--field-border-radius);
-							padding: 0.25rem 0.75rem;
-							width: 100%;
-							font-size: 0.875rem;
-							font-weight: 400;
-							background-color: unset;
-							box-shadow: unset;
-							transition: 0.1s ease-out;
-							font-family: var(--neue-montreal);
-							letter-spacing: 0.02em;
-							appearance: none; // Disables the default chevron
-
-							&:hover,
-							&:focus-within {
-								background-color: var(--smoke-25);
-								border-color: var(--almostblack-50);
-								box-shadow: unset;
-							}
-						}
-
-						svg {
-							height: 100%;
-							pointer-events: none;
-							position: absolute;
-							right: 0.375rem;
-							width: 1.25rem;
-							color: var(--almost-black);
-							transition: 0.2s ease-out;
-							transition-property: transform, color;
-						}
-					}
-				}
-
-				// Checkbox Field
-				.snipcart-form__field-checkbox {
-					display: flex;
-					flex-direction: row;
-					gap: 0.5rem;
-					justify-content: flex-start;
-					align-items: center;
-					margin: 0.375rem 0 0;
-
-					.snipcart-form__label {
-						margin-bottom: unset;
-					}
-				}
-
-				.snipcart-payment-card-form {
-					min-height: 168px; // This is to prevent the modal from collapsing when the modal is dismissed
-				}
-
-				iframe {
-					border: none;
-					width: 100%;
-				}
+			.snipcart-typeahead__input {
+				cursor: pointer;
 			}
 
-			// Form Address Field
-			.snipcart-form__address-autocomplete,
-			.snipcart-typeahead__input,
-			.snipcart-typeahead {
+			svg {
+				pointer-events: none;
+				position: absolute;
+				right: 0.5rem;
+				width: 1.25rem;
+				color: var(--text);
+			}
+
+			.snipcart-typeahead__suggestions {
+				position: absolute;
+				max-height: auto;
+				height: auto;
+				top: 100%;
+				max-height: 300px;
+				overflow-y: auto;
+				background-color: #f2f3ef;
+				cursor: pointer;
+				border: 1px solid rgba(0, 0, 0, 0.25);
+				list-style-type: none;
+				margin: 0;
+				margin-top: -0.25rem;
+				padding: 0;
+				z-index: 100;
+				border-radius: var(--field-border-radius);
 				width: 100%;
 
-				.snipcart-textbox {
-					/* height: var(--field-height);
-					min-height: unset;
-					background-image: none;
-					width: 100%; */
+				.snipcart-typeahead__suggestion {
+					margin: 0;
+					padding: 0.5rem 1rem;
+					font-weight: 500;
+					font-size: 0.875rem;
 
-					// Hidden input inside of a textbox, e.g. Street Address
-					.snipcart-textbox--hidden {
-						border: none;
-						background-color: transparent;
-						width: 100%;
-						padding: 0;
-
-						&:focus {
-							outline: none;
-						}
-					}
-				}
-
-				&.snipcart-form__address-autocomplete {
-					.snipcart-typeahead__select {
-						height: 0;
-						opacity: 0;
-					}
-				}
-
-				.snipcart-typeahead__select,
-				.snipcart-form__select-wrapper {
-					position: relative;
-					display: flex;
-					align-items: center;
-
-					&.snipcart-typeahead__select--focus {
-						height: unset;
-						opacity: 1;
+					.snipcart-typeahead__typeahead__suggestion--highlight {
+						display: block;
+						font-weight: 500;
+						line-height: 150%;
+						letter-spacing: 0.02em;
 					}
 
-					.snipcart-typeahead__input {
-						cursor: pointer;
+					.snipcart-typeahead__suggestion--secondary {
+						display: block;
+						font-weight: 400;
+						font-size: 0.75rem;
+						line-height: 160%;
+						letter-spacing: 0.01em;
+						opacity: 0.75;
 					}
 
-					svg {
-						pointer-events: none;
-						position: absolute;
-						right: 0.5rem;
-						width: 1.25rem;
-						color: var(--text);
+					&.snipcart-typeahead__suggestion--search-query {
+						padding: 0.75rem 1rem;
 					}
 
-					.snipcart-typeahead__suggestions {
-						position: absolute;
-						max-height: auto;
-						height: auto;
-						top: 100%;
-						max-height: 300px;
-						overflow-y: auto;
-						background-color: #f2f3ef;
-						cursor: pointer;
-						border: 1px solid rgba(0, 0, 0, 0.25);
-						list-style-type: none;
-						margin: 0;
-						margin-top: -0.25rem;
-						padding: 0;
-						z-index: 100;
-						border-radius: var(--field-border-radius);
-						width: 100%;
+					&.snipcart-typeahead__suggestion--active {
+						background-color: rgba(0, 0, 0, 0.05);
+					}
 
-						.snipcart-typeahead__suggestion {
-							margin: 0;
-							padding: 0.5rem 1rem;
-							font-weight: 500;
-							font-size: 0.875rem;
-
-							.snipcart-typeahead__typeahead__suggestion--highlight {
-								display: block;
-								font-weight: 500;
-								line-height: 150%;
-								letter-spacing: 0.02em;
-							}
-
-							.snipcart-typeahead__suggestion--secondary {
-								display: block;
-								font-weight: 400;
-								font-size: 0.75rem;
-								line-height: 160%;
-								letter-spacing: 0.01em;
-								opacity: 0.75;
-							}
-
-							&.snipcart-typeahead__suggestion--search-query {
-								padding: 0.75rem 1rem;
-							}
-
-							&.snipcart-typeahead__suggestion--active {
-								background-color: rgba(0, 0, 0, 0.05);
-							}
-
-							&.snipcart-typeahead__suggestion--powered-by-google {
-								display: none;
-							}
-						}
+					&.snipcart-typeahead__suggestion--powered-by-google {
+						display: none;
 					}
 				}
 			}
 		}
 	}
+}
+
+.snipcart-order__details {
+	svg {
+		display: none;
+	}
+
+	/* 	.snipcart-order__box__header {
+		margin-top: 1rem;
+
+		h1 {
+			@include cart-header;
+		}
+
+		.snipcart-order__invoice-number--highlight {
+			@include cart-paragraph;
+			margin-top: 0.125rem;
+		}
+	} */
 }
