@@ -1033,9 +1033,11 @@
 	}
 }
 
-.snipcart-scroll {
-	@include modal-scrollbar;
-	overflow-y: auto;
+.snipcart-cart-order-container {
+	.snipcart-layout__content {
+		@include modal-scrollbar;
+		overflow-y: auto;
+	}
 }
 
 .snipcart-order__details {

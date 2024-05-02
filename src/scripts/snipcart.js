@@ -262,13 +262,12 @@ export function initSnipcart() {
 				routesChange.to === "/order"
 			) {
 				const snipcart = document.getElementById("snipcart");
-				const snipcartLayoutContent = snipcart?.querySelector(
-					".snipcart-layout__content"
-				);
 
-				snipcartLayoutContent?.children[0].classList.add(
-					"snipcart-scroll"
-				);
+				const snipcartModal =
+					snipcart?.querySelector(".snipcart-modal");
+
+				if (snipcartModal)
+					snipcartModal.setAttribute("closing", "true");
 			}
 		});
 
