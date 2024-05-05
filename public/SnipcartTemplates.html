@@ -55,6 +55,9 @@
 							<h2 class="snipcart-item-line__title">
 								{{ item.name }}
 							</h2>
+							<div class=".item-id" style="display: none">
+								{{ item.id }}
+							</div>
 							<div class="snipcart-item-line__body">
 								<div class="snipcart-item-line__variants">
 									<div>
@@ -92,6 +95,13 @@
 									</div>
 								</div>
 							</div>
+							<button-icon
+								icon="trash"
+								label="item.remove_item"
+								title="remove item"
+								@click="removeItem"
+								>Remove</button-icon
+							>
 						</div>
 					</div>
 				</li>

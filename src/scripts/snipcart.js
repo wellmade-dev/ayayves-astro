@@ -210,6 +210,22 @@ export function initSnipcart() {
 		}, 800);
 	}
 
+	function removeItem(buttonElement) {
+		var itemIdElement = buttonElement
+			.closest(".snipcart-item-line__product")
+			.querySelector(".item-id");
+		var itemId = itemIdElement.textContent.trim();
+
+		Snipcart.api.cart.items
+			.remove(itemId)
+			.then(() => {
+				alert("Item removed");
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+	}
+
 	document.addEventListener("snipcart.ready", function () {
 		// Add light theming and disable Lenis on cart
 		Snipcart.events.on("snipcart.initialized", function () {
@@ -236,13 +252,16 @@ export function initSnipcart() {
 		});
 
 		Snipcart.events.on("theme.routechanged", (routesChange) => {
+			console.log("Changed");
 			if (routesChange.from === "/" && routesChange.to !== "/") {
+				// Cart Opened
 				setModalTheme();
 				togglePageScroll(false);
 				setBackdropEventListeners();
 			}
 
 			if (routesChange.from !== "/" && routesChange.to === "/") {
+				// Cart Closed
 				const snipcart = document.getElementById("snipcart");
 
 				const snipcartModal =

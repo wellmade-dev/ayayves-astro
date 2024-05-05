@@ -10,6 +10,7 @@
 	max-height: calc(100% - (2 * var(--page-margin)));
 	overflow-y: auto;
 	overscroll-behavior: contain;
+	background-color: var(--bg);
 
 	@media (max-width: 460px) {
 		width: calc(100% - (2 * var(--page-margin)));
@@ -329,7 +330,16 @@
 
 		button[aria-label="Remove item"] {
 			// Remove Item Button opposite Product Title
-			display: none;
+			display: flex;
+			font-size: 0.75rem;
+			margin-top: 0.5rem;
+			opacity: 0.5;
+			transition: opacity 0.1s ease-out;
+			padding: 0 0.5rem 0.5rem 0;
+
+			&:hover {
+				opacity: 1;
+			}
 		}
 
 		.snipcart-item-line__body {
@@ -445,7 +455,7 @@
 							border-radius: var(--field-border-radius);
 							padding: 0.25rem 0.75rem;
 							width: 100%;
-							font-size: 0.875rem;
+							font-size: 1rem;
 							font-weight: 400;
 							background-color: unset;
 							box-shadow: unset;
@@ -648,7 +658,7 @@
 
 	// Component that confirms shipping address in Shipping section
 	.snipcart-shipping-address__address-field {
-		font-size: 0.9rem;
+		font-size: 1rem;
 		opacity: var(--text-secondary-opacity);
 		line-height: 125%;
 		text-wrap: pretty;
@@ -815,7 +825,7 @@
 				width: 100%;
 				height: 100%;
 				padding: var(--field-padding);
-				font-size: 0.925rem;
+				font-size: 1rem;
 				transition: 0.05s ease-out;
 				color: var(--text);
 				background-color: var(--field-background);
@@ -853,7 +863,7 @@
 				border: 1px solid var(--divider-partial);
 				transition: 0.1s ease-out;
 				padding: var(--field-padding);
-				font-size: 0.925rem;
+				font-size: 1rem;
 				background-color: rgba(255, 255, 255, 0.325);
 				border-radius: var(--field-border-radius);
 				width: 100%;
@@ -872,7 +882,7 @@
 					border-radius: var(--field-border-radius);
 					padding: 0.25rem 0.75rem;
 					width: 100%;
-					font-size: 0.875rem;
+					font-size: 1rem;
 					font-weight: 400;
 					background-color: unset;
 					box-shadow: unset;
@@ -998,7 +1008,7 @@
 					margin: 0;
 					padding: 0.5rem 1rem;
 					font-weight: 500;
-					font-size: 0.875rem;
+					font-size: 1rem;
 
 					.snipcart-typeahead__typeahead__suggestion--highlight {
 						display: block;
@@ -1010,7 +1020,7 @@
 					.snipcart-typeahead__suggestion--secondary {
 						display: block;
 						font-weight: 400;
-						font-size: 0.75rem;
+						font-size: 0rem;
 						line-height: 160%;
 						letter-spacing: 0.01em;
 						opacity: 0.75;

@@ -3,15 +3,23 @@ let { width = "0.625rem" } = Astro.props;
 ---
 
 <svg
-  width={width}
-  height={width}
-  viewBox="0 0 11 11"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
+	width={width}
+	height={width}
+	viewBox="0 0 11 11"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
 >
-  <path
-    fill-rule="evenodd"
-    clip-rule="evenodd"
-    d="M8.005 1.75443H0.375954V0H11V10.6241H9.24557V2.995L1.24057 11L0 9.75943L8.005 1.75443Z"
-    fill="currentColor"></path>
+	<path
+		fill-rule="evenodd"
+		clip-rule="evenodd"
+		d="M8.005 1.75443H0.375954V0H11V10.6241H9.24557V2.995L1.24057 11L0 9.75943L8.005 1.75443Z"
+		fill="currentColor"></path>
 </svg>
+
+<style>
+	svg {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
