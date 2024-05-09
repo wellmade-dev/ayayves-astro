@@ -1,30 +1,33 @@
-/* function throttle(func, limit: number) {
-    let inThrottle: boolean | null;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    };
+import { lenis } from "./init";
+
+// Throttle Function
+function throttle(func: Function, limit: number) {
+	let inThrottle: boolean;
+	return function () {
+		const args = arguments;
+		const context = this;
+		if (!inThrottle) {
+			func.apply(context, args);
+			inThrottle = true;
+			setTimeout(() => {
+				inThrottle = false;
+			}, limit);
+		}
+	};
 }
 
-// On Resize Function
+// Resize Function
+// Validation to prevent resize events on iOS Safari
 let windowWidth = window.innerWidth;
-
-export function onResize(passedFunction: () => void): void {
-  if (window.innerWidth !== windowWidth) {
-      windowWidth = window.innerWidth;
-
-    passedFunction();
-  }
-} */
-
-/* window.addEventListener('resize', throttle(() => onResize(initMarquees), 250)); */
-
-import { lenis } from "./init";
+export function onResize(passedFunction: Function) {
+	return function () {
+		if (window.innerWidth !== windowWidth) {
+			const throttledFunction = throttle(passedFunction, 250);
+			windowWidth = window.innerWidth;
+			throttledFunction();
+		}
+	};
+}
 
 // Toggle Page Scroll
 export function togglePageScroll(enable: boolean) {

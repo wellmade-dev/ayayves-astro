@@ -252,7 +252,6 @@ export function initSnipcart() {
 		});
 
 		Snipcart.events.on("theme.routechanged", (routesChange) => {
-			console.log("Changed");
 			if (routesChange.from === "/" && routesChange.to !== "/") {
 				// Cart Opened
 				setModalTheme();

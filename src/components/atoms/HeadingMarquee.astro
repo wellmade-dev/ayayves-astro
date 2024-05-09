@@ -1,64 +1,64 @@
 ---
 interface Props {
-  firstString: string;
-  secondString: string;
+	firstString: string;
+	secondString: string;
 }
 
 const { firstString, secondString } = Astro.props as Props;
 ---
 
 <div class="heading-marquee">
-  <div class="marquee-split">
-    <div class="flexed marquee-block">
-      <h2>
-        <span class="heading-grand">{firstString} </span>
-        <span class="heading-grand serif">{secondString} </span>
-      </h2>
-    </div>
-  </div>
+	<div class="marquee-split">
+		<div class="flexed marquee-block">
+			<h2>
+				<span class="heading-grand">{firstString} </span>
+				<span class="heading-grand serif">{secondString} </span>
+			</h2>
+		</div>
+	</div>
 </div>
 
 <style lang="scss">
-  .heading-marquee {
-    margin: 0 0 -2vw;
-    overflow: clip;
-    display: flex;
-    flex-direction: row;
-    flex: none;
-    padding-bottom: 2vw;
+	.heading-marquee {
+		margin: 0 0 -2vw;
+		overflow: clip;
+		display: flex;
+		flex-direction: row;
+		flex: none;
+		padding-bottom: 2vw;
 
-    .marquee-split {
-      display: flex;
-      flex-direction: row;
-      flex: none;
-    }
+		.marquee-split {
+			display: flex;
+			flex-direction: row;
+			flex: none;
+		}
 
-    .marquee-block {
-      padding-right: 8vw;
-      display: flex;
-      align-items: center;
+		.marquee-block {
+			padding-right: 8vw;
+			display: flex;
+			align-items: center;
 
-      &.flexed {
-        padding-right: 6vw;
-        gap: 6vw;
-      }
-    }
+			&.flexed {
+				padding-right: 6vw;
+				gap: 6vw;
+			}
+		}
 
-    .heading-grand {
-      font-size: max(6rem, 21vw);
-      font-weight: 300;
+		.heading-grand {
+			font-size: max(6rem, 21vw);
+			font-weight: 300;
 
-      &.serif {
-        font-family: var(--editorial-old);
-        font-size: max(5.75rem, 20vw);
-        font-weight: 300;
-      }
-    }
-  }
+			&.serif {
+				font-family: var(--editorial-old);
+				font-size: max(5.75rem, 20vw);
+				font-weight: 300;
+			}
+		}
+	}
 </style>
 
 <script>
-  import { initMarquee } from "../../scripts/animations";
-  const marquee = document.querySelector(".heading-marquee");
-  initMarquee(marquee, 90);
+	import { initMarquee } from "../../scripts/animations";
+	const marquee = document.querySelector(".heading-marquee")!;
+	initMarquee(marquee, 90);
 </script>
