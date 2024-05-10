@@ -124,48 +124,6 @@ export function initSnipcart() {
 		}
 	})();
 
-	const itemCountWrapper = document.querySelectorAll(".cart-counter-w");
-
-	const updateItemCount = () => {
-		if (window.Snipcart) {
-			// Retrieve item count from sessionStorage
-			let itemCount = sessionStorage.getItem("snipcartItemCount");
-			const storageCount = itemCount;
-
-			function setItemCounter() {
-				if (itemCount > 0) {
-					itemCountWrapper.forEach((wrapper) => {
-						wrapper.style.display = "flex";
-						wrapper
-							.querySelectorAll(".cart-counter")
-							.forEach((counter) => {
-								counter.textContent = itemCount;
-							});
-					});
-				} else {
-					itemCountWrapper.forEach((wrapper) => {
-						wrapper.style.display = "none";
-					});
-				}
-			}
-
-			if (itemCount) {
-				setItemCounter();
-			}
-
-			// Get the cart item count from Snipcart
-			itemCount = Snipcart.store.getState().cart.items.count;
-
-			if (itemCount !== storageCount) {
-				// Store the item count in session storage
-				sessionStorage.setItem("snipcartItemCount", itemCount);
-
-				// Run setItemCounter
-				setItemCounter();
-			}
-		}
-	};
-
 	function setModalTheme() {
 		document.getElementById("snipcart").setAttribute("data-theme", "light");
 	}
@@ -208,22 +166,6 @@ export function initSnipcart() {
 				);
 			}
 		}, 800);
-	}
-
-	function removeItem(buttonElement) {
-		var itemIdElement = buttonElement
-			.closest(".snipcart-item-line__product")
-			.querySelector(".item-id");
-		var itemId = itemIdElement.textContent.trim();
-
-		Snipcart.api.cart.items
-			.remove(itemId)
-			.then(() => {
-				alert("Item removed");
-			})
-			.catch((error) => {
-				console.error("Error:", error);
-			});
 	}
 
 	document.addEventListener("snipcart.ready", function () {
@@ -337,4 +279,40 @@ export function initSnipcart() {
 			},
 		});
 	});
+}
+
+export function updateItemCount() {
+	// Retrieve item count from sessionStorage
+	let itemCount = sessionStorage.getItem("snipcartItemCount");
+	const itemCountWrapper = document.querySelectorAll(".cart-counter-w");
+
+	function setItemCounter() {
+		if (itemCount > 0) {
+			itemCountWrapper.forEach((wrapper) => {
+				wrapper.style.display = "flex";
+				wrapper.querySelectorAll(".cart-counter").forEach((counter) => {
+					counter.textContent = itemCount;
+				});
+			});
+		} else {
+			itemCountWrapper.forEach((wrapper) => {
+				wrapper.style.display = "none";
+			});
+		}
+	}
+
+	if (itemCount) {
+		setItemCounter();
+	}
+
+	if (window.Snipcart) {
+		// Get the cart item count from Snipcart
+		const newItemCount = Snipcart.store.getState().cart.items.count;
+
+		// Store the item count in session storage
+		sessionStorage.setItem("snipcartItemCount", newItemCount);
+
+		// Run setItemCounter
+		setItemCounter();
+	}
 }

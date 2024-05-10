@@ -94,6 +94,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 		</div>
 	</div>
 	<NavigationMenu />
+	<div class="navigation-bg-tint"></div>
 </nav>
 
 <style lang="scss">
@@ -246,6 +247,18 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 		}
 	}
 
+	.navigation-bg-tint {
+		display: none;
+		position: fixed;
+		z-index: 9;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: black;
+		opacity: 0;
+	}
+
 	.button-label-w {
 		overflow: hidden;
 		position: relative;
@@ -261,7 +274,11 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 	import { gsap } from "gsap";
 	import { tickerLinkHover } from "../../scripts/animations.js";
 	import { togglePageScroll } from "../../scripts/utils.ts";
+	import { updateItemCount } from "../../scripts/snipcart";
 	import { easingSmall, easingLarge } from "../../scripts/init.js";
+
+	// Update Item Count
+	updateItemCount();
 
 	// Menu Variable Declarations
 	const navigation = document.getElementById("navigation") as HTMLElement;
@@ -271,6 +288,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 
 	let navTheme: string | null = null;
 
+	const navBackgroundTint = navigation.querySelector(".navigation-bg-tint")!;
 	let navDesktopLinks = navigation?.querySelector(
 		".desktop-links"
 	) as HTMLElement;
@@ -355,6 +373,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 				onStart: () => {
 					togglePageScroll(isOpening ? false : true);
 					gsap.set(navigationMenu, { display: "flex" });
+					gsap.set(navBackgroundTint, { display: "block" });
 					animateMenuButton(isOpening);
 					tickerLinkHover(
 						navMenuButton,
@@ -386,6 +405,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 						);
 						navMenuButton?.setAttribute("aria-expanded", "false");
 						gsap.set(navigationMenu, { display: "none" });
+						gsap.set(navBackgroundTint, { display: "none" });
 					}
 					isAnimating = false;
 				},
@@ -430,6 +450,17 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 					clipPath: isOpening
 						? "inset(0% 0% 0% 0%)"
 						: "inset(0% 0% 100% 0%)",
+					duration: 1,
+					ease: easingLarge,
+				},
+				isOpening ? 0 : 0.2
+			);
+
+			// Tint the Page Content on Open
+			tl.to(
+				navBackgroundTint,
+				{
+					opacity: isOpening ? 0.75 : 0,
 					duration: 1,
 					ease: easingLarge,
 				},

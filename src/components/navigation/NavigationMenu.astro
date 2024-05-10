@@ -104,177 +104,177 @@ const currentYear = new Date().getFullYear();
 		<div class="p2">Aya Yves {currentYear}</div>
 		<div class="p2">Site by Wellmade</div>
 	</div>
+</div>
 
-	<style lang="scss">
-		@use "../../styles/vars" as *;
-		.navigation-menu {
+<style lang="scss">
+	@use "../../styles/vars" as *;
+	.navigation-menu {
+		display: flex;
+		position: fixed;
+		flex-direction: column;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: var(--bg-dark);
+		padding-top: calc($navheight - 0.5rem);
+		clip-path: inset(0 0 100% 0);
+		z-index: 10;
+
+		.menu-content {
 			display: flex;
-			position: fixed;
-			flex-direction: column;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: var(--bg-dark);
-			padding-top: calc($navheight - 0.5rem);
-			clip-path: inset(0 0 100% 0);
-			z-index: 10;
+			align-items: center;
+			justify-content: center;
+			gap: clamp(6rem, 7.5vw, 8rem);
+			padding: 0 var(--page-margin);
+			flex-grow: 1;
 
-			.menu-content {
+			@media (max-width: $tablet) {
+				gap: clamp(4rem, 7.5vw, 6rem);
+			}
+
+			@media (max-width: $phablet) {
+				justify-content: start;
+				align-items: start;
+				padding-top: 1.25rem;
+			}
+
+			.image-col {
+				--corner-gap: 3.5rem;
+				--card-height: clamp(25rem, 60vh, 35rem);
+				--card-width: calc(var(--card-height) * 0.725);
 				display: flex;
-				align-items: center;
+				position: relative;
 				justify-content: center;
-				gap: clamp(6rem, 7.5vw, 8rem);
-				padding: 0 var(--page-margin);
-				flex-grow: 1;
+				align-items: center;
+				width: calc(var(--corner-gap) + var(--card-width));
+				height: calc(var(--corner-gap) + var(--card-height));
+				max-height: calc(100vh - (2 * var(--nav-height)));
 
 				@media (max-width: $tablet) {
-					gap: clamp(4rem, 7.5vw, 6rem);
+					--corner-gap: 2rem;
+					--card-height: 50vw;
+					--card-width: calc(var(--card-height) * 0.725);
 				}
 
 				@media (max-width: $phablet) {
-					justify-content: start;
-					align-items: start;
-					padding-top: 1.25rem;
+					display: none;
 				}
 
-				.image-col {
-					--corner-gap: 3.5rem;
-					--card-height: clamp(25rem, 60vh, 35rem);
-					--card-width: calc(var(--card-height) * 0.725);
-					display: flex;
-					position: relative;
-					justify-content: center;
-					align-items: center;
-					width: calc(var(--corner-gap) + var(--card-width));
-					height: calc(var(--corner-gap) + var(--card-height));
-					max-height: calc(100vh - (2 * var(--nav-height)));
+				.img-w {
+					height: 100%;
+					border-radius: var(--radius-small);
+					overflow: hidden;
+					width: var(--card-width);
+					height: var(--card-height);
+					position: absolute;
+					max-height: 100%;
 
-					@media (max-width: $tablet) {
-						--corner-gap: 2rem;
-						--card-height: 50vw;
-						--card-width: calc(var(--card-height) * 0.725);
+					&:nth-child(1) {
+						bottom: var(--corner-gap);
+						left: var(--corner-gap);
 					}
 
-					@media (max-width: $phablet) {
-						display: none;
+					&:nth-child(2) {
+						bottom: 0;
+						left: 0;
 					}
 
-					.img-w {
+					img {
 						height: 100%;
-						border-radius: var(--radius-small);
-						overflow: hidden;
-						width: var(--card-width);
-						height: var(--card-height);
-						position: absolute;
-						max-height: 100%;
-
-						&:nth-child(1) {
-							bottom: var(--corner-gap);
-							left: var(--corner-gap);
-						}
-
-						&:nth-child(2) {
-							bottom: 0;
-							left: 0;
-						}
-
-						img {
-							height: 100%;
-							width: 100%;
-							-o-object-fit: cover;
-							object-fit: cover;
-						}
+						width: 100%;
+						-o-object-fit: cover;
+						object-fit: cover;
 					}
 				}
+			}
 
-				.links-col {
+			.links-col {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5rem;
+				padding-bottom: 2rem;
+				padding-right: 4rem;
+
+				@media (max-width: $tablet) {
+					gap: 1.25rem;
+					padding-right: 3rem;
+				}
+
+				.primary-links-w {
 					display: flex;
 					flex-direction: column;
-					gap: 1.5rem;
-					padding-bottom: 2rem;
-					padding-right: 4rem;
 
-					@media (max-width: $tablet) {
-						gap: 1.25rem;
-						padding-right: 3rem;
+					&:hover > :not(:hover),
+					&:focus > :not(:focus) {
+						--link-opacity: 0.5;
 					}
 
-					.primary-links-w {
-						display: flex;
-						flex-direction: column;
+					li {
+						opacity: var(--link-opacity);
+						transition: opacity 0.05s ease-out;
 
-						&:hover > :not(:hover),
-						&:focus > :not(:focus) {
-							--link-opacity: 0.5;
-						}
-
-						li {
-							opacity: var(--link-opacity);
-							transition: opacity 0.05s ease-out;
-
-							&:nth-child(1),
-							&:nth-child(2) {
-								padding-bottom: 0.35rem;
-							}
-						}
-
-						.primary-link {
-							font-size: 3.5rem;
-							cursor: pointer;
-							overflow: hidden;
-							text-align: left;
-
-							@media (max-width: $tablet) {
-								font-size: 3rem;
-							}
-
-							.label {
-								padding-bottom: 0.15rem;
-								pointer-events: none;
-							}
+						&:nth-child(1),
+						&:nth-child(2) {
+							padding-bottom: 0.35rem;
 						}
 					}
 
-					.secondary-links-w {
-						display: grid;
-						grid-template-columns: 1fr 1fr;
-						grid-auto-flow: row;
-						-moz-column-gap: 4rem;
-						column-gap: 4rem;
+					.primary-link {
+						font-size: 3.5rem;
+						cursor: pointer;
+						overflow: hidden;
+						text-align: left;
+
+						@media (max-width: $tablet) {
+							font-size: 3rem;
+						}
+
+						.label {
+							padding-bottom: 0.15rem;
+							pointer-events: none;
+						}
 					}
+				}
 
-					.streaming-links-w,
-					.social-links-w {
-						.secondary-link {
-							font-size: 1rem;
-							letter-spacing: 0.01em;
-							color: var(--text);
-							position: relative;
-							cursor: pointer;
-							overflow: hidden;
-							transition: opacity 0.05s ease-out;
-							opacity: 0.6;
+				.secondary-links-w {
+					display: grid;
+					grid-template-columns: 1fr 1fr;
+					grid-auto-flow: row;
+					-moz-column-gap: 4rem;
+					column-gap: 4rem;
+				}
 
-							&:hover,
-							&:focus {
-								opacity: 1;
-							}
+				.streaming-links-w,
+				.social-links-w {
+					.secondary-link {
+						font-size: 1rem;
+						letter-spacing: 0.01em;
+						color: var(--text);
+						position: relative;
+						cursor: pointer;
+						overflow: hidden;
+						transition: opacity 0.05s ease-out;
+						opacity: 0.6;
 
-							.label {
-								padding: 0.45rem 0;
-								pointer-events: none;
-							}
+						&:hover,
+						&:focus {
+							opacity: 1;
+						}
+
+						.label {
+							padding: 0.45rem 0;
+							pointer-events: none;
 						}
 					}
 				}
 			}
 		}
+	}
 
-		.menu-footer {
-			display: flex;
-			justify-content: space-between;
-			padding: 0 var(--page-margin) 2.25rem;
-		}
-	</style>
-</div>
+	.menu-footer {
+		display: flex;
+		justify-content: space-between;
+		padding: 0 var(--page-margin) 2.25rem;
+	}
+</style>
