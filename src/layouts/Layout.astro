@@ -28,7 +28,7 @@ const { title, compactNavBar } = Astro.props;
 
 	<body>
 		{compactNavBar ? <Navigation mobileOnDesktop /> : <Navigation />}
-		<main>
+		<main class="hidden">
 			<slot />
 			<FooterSection />
 		</main>
@@ -38,10 +38,66 @@ const { title, compactNavBar } = Astro.props;
 			import "../scripts/init.js";
 			import { initSnipcart } from "../scripts/snipcart";
 			initSnipcart();
+
+			// Page Transitions
+			const mainContent = document.querySelector("main")!;
+			const nav = document.querySelector("nav");
+
+			// On Page Transition Out
+			document.addEventListener("DOMContentLoaded", function () {
+				// Initial Pageload
+				setTimeout(() => {
+					mainContent.classList.remove("hidden");
+				}, 100);
+
+				document.querySelectorAll("a").forEach(function (link) {
+					link.addEventListener("click", function (e) {
+						const targetElement =
+							e.target instanceof Element ? e.target : null;
+						if (
+							link.hostname === window.location.hostname &&
+							!link.hash &&
+							link.target !== "_blank" &&
+							targetElement &&
+							!targetElement.closest(".release-card")
+						) {
+							e.preventDefault();
+							const destination = link.href;
+							mainContent.classList.add("transition-out");
+
+							// List for the transition to complete before redirecting
+							mainContent.addEventListener(
+								"transitionend",
+								function onAnimationEnd() {
+									window.location.href = destination;
+									mainContent.removeEventListener(
+										"transitionend",
+										onAnimationEnd
+									);
+								}
+							);
+						}
+					});
+				});
+			});
 		</script>
 		<style is:global lang="scss">
 			@use "../styles/vars" as *;
 			@import "/src/styles/global.scss";
+
+			main {
+				transition: 0.8s cubic-bezier(0.58, 0.21, 0, 0.96);
+
+				&.transition-out {
+					opacity: 0;
+					transform: translateY(-1rem);
+				}
+
+				&.hidden {
+					opacity: 0;
+					transform: translateY(1rem);
+				}
+			}
 		</style>
 	</body>
 </html>

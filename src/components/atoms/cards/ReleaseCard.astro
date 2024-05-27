@@ -56,7 +56,6 @@ const ariaLabel = `Learn more about ${release.title}`;
 		border-radius: var(--radius-small);
 		overflow: clip;
 		padding: 1.375rem 1.25rem;
-		transition: all 0.5s;
 		transform: translate(0);
 
 		.desc-w,
@@ -146,8 +145,9 @@ const ariaLabel = `Learn more about ${release.title}`;
 			z-index: 1;
 			-o-object-fit: cover;
 			object-fit: cover;
-			scale: 1.025;
-			transition: scale 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
+			scale: 1.02;
+			transition: scale 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+			will-change: transform;
 		}
 
 		.bg-tint {

@@ -1,50 +1,52 @@
 ---
 interface Props {
-  animateHover?: boolean;
-  [key: string]: any;
+	animateHover?: boolean;
+	[key: string]: any;
 }
 
 const { animateHover, ...attributes } = Astro.props as Props;
 ---
 
 <div class={`divider ${animateHover ? "animate-hover" : ""}`} {...attributes}>
-  <div class="divider_fill"></div>
-  <div class="divider_bg"></div>
+	<div class="divider-fill"></div>
+	<div class="divider-bg"></div>
 </div>
 
 <style lang="scss">
-  body {
-      --divider-fill: 0%;
-      --divider-fill-speed: 0.5s;
-  }
+	body {
+		--divider-fill: 0%;
+		--divider-fill-speed: 0.5s;
+	}
 
-  .divider {
-    z-index: 5;
-    height: 1px;
-    position: relative;
+	.divider {
+		z-index: 5;
+		height: 1px;
+		position: relative;
 
-    .divider_bg {
-      width: 100%;
-      height: 1px;
-      background-color: var(--divider-partial);
-      position: absolute;
-      top: 0%;
-      bottom: auto;
-      left: 0%;
-      right: 0%;
-    }
+		.divider-bg {
+			width: 100%;
+			height: 1px;
+			background-color: var(--divider-partial);
+			position: absolute;
+			top: 0%;
+			bottom: auto;
+			left: 0%;
+			right: 0%;
+			will-change: width;
+		}
 
-    .divider_fill {
-      width: var(--divider-fill);
-      height: 1px;
-      background-color: var(--divider-full);
-      position: absolute;
-      top: 0%;
-      bottom: auto;
-      left: 0%;
-      right: 0%;
-      transition: width var(--divider-fill-speed) cubic-bezier(0.24,0.98,0.36,1);
-    }
-  }
-      
+		.divider-fill {
+			width: var(--divider-fill);
+			height: 1px;
+			background-color: var(--divider-full);
+			position: absolute;
+			top: 0%;
+			bottom: auto;
+			left: 0%;
+			right: 0%;
+			will-change: width;
+			transition: width var(--divider-fill-speed)
+				cubic-bezier(0.24, 0.98, 0.36, 1);
+		}
+	}
 </style>

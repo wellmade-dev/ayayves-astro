@@ -7,7 +7,7 @@ export function initSnipcart() {
 		publicApiKey: PUBLIC_SNIPCART_API_KEY,
 		loadCSS: false,
 		loadStrategy: "on-user-interaction",
-		templatesUrl: "/SnipcartTemplates.html",
+		templatesUrl: "/snipcart-templates.html",
 	};
 
 	(function () {

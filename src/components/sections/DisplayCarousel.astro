@@ -4,105 +4,167 @@ import ProductSlider from "../atoms/carousels/ProductSlider.astro";
 import CarouselArrows from "../atoms/carousels/CarouselArrows.astro";
 
 interface Props {
-  headingFirst: string;
-  headingSecond: string;
+	headingFirst: string;
+	headingSecond: string;
 }
 
 const { headingFirst, headingSecond } = Astro.props;
 ---
 
 <section class="display-carousel-section">
-  <div class="heading-marquee-w">
-    <HeadingMarquee firstString={headingFirst} secondString={headingSecond} />
-  </div>
-  <div class="carousel-w">
-    <slot />
-    <div class="arrow-counter-w">
-      <CarouselArrows />
-      <div hide-mobile="true" class="counter"></div>
-    </div>
-  </div>
+	<div class="heading-marquee-w">
+		<HeadingMarquee
+			firstString={headingFirst}
+			secondString={headingSecond}
+		/>
+	</div>
+	<div class="carousel-w">
+		<slot />
+		<div class="arrow-counter-w">
+			<CarouselArrows />
+			<div hide-mobile="true" class="counter"></div>
+		</div>
+	</div>
 </section>
 
 <style lang="scss">
-  @use "../../styles/vars" as *;
+	@use "../../styles/vars" as *;
 
-  .display-carousel-section {
-    width: 100%;
-    min-height: 100lvh;
-    overflow: clip;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+	.display-carousel-section {
+		width: 100%;
+		min-height: 100lvh;
+		overflow: clip;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 
-    /* Padding Bottom is to Visually Center Content */
-    padding-bottom: 11vw;
+		/* Padding Bottom is to Visually Center Content */
+		padding-bottom: 11vw;
 
-    @media (max-width: $mobile) {
-      padding-top: $navheight;
-      overflow: clip;
-    }
+		@media (max-width: $mobile) {
+			padding-top: $navheight;
+			overflow: clip;
+		}
 
-    .heading-marquee-w {
-      margin-top: 5vw;
+		.heading-marquee-w {
+			margin-top: 5vw;
 
-      @media (max-width: $mobile) {
-        margin-top: 0;
-        position: sticky;
-        top: 5rem;
-      }
-    }
+			@media (max-width: $mobile) {
+				margin-top: 0;
+				position: sticky;
+				top: 5rem;
+			}
+		}
 
-    .carousel-w {
-      margin-top: -5vw;
-      padding: 0 var(--page-margin);
+		.carousel-w {
+			margin-top: -5vw;
+			padding: 0 var(--page-margin);
 
-      @media (max-width: $mobile) {
-        margin-top: -3.5vw;
-      }
-    }
+			@media (max-width: $mobile) {
+				margin-top: -3.5vw;
+			}
+		}
 
-    .arrow-counter-w {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 2.5rem;
+		.arrow-counter-w {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			padding-top: 2.5rem;
 
-      .counter {
-        font-size: 1.25rem;
-        letter-spacing: 0;
-        font-family: var(--editorial-old);
-        font-weight: 300;
-        padding-bottom: 0.25rem;
-        width: unset;
-      }
-    }
+			.counter {
+				font-size: 1.25rem;
+				letter-spacing: 0;
+				font-family: var(--editorial-old);
+				font-weight: 300;
+				padding-bottom: 0.25rem;
+				width: unset;
+			}
+		}
 
-    &.section-release-archive {
-      .release-slider {
-        margin-top: -5vw;
-        padding: 0 var(--page-margin);
+		&.section-release-archive {
+			.release-slider {
+				margin-top: -5vw;
+				padding: 0 var(--page-margin);
 
-        @media (max-width: $mobile) {
-          margin-top: -3.5vw;
+				@media (max-width: $mobile) {
+					margin-top: -3.5vw;
 
-          .slider-rail {
-            flex-direction: column;
-            gap: var(--page-margin);
-            margin-right: 0;
-          }
+					.slider-rail {
+						flex-direction: column;
+						gap: var(--page-margin);
+						margin-right: 0;
+					}
 
-          .carousel-w {
-            padding-bottom: 0rem;
-            height: unset;
-            width: 100%;
-            padding-right: 0;
-            box-shadow: 0 1rem 6rem 0 rgba(0, 0, 0, 0.25);
-          }
-        }
-      }
-    }
-  }
+					.carousel-w {
+						padding-bottom: 0rem;
+						height: unset;
+						width: 100%;
+						padding-right: 0;
+						box-shadow: 0 1rem 6rem 0 rgba(0, 0, 0, 0.25);
+					}
+				}
+			}
+		}
+	}
 </style>
+
+<script>
+	import gsap from "gsap";
+
+	const section = document.querySelector(
+		".display-carousel-section"
+	)! as HTMLElement;
+	const productCards = section.querySelectorAll(".product-card");
+	const catalogueCards = section.querySelectorAll(".release-card");
+
+	const tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: section,
+			start: "top 90%",
+			end: "bottom 10%",
+			once: true,
+		},
+	});
+
+	if (productCards) {
+		gsap.set(productCards, {
+			y: "1.5rem",
+			opacity: 0,
+		});
+
+		function animateProductCards() {
+			gsap.to(productCards, {
+				duration: 0.5,
+				y: 0,
+				opacity: 1,
+				stagger: {
+					each: 0.25,
+				},
+			});
+		}
+
+		tl.add(animateProductCards, 0.3);
+	}
+
+	if (catalogueCards) {
+		gsap.set(catalogueCards, {
+			y: "1.5rem",
+			opacity: 0,
+		});
+
+		function animateCatalogueCards() {
+			gsap.to(catalogueCards, {
+				duration: 0.5,
+				y: 0,
+				opacity: 1,
+				stagger: {
+					each: 0.15,
+				},
+			});
+		}
+
+		tl.add(animateCatalogueCards, 0.3);
+	}
+</script>

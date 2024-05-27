@@ -61,7 +61,7 @@ export function validateForm(form: HTMLFormElement) {
 	submitButton.disabled = !isValid;
 }
 
-export function handleFormError(error: Error, errorCount: number) {
+/* export function handleFormError(error: Error, errorCount: number) {
 	let errorMessage;
 
 	if (errorCount >= 1) {
@@ -77,4 +77,4 @@ export function handleFormError(error: Error, errorCount: number) {
 	displayModalMessage(errorMessage, "error");
 
 	return errorCount + 1; // Return the incremented errorCount
-}
+} */

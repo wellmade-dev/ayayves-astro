@@ -5,169 +5,176 @@ import Divider from "../Divider.astro";
 import ButtonDisplaySecondary from "../buttons/ButtonDisplaySecondary.astro";
 
 interface Props {
-  product: ProductData;
-  fullWidthOnMobile?: boolean;
+	product: ProductData;
+	fullWidthOnMobile?: boolean;
 }
 
 const { product, fullWidthOnMobile } = Astro.props as Props;
 const ariaLabel = `Learn more about ${product.name}`;
 ---
 
-<div class={`product-card ${fullWidthOnMobile ? "full-width" : ""}`}>
-  <div class="info-w">
-    <div class="desc-w">
-      <a class="heading" aria-label={ariaLabel} href=`/products/${product.slug}`
-        >{product.name}</a
-      >
-      <div class="divider-w">
-        <Divider />
-      </div>
-      <div class="meta-w">
-        <div class="heading-300">{product.collection}</div>
-        <div class="p1">{product.short_description}</div>
-      </div>
-    </div>
-    <div class="button-w">
-      <ButtonDisplaySecondary
-        label="Shop"
-        ariaLabel={ariaLabel}
-        href=`/products/${product.slug}`
-      />
-    </div>
-  </div>
-  <a class="img-w" aria-label={ariaLabel} href=`/products/${product.slug}`>
-    <ImageWellmade image={product.image} sizes="360px" /></a
-  >
-</div>
+<a
+	class={`product-card ${fullWidthOnMobile ? "full-width" : ""}`}
+	aria-label={ariaLabel}
+	href=`/products/${product.slug}`
+>
+	<div class="info-w">
+		<div class="desc-w">
+			<div class="heading">
+				{product.name}
+			</div>
+			<div class="divider-w">
+				<Divider />
+			</div>
+			<div class="meta-w">
+				<div class="heading-300">{product.collection}</div>
+				<div class="p1">{product.short_description}</div>
+			</div>
+		</div>
+		<div class="button-w">
+			<ButtonDisplaySecondary label="Shop" elementType="div" />
+		</div>
+	</div>
+	<div class="img-w">
+		<ImageWellmade image={product.image} sizes="360px" />
+	</div>
+</a>
 
 <style lang="scss">
-  @use "../../../styles/vars" as *;
+	@use "../../../styles/vars" as *;
 
-  .product-card {
-    gap: 1.5rem;
-    background-color: var(--card-bg);
-    border-radius: var(--radius-small);
-    padding: 1.75rem;
-    display: grid;
-    grid-template-columns: 1fr 1.05fr;
-    height: 100%;
-    width: 44.5rem;
-    backdrop-filter: var(--glass-blur);
+	.product-card {
+		gap: 1.5rem;
+		background-color: var(--card-bg);
+		border-radius: var(--radius-small);
+		padding: 1.75rem;
+		display: grid;
+		grid-template-columns: 1fr 1.05fr;
+		height: 100%;
+		width: 44.5rem;
+		backdrop-filter: var(--glass-blur);
+		transition: background-color 0.25s;
 
-    @media (max-width: $tablet) {
-      width: 40rem;
-      padding: 1.5rem;
-    }
+		&:hover {
+			background-color: var(--card-bg-hover);
+		}
 
-    @media (max-width: $phablet) {
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 1rem;
-      justify-content: flex-end;
-      width: 80vw;
-      max-width: 20rem;
-      padding: 1.25rem 1.25rem 1.5rem;
-    }
+		@media (max-width: $tablet) {
+			width: 40rem;
+			padding: 1.5rem;
+		}
 
-    @media (max-width: $mobile) {
-      &.full-width {
-        max-width: unset;
-        width: 100%;
-      }
-    }
+		@media (max-width: $phablet) {
+			display: flex;
+			flex-direction: column-reverse;
+			gap: 1rem;
+			justify-content: flex-end;
+			width: 80vw;
+			max-width: 20rem;
+			padding: 1.25rem 1.25rem 1.5rem;
+		}
 
-    .heading {
-      font-family: var(--editorial-old);
-      font-size: 2.5rem;
-      font-weight: 200;
-      line-height: 1;
-      letter-spacing: -0.01em;
-      text-wrap: pretty;
+		@media (max-width: $mobile) {
+			&.full-width {
+				max-width: unset;
+				width: 100%;
+			}
+		}
 
-      @media (max-width: $phablet) {
-        font-size: 1.825rem;
-        letter-spacing: 0.01em;
-        line-height: 1.1;
-      }
-    }
+		.heading {
+			font-family: var(--editorial-old);
+			font-size: 2.5rem;
+			font-weight: 200;
+			line-height: 1;
+			letter-spacing: -0.01em;
+			text-wrap: pretty;
 
-    .divider-w {
-      @media (max-width: $phablet) {
-        display: none;
-      }
-    }
-    .button-w {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      @media (max-width: $phablet) {
-        display: none;
-      }
-    }
+			@media (max-width: $phablet) {
+				font-size: 1.825rem;
+				letter-spacing: 0.01em;
+				line-height: 1.1;
+			}
+		}
 
-    .info-w {
-      flex-direction: column;
-      display: flex;
-      height: 100%;
+		.divider-w {
+			@media (max-width: $phablet) {
+				display: none;
+			}
+		}
+		.button-w {
+			display: flex;
+			align-items: flex-start;
+			justify-content: flex-start;
+			@media (max-width: $phablet) {
+				display: none;
+			}
+		}
 
-      @media (max-width: $phablet) {
-        height: auto;
-        padding: 0 0.125rem;
-      }
-    }
+		.info-w {
+			flex-direction: column;
+			display: flex;
+			height: 100%;
 
-    .desc-w {
-      gap: 1.25rem;
-      flex-direction: column;
-      display: flex;
-      height: 100%;
+			@media (max-width: $phablet) {
+				height: auto;
+				padding: 0 0.125rem;
+			}
+		}
 
-      @media (max-width: $phablet) {
-        gap: 0.625rem;
+		.desc-w {
+			gap: 1.25rem;
+			flex-direction: column;
+			display: flex;
+			height: 100%;
 
-        .divider {
-          display: none;
-        }
+			@media (max-width: $phablet) {
+				gap: 0.625rem;
 
-        .heading-300 {
-          display: none;
-        }
-      }
-    }
+				.divider {
+					display: none;
+				}
 
-    .meta-w {
-      display: flex;
-      gap: 0.25rem;
-      flex-direction: column;
-    }
+				.heading-300 {
+					display: none;
+				}
+			}
+		}
 
-    .button--display.secondary {
-      margin-top: 3.5rem;
-      flex-shrink: 0;
+		.meta-w {
+			display: flex;
+			gap: 0.25rem;
+			flex-direction: column;
+		}
 
-      @media (max-width: $phablet) {
-        display: none;
-      }
-    }
+		.button--display.secondary {
+			margin-top: 3.5rem;
+			flex-shrink: 0;
 
-    .img-w {
-      background-color: var(--highlight);
-      border-radius: var(--radius-small);
-      aspect-ratio: 1 / 1.4;
-      justify-content: center;
-      align-items: center;
-      overflow: clip;
+			@media (max-width: $phablet) {
+				display: none;
+			}
+		}
 
-      @media (max-width: $phablet) {
-        aspect-ratio: 1 / 1.3;
-      }
+		.img-w {
+			background-color: var(--highlight);
+			border-radius: var(--radius-small);
+			aspect-ratio: 1 / 1.4;
+			justify-content: center;
+			align-items: center;
+			overflow: clip;
 
-      img {
-        width: 100%;
-        height: 100%;
-        max-width: none;
-        filter: drop-shadow(0.1rem 0.5rem 0.5rem var(--almost-black-10));
-      }
-    }
-  }
+			@media (max-width: $phablet) {
+				aspect-ratio: 1 / 1.3;
+			}
+
+			img {
+				width: 100%;
+				height: 100%;
+				max-width: none;
+				filter: drop-shadow(
+					0.1rem 0.5rem 0.5rem var(--almost-black-10)
+				);
+			}
+		}
+	}
 </style>

@@ -33,13 +33,6 @@ function initGSAPLenis() {
 
 initGSAPLenis();
 
-const cartButtons = document.querySelectorAll("button[data-modal=cart]");
-cartButtons?.forEach((cartButton) => {
-	cartButton.addEventListener("click", () => {
-		Snipcart.api.theme.cart.open();
-	});
-});
-
 export const easingSmall = CustomEase.create(
 	"custom",
 	"M0,0 C0.288,0 0.199,0.599 0.4,0.8 0.609,1.011 0.898,1 1,1 "

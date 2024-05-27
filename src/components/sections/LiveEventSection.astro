@@ -104,6 +104,7 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
         width: 100%;
         -o-object-fit: cover;
         object-fit: cover;
+        will-transform: transform;
       }
   }
 
@@ -192,5 +193,10 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
 
 <script>
   import { imageParallax } from "../../scripts/animations";
-  imageParallax(document.querySelector(".section-events img"), "top bottom", "bottom top", "0%", "30%",);
+
+  function initLiveEventSection() {
+    imageParallax(document.querySelector(".section-events img"), "top bottom", "bottom top", "0%", "30%",);
+  }
+  initLiveEventSection();
+  
 </script>

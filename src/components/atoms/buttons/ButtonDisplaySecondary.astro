@@ -1,24 +1,67 @@
 ---
 import StarSVG from "../svgs/StarSVG.astro";
 
-interface Props {
+interface CommonProps {
 	label: string;
+	ariaLabel?: string;
+	href?: string;
+}
+
+interface ButtonProps extends CommonProps {
+	elementType: "button";
+	ariaLabel: string;
+}
+
+interface LinkProps extends CommonProps {
+	elementType: "link";
 	ariaLabel: string;
 	href: string;
 }
 
-const { label, ariaLabel, href } = Astro.props;
+interface DivProps extends CommonProps {
+	elementType: "div";
+}
+
+type Props = ButtonProps | LinkProps | DivProps;
+
+const { label, ariaLabel, href, elementType } = Astro.props as Props;
 ---
 
-<a class="button--display secondary" aria-label={ariaLabel} href={href}>
-	<div class="star-w">
-		<StarSVG width="0.75rem" />
-	</div>
-	<div class="label">{label}</div>
-	<div class="star-w">
-		<StarSVG width="0.75rem" />
-	</div>
-</a>
+{
+	elementType === "button" ? (
+		<button class="button--display secondary" aria-label={ariaLabel}>
+			<span>
+				<div class="star-w">
+					<StarSVG width="0.75rem" />
+				</div>
+				<div class="label">{label}</div>
+				<div class="star-w">
+					<StarSVG width="0.75rem" />
+				</div>
+			</span>
+		</button>
+	) : elementType === "div" ? (
+		<div class="button--display secondary">
+			<div class="star-w">
+				<StarSVG width="0.75rem" />
+			</div>
+			<div class="label">{label}</div>
+			<div class="star-w">
+				<StarSVG width="0.75rem" />
+			</div>
+		</div>
+	) : (
+		<a class="button--display secondary" aria-label={ariaLabel} href={href}>
+			<div class="star-w">
+				<StarSVG width="0.75rem" />
+			</div>
+			<div class="label">{label}</div>
+			<div class="star-w">
+				<StarSVG width="0.75rem" />
+			</div>
+		</a>
+	)
+}
 
 <style lang="scss">
 	$padding: 0.1rem;

@@ -10,126 +10,133 @@ const imageSecond = createImageObject(objects.doublecard_image_second);
 ---
 
 <section id="section-doublecard">
-  <div class="card-w">
-    <div class="card">
-      <ImageWellmade image={imageFirst} sizes="60vw" />
-    </div>
-    <div class="card">
-      <ImageWellmade image={imageSecond} sizes="50vw" />
-    </div>
-  </div>
+	<div class="card-w">
+		<div class="card">
+			<ImageWellmade image={imageFirst} sizes="60vw" />
+		</div>
+		<div class="card">
+			<ImageWellmade image={imageSecond} sizes="50vw" />
+		</div>
+	</div>
 </section>
 
 <style lang="scss">
-  @use "../../styles/vars" as *;
+	@use "../../styles/vars" as *;
 
-  #section-doublecard {
-    margin: 0 auto;
-    padding: 0 calc(2 * var(--page-margin)) 20vw;
+	#section-doublecard {
+		margin: 0 auto;
+		padding: 0 calc(2 * var(--page-margin)) 20vw;
 
-    @media (max-width: $phablet) {
-      padding: 0 var(--page-margin) 20vw;
-    }
+		@media (max-width: $phablet) {
+			padding: 0 var(--page-margin) 20vw;
+		}
 
-    .card-w {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: center;
-      container-type: inline-size;
-    }
+		.card-w {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			justify-content: center;
+			container-type: inline-size;
+		}
 
-    .card {
-      --firstWidth: 60cqw;
-      --negativeMargin: -9cqw;
-      --secondWidth: calc(100cqw - var(--firstWidth) - var(--negativeMargin));
-      width: var(--firstWidth);
-      overflow: clip;
-      position: relative;
-      aspect-ratio: 1 / 1.35;
-      flex: none;
-      border-radius: var(--radius-medium);
-      align-self: start;
-      margin-bottom: -10vw;
+		.card {
+			--firstWidth: 60cqw;
+			--negativeMargin: -9cqw;
+			--secondWidth: calc(
+				100cqw - var(--firstWidth) - var(--negativeMargin)
+			);
+			width: var(--firstWidth);
+			overflow: clip;
+			position: relative;
+			aspect-ratio: 1 / 1.35;
+			flex: none;
+			border-radius: var(--radius-medium);
+			align-self: start;
+			margin-bottom: -10vw;
+			will-change: transform;
 
-      &:nth-child(1) {
-        img {
-          top: auto;
-          bottom: 0;
-          height: 110%;
-        }
+			&:nth-child(1) {
+				img {
+					top: auto;
+					bottom: 0;
+					height: 110%;
+					will-change: transform;
+				}
 
-        @media (max-width: $phablet) {
-          --firstWidth: 70cqw;
-        }
-      }
+				@media (max-width: $phablet) {
+					--firstWidth: 70cqw;
+				}
+			}
 
-      &:nth-child(2) {
-        width: var(--secondWidth);
-        aspect-ratio: 1 / 1.3;
-        align-self: end;
+			&:nth-child(2) {
+				width: var(--secondWidth);
+				aspect-ratio: 1 / 1.3;
+				align-self: end;
 
-        @media (max-width: $tablet) {
-          --negativeMargin: -16cqw;
-        }
+				@media (max-width: $tablet) {
+					--negativeMargin: -16cqw;
+				}
 
-        @media (max-width: $phablet) {
-          --negativeMargin: -22cqw;
-        }
+				@media (max-width: $phablet) {
+					--negativeMargin: -22cqw;
+				}
 
-        @media (max-width: $mobile) {
-          --negativeMargin: -22cqw;
-        }
-      }
+				@media (max-width: $mobile) {
+					--negativeMargin: -22cqw;
+				}
+			}
 
-      img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
+			img {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
 </style>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-  import { imageParallax } from "../../scripts/animations";
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+	import { imageParallax } from "../../scripts/animations";
 
-  gsap.registerPlugin(ScrollTrigger);
+	function initDoubleCardSection() {
+		gsap.registerPlugin(ScrollTrigger);
 
-  function initDoubleCardSection() {
-    const doublecardSection =
-      document.getElementById("section-doublecard");
+		const doublecardSection = document.getElementById("section-doublecard");
 
-    if (doublecardSection) {
-      const cards = doublecardSection.querySelectorAll<HTMLElement>(".card");
-      const firstImage =
-        doublecardSection.querySelector<HTMLImageElement>("img");
+		if (doublecardSection) {
+			const cards =
+				doublecardSection.querySelectorAll<HTMLElement>(".card");
+			const firstImage =
+				doublecardSection.querySelector<HTMLImageElement>("img");
 
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: doublecardSection,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        })
+			gsap.timeline({
+				scrollTrigger: {
+					trigger: doublecardSection,
+					start: "top bottom",
+					end: "bottom top",
+					scrub: true,
+				},
+			})
 
-        .fromTo(cards[0], { y: "10%" }, { y: "0%", ease: "none" }, "start")
-        .fromTo(
-          cards[1],
-          { y: "0%" },
-          { y: "-60%", ease: "power1.in" },
-          "start"
-        );
+				.fromTo(
+					cards[0],
+					{ y: "10%" },
+					{ y: "0%", ease: "none" },
+					"start"
+				)
+				.fromTo(
+					cards[1],
+					{ y: "0%" },
+					{ y: "-60%", ease: "power1.in" },
+					"start"
+				);
 
-      imageParallax(firstImage, "top bottom", "bottom top", "0%", "10%");
-    }
-  }
-
-  initDoubleCardSection();
+			imageParallax(firstImage, "top bottom", "bottom top", "0%", "10%");
+		}
+	}
+	initDoubleCardSection();
 </script>
