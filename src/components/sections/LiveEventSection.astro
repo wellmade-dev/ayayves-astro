@@ -169,7 +169,7 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
 
         .heading-400, .heading-500 {
           opacity: var(--text-opacity);
-          transition: all 0.4s ease;
+          transition: opacity 0.4s ease;
         }
 
         @container (max-width: 30rem) {
@@ -192,11 +192,88 @@ const events = activeEvents.concat(inactiveEvents.slice(0, displayInactiveCount)
 </style>
 
 <script>
+  import gsap from "gsap";
   import { imageParallax } from "../../scripts/animations";
 
   function initLiveEventSection() {
     imageParallax(document.querySelector(".section-events img"), "top bottom", "bottom top", "0%", "30%",);
   }
   initLiveEventSection();
+
+  const liveEventSection = document.querySelector(".section-events")!;
+  const eventsWrapper = liveEventSection.querySelector(".events_info-w")!;
+  const eventItems = liveEventSection.querySelectorAll(".event-item")!;
+
+  eventItems.forEach(item => {
+    const eventInner = item.querySelector(".event-item-inner")!;
+    const innerElements = Array.from(eventInner.children);
+    const dividerBackground = item.querySelector(".divider-bg")!;
+    const dividerFill = item.querySelector(".divider-fill")!;
+    
+    gsap.set(innerElements, {
+      y: "0.5rem",
+      opacity: 0,
+    });
+    
+    gsap.set(dividerBackground, {
+      width: 0,
+    });
+
+    gsap.set(dividerFill, {
+      display: "none",
+    })
+  });
+
+  // Animate Events
+  function animateEvents() {
+    gsap.to(eventItems, {
+      stagger: {
+        each: 0.2,
+        onStart: function(this: any) {
+          const target = this.targets()[0];
+          const eventInner = target.querySelector(".event-item-inner")!;
+          const innerElements = Array.from(eventInner.children) as HTMLElement[];
+          const dividerBackground = target.querySelector(".divider-bg")!;
+          const dividerFill = target.querySelector(".divider-fill")!;
+          
+          gsap.to(innerElements, {
+            duration: 0.5,
+            opacity: 1,
+            y: 0,
+            stagger: {
+              each: 0.15
+            },
+            onComplete: () => {
+              innerElements.forEach(element => {
+                element.removeAttribute('style');
+              })
+            }
+          });
+          
+          gsap.to(dividerBackground, {
+            width: "100%",
+            duration: 0.5,
+            onComplete: () => {
+              gsap.set(dividerFill, {
+                display: "block"
+              })
+            }
+          });
+        }
+      }
+    })
+  }
+
+  // Setup GSAP Timeline
+  const tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: eventsWrapper,
+			start: "top 90%",
+			end: "bottom 10%",
+			once: true,
+		},
+	});
+
+  tl.add(animateEvents, 0.2);
   
 </script>
