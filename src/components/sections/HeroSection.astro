@@ -361,121 +361,129 @@ const release = await fetchHeroRelease();
   }
   initHeroSection();
 
-
   function animateHeroSection() {
-  // Setup Heading for Animation 
-  const heading = heroSection.querySelector("h2")!;
-  const splitHeading = SplitType.create(heading);
-  gsap.set(splitHeading.words, {
-		y: "0.75rem",
-		opacity: 0,
-	});
+    const homepageVisited = sessionStorage.getItem("homepageVisited");
 
-  function animateHeading() {
-    gsap.to(splitHeading.words, {
-      duration: 0.9,
-      y: 0,
-      opacity: 1,
-      ease: easingSmall,
-      stagger: {
-        each: 0.2
+    if (!homepageVisited) {
+      // Setup Heading for Animation 
+      const heading = heroSection.querySelector("h2")!;
+      const splitHeading = SplitType.create(heading);
+      gsap.set(splitHeading.words, {
+        y: "0.75rem",
+        opacity: 0,
+      });
+
+      function animateHeading() {
+        gsap.to(splitHeading.words, {
+          duration: 0.9,
+          y: 0,
+          opacity: 1,
+          ease: easingSmall,
+          stagger: {
+            each: 0.2
+          }
+        })
       }
-    })
-  }
 
-  // Setup Divider for Animation
-  const divider = heroSection.querySelector(".divider-bg")! as HTMLElement;
-  gsap.set(divider, {
-    width: 0,
-  });
+      
 
-  function animateDivider() {
-    gsap.to(divider, {
-      duration: 1.5,
-      width: "100%",
-      ease: easingLarge,
-    })
-  }
+      // Setup Divider for Animation
+      const divider = heroSection.querySelector(".divider-bg")! as HTMLElement;
+      gsap.set(divider, {
+        width: 0,
+      });
 
-  // Setup Supporting Info for Animation
-  const metaWrapper = heroSection.querySelector(".meta-w")!;
-  const metaWrapperItems = metaWrapper.querySelectorAll("div")!;
-  gsap.set(metaWrapperItems, {
-    y: "0.5rem",
-    opacity: 0,
-  });
-
-  function animateMetaWrapper() {
-    gsap.to(metaWrapperItems, {
-      duration: 0.8,
-      y: 0,
-      opacity: 1,
-      ease: easingSmall,
-      stagger: {
-        each: 0.3
+      function animateDivider() {
+        gsap.to(divider, {
+          duration: 1.5,
+          width: "100%",
+          ease: easingLarge,
+        })
       }
-    })
-  }
 
-  // Setup Button for Animation
-  const button = heroSection.querySelector('.button--display')! as HTMLElement;
-  gsap.set(button, {
-    opacity: 0
-  })
+      // Setup Supporting Info for Animation
+      const metaWrapper = heroSection.querySelector(".meta-w")!;
+      const metaWrapperItems = metaWrapper.querySelectorAll("div")!;
+      gsap.set(metaWrapperItems, {
+        y: "0.5rem",
+        opacity: 0,
+      });
 
-  function animateButton() {
-    gsap.to(button, {
-      y: 0,
-      opacity: 1,
-      duration: 0.15,
-    })
-  }
+      function animateMetaWrapper() {
+        gsap.to(metaWrapperItems, {
+          duration: 0.8,
+          y: 0,
+          opacity: 1,
+          ease: easingSmall,
+          stagger: {
+            each: 0.3
+          }
+        })
+      }
 
-  // Setup Scroll Nudge for Animation
-  const scrollNudge = heroSection.querySelector(".scroll-nudge")! as HTMLElement;
-  const splitScrollNudge = SplitType.create(scrollNudge);
-  gsap.set(splitScrollNudge.words, {
-		y: "0.25rem",
-		opacity: 0,
-	});
+      // Setup Button for Animation
+      const button = heroSection.querySelector('.button--display')! as HTMLElement;
+      gsap.set(button, {
+        opacity: 0
+      })
 
-  function animateScrollNudge() {
-		gsap.to(splitScrollNudge.words, {
-			duration: 1.5,
-			y: 0,
-			opacity: 1,
-      ease: easingSmall,
-			stagger: {
-				each: 0.2,
-			}
-		});
-	}
+      function animateButton() {
+        gsap.to(button, {
+          y: 0,
+          opacity: 1,
+          duration: 0.15,
+        })
+      }
 
-  // Setup GSAP Timeline
-  const tl = gsap.timeline({
-		scrollTrigger: {
-			trigger: heroSection,
-			start: "top 98%",
-			end: "bottom 2%",
-			once: true,
-		},
-	});
+      // Setup Scroll Nudge for Animation
+      const scrollNudge = heroSection.querySelector(".scroll-nudge")! as HTMLElement;
+      const splitScrollNudge = SplitType.create(scrollNudge);
+      gsap.set(splitScrollNudge.words, {
+        y: "0.25rem",
+        opacity: 0,
+      });
 
-  if (window.innerWidth > 991) {
-    // Desktop Layout
-    tl.add(animateHeading, 1);
-    tl.add(animateDivider, 2.25);
-    tl.add(animateMetaWrapper, 3);
-    tl.add(animateButton, 4);
-    tl.add(animateScrollNudge, 4.75);
-  } else {
-    // Tablet/Mobile Layout
-    tl.add(animateHeading, 1);
-    tl.add(animateMetaWrapper, 2.25);
-    tl.add(animateDivider, 3.5);
-    tl.add(animateButton, 4.75);
-    tl.add(animateScrollNudge, 5);
-  }
+      function animateScrollNudge() {
+        gsap.to(splitScrollNudge.words, {
+          duration: 1.5,
+          y: 0,
+          opacity: 1,
+          ease: easingSmall,
+          stagger: {
+            each: 0.2,
+          }
+        });
+      }
+
+      // Setup GSAP Timeline
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSection,
+          start: "top 98%",
+          end: "bottom 2%",
+          once: true,
+        },
+      });
+
+      if (window.innerWidth > 991) {
+        // Desktop Layout
+        tl.add(animateHeading, 1);
+        tl.add(animateDivider, 2.25);
+        tl.add(animateMetaWrapper, 3);
+        tl.add(animateButton, 4);
+        tl.add(animateScrollNudge, 4.75);
+      } else {
+        // Tablet/Mobile Layout
+        tl.add(animateHeading, 1);
+        tl.add(animateMetaWrapper, 2.25);
+        tl.add(animateDivider, 3.5);
+        tl.add(animateButton, 4.75);
+        tl.add(animateScrollNudge, 5);
+      }
+    }
+
+    // Set Session Storage Flag
+    sessionStorage.setItem("homepageVisited", "true");
   }
 
   animateHeroSection();
