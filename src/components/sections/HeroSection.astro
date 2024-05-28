@@ -391,8 +391,9 @@ const release = await fetchHeroRelease();
       });
 
       function animateDivider() {
+        const dividerAnimationSpeed = window.innerWidth / 1120 + 1.2;
         gsap.to(divider, {
-          duration: 1.5,
+          duration: dividerAnimationSpeed,
           width: "100%",
           ease: easingLarge,
         })
@@ -454,7 +455,7 @@ const release = await fetchHeroRelease();
 
       // Hide Scrollnudge on scroll
       function hideScrollNudge() {
-        if (window.scrollY >= 200) {
+        if (window.scrollY >= 400) {
           gsap.to(scrollNudge, {
             opacity: 0,
             duration: 0.5,
@@ -479,9 +480,9 @@ const release = await fetchHeroRelease();
       if (window.innerWidth > 991) {
         // Desktop Layout
         tl.add(animateHeading, 1);
-        tl.add(animateDivider, 2.25);
-        tl.add(animateMetaWrapper, 3);
-        tl.add(animateButton, 4);
+        tl.add(animateDivider, 1.5);
+        tl.add(animateMetaWrapper, 2.25);
+        tl.add(animateButton, 3);
         tl.add(animateScrollNudge, 4.75);
       } else {
         // Tablet/Mobile Layout
