@@ -364,8 +364,7 @@ const release = await fetchHeroRelease();
   function animateHeroSection() {
     const homepageVisited = sessionStorage.getItem("homepageVisited");
 
-    if (!homepageVisited) {
-      // Setup Heading for Animation 
+    // Setup Heading for Animation 
       const heading = heroSection.querySelector("h2")!;
       const splitHeading = SplitType.create(heading);
       gsap.set(splitHeading.words, {
@@ -384,8 +383,6 @@ const release = await fetchHeroRelease();
           }
         })
       }
-
-      
 
       // Setup Divider for Animation
       const divider = heroSection.querySelector(".divider-bg")! as HTMLElement;
@@ -455,6 +452,20 @@ const release = await fetchHeroRelease();
         });
       }
 
+      // Hide Scrollnudge on scroll
+      function hideScrollNudge() {
+        if (window.scrollY >= 200) {
+          gsap.to(scrollNudge, {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+              window.removeEventListener('scroll', hideScrollNudge)
+            }
+          })
+        }
+      }
+      window.addEventListener('scroll', hideScrollNudge)
+
       // Setup GSAP Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -475,17 +486,15 @@ const release = await fetchHeroRelease();
       } else {
         // Tablet/Mobile Layout
         tl.add(animateHeading, 1);
-        tl.add(animateMetaWrapper, 2.25);
-        tl.add(animateDivider, 3.5);
-        tl.add(animateButton, 4.75);
+        tl.add(animateMetaWrapper, 2);
+        tl.add(animateDivider, 2.25);
+        tl.add(animateButton, 3.25);
         tl.add(animateScrollNudge, 5);
       }
-    }
 
     // Set Session Storage Flag
     sessionStorage.setItem("homepageVisited", "true");
   }
-
   animateHeroSection();
 
 </script>
