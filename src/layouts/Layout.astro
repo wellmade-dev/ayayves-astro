@@ -3,29 +3,33 @@ import Navigation from "../components/navigation/Navigation.astro";
 import FooterSection from "../components/sections/FooterSection.astro";
 import ContactModal from "../components/atoms/modals/ContactModal.astro";
 import MailchimpModal from "../components/atoms/modals/MailchimpModal.astro";
+const HOSTNAME = import.meta.env.HOSTNAME;
 
 interface Props {
 	title: string;
+	description: string;
+	slug: string;
+	imageURL: string;
 	compactNavBar?: boolean;
 }
 
-const { title, compactNavBar } = Astro.props;
+const { title, description, slug, imageURL, compactNavBar } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta
-			name="generator"
-			content="width=device-width, initial-scale=1, maximum-scale=1"
-		/>
-		<title>{title}</title>
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={imageURL} />
+		<meta property="og:url" content=`${HOSTNAME}/${slug}` />
+		<meta property="og:type" content="website" />
 	</head>
-
 	<body>
 		{compactNavBar ? <Navigation mobileOnDesktop /> : <Navigation />}
 		<main class="hidden">

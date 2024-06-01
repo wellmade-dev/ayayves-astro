@@ -2,10 +2,17 @@
 import Layout from "../layouts/Layout.astro";
 import DisplayCarousel from "../components/sections/DisplayCarousel.astro";
 import CatalogueSlider from "../components/atoms/carousels/CatalogueSlider.astro";
+import { fetchPageMetaInformation } from "../scripts/fetch";
+const meta = await fetchPageMetaInformation("product-listing-page");
 ---
 
-<Layout title="Catalogue">
-  <DisplayCarousel headingFirst="Catalogue" headingSecond="Discography">
-    <CatalogueSlider isDisplayCarousel />
-  </DisplayCarousel>
+<Layout
+	title="Catalogue"
+	description={meta.description}
+	slug="catalogue"
+	imageURL={meta.imageURL}
+>
+	<DisplayCarousel headingFirst="Catalogue" headingSecond="Discography">
+		<CatalogueSlider isDisplayCarousel />
+	</DisplayCarousel>
 </Layout>

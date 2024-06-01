@@ -7,16 +7,23 @@ import LiveGridSection from "../components/sections/LiveGridSection.astro";
 import LiveEventSection from "../components/sections/LiveEventSection.astro";
 import DoubleCardSection from "../components/sections/DoubleCardSection.astro";
 import CatalogueSection from "../components/sections/CatalogueSection.astro";
+import { fetchPageMetaInformation } from "../scripts/fetch";
+const meta = await fetchPageMetaInformation("homepage");
 ---
 
-<Layout title="Aya Yves">
-  <HeroSection>
-    <CarouselSection title="Support the Art" subtitle="Merch">
-      <ProductSlider />
-    </CarouselSection>
-  </HeroSection>
-  <LiveGridSection />
-  <LiveEventSection />
-  <DoubleCardSection />
-  <CatalogueSection />
+<Layout
+	title="Aya Yves"
+	description={meta.description}
+	slug=""
+	imageURL={meta.imageURL}
+>
+	<HeroSection>
+		<CarouselSection title="Support the Art" subtitle="Merch">
+			<ProductSlider />
+		</CarouselSection>
+	</HeroSection>
+	<LiveGridSection />
+	<LiveEventSection />
+	<DoubleCardSection />
+	<CatalogueSection />
 </Layout>
