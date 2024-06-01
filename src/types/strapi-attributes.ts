@@ -12,7 +12,7 @@ export interface CatalogueData {
 	};
 	releaseType: string;
 	released: boolean;
-	releaseDate: string;
+	releaseDate: number;
 	releaseDatePretty: string;
 	releaseMonth: string;
 	presaveDate?: string;

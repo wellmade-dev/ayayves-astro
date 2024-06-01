@@ -7,9 +7,10 @@ export function initSnipcart() {
 		publicApiKey: PUBLIC_SNIPCART_API_KEY,
 		loadCSS: false,
 		loadStrategy: "on-user-interaction",
-		templatesUrl: "/SnipcartTemplates.html",
+		templatesUrl: "/snipcart-templates.html",
 	};
 
+	// Supplied Snipcart Setup Script
 	(function () {
 		var c, d;
 		(d = (c = window.SnipcartSettings).version) != null ||
@@ -124,10 +125,22 @@ export function initSnipcart() {
 		}
 	})();
 
+	// Add click event listeners to cart buttons
+	function initCartButtons() {
+		const cartButtons = document.querySelectorAll("[data-modal='cart']");
+		cartButtons.forEach((cartButton) => {
+			cartButton.addEventListener("click", () => {
+				Snipcart.api.theme.cart.open();
+			});
+		});
+	}
+
+	// Set the data-theme attribute on Snipcart
 	function setModalTheme() {
 		document.getElementById("snipcart").setAttribute("data-theme", "light");
 	}
 
+	// Set an event listener on backdrop when cart is open
 	function setBackdropEventListeners() {
 		setTimeout(function () {
 			const snipcartContainer = document.getElementById("snipcart");
@@ -168,10 +181,12 @@ export function initSnipcart() {
 		}, 800);
 	}
 
+	// When Snipcart is ready, run configuration scripts
 	document.addEventListener("snipcart.ready", function () {
-		// Add light theming and disable Lenis on cart
+		// Add light theming, init cartButtons, and disable Lenis on cart
 		Snipcart.events.on("snipcart.initialized", function () {
 			setModalTheme();
+			initCartButtons();
 
 			document
 				.getElementById("snipcart")
@@ -281,11 +296,13 @@ export function initSnipcart() {
 	});
 }
 
+// Retrieving & saving item count, and applying to string in cartButtons
 export function updateItemCount() {
 	// Retrieve item count from sessionStorage
 	let itemCount = sessionStorage.getItem("snipcartItemCount");
 	const itemCountWrapper = document.querySelectorAll(".cart-counter-w");
 
+	// Set the item count as string in cartButtons
 	function setItemCounter() {
 		if (itemCount > 0) {
 			itemCountWrapper.forEach((wrapper) => {
@@ -301,10 +318,12 @@ export function updateItemCount() {
 		}
 	}
 
+	// If item count exists in session storage, set as string on cartButtons
 	if (itemCount) {
 		setItemCounter();
 	}
 
+	// Call Snipcart for most up to date count and save to session storage
 	if (window.Snipcart) {
 		// Get the cart item count from Snipcart
 		const newItemCount = Snipcart.store.getState().cart.items.count;

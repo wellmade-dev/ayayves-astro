@@ -26,35 +26,18 @@ const release = await fetchHeroRelease();
     {
       release && release.musicVideo ? (
         <div class="bg-content video-w">
-          {release.keyImage ? (
-            <ImageWellmade
-              image={release.keyImage}
-              sizes="100vw"
-              class="bg-content"
-              eagerLoading
-            />
-          ) : (
-            <ImageWellmade
-              image={release.coverImage}
-              sizes="100vw"
-              class="bg-content"
-              eagerLoading
-            />
-          )}
           <video
-            playsinline
-            loop
-            muted
-            autoplay
-            height="100%"
             preload="auto"
+            loop=""
+            muted="muted"
+            playsinline="playsinline"
+            autoplay=""
+            height="100%"
             style="object-fit: cover;"
             aria-hidden="true"
-            data-src={release.musicVideo}
             class="bg-content"
-          >
-            <source src={release.musicVideo.src} type="video/mp4" />
-          </video>
+            src={release.musicVideo.src}
+          ></video>
         </div>
       ) : release && release.keyImage ? (
         <ImageWellmade
@@ -116,7 +99,7 @@ const release = await fetchHeroRelease();
             />
           )}
           </div>  
-          <div class="p1" data-subtitle style="align-self: center;">
+          <div class="p1 scroll-nudge" data-subtitle style="align-self: center;">
             Scroll to explore
           </div>
         </div>
@@ -170,6 +153,7 @@ const release = await fetchHeroRelease();
         width: 100%;
         height: 100%;
         opacity: 0.3;
+        will-change: opacity;
       }
 
       .bg-content {
@@ -180,6 +164,7 @@ const release = await fetchHeroRelease();
         -o-object-fit: cover;
         object-fit: cover;
         top: 0;
+        will-change: transform;
 
         &.video-w {
           img,
@@ -319,54 +304,198 @@ const release = await fetchHeroRelease();
 
 <script>
   import gsap from "gsap";
+  import SplitType from "split-type";
+  import { easingSmall, easingLarge } from "../../scripts/init";
 
-  const heroSection = document.querySelector('.section-hero');
-  const streamButton = heroSection?.querySelector('button.button--display');
-  const streamModal = heroSection?.querySelector('dialog');
-  
-  if (streamButton) {
-    streamButton.addEventListener("click", () => {
-      streamModal?.showModal();
-    })
-  }
-  
-  // Hero Background Parallax
-  function heroParallax() {
-    const heroSection = document.querySelector(".section-hero");
-    if (heroSection) {
-      const background = heroSection.querySelector(".bg-content");
-      const tint = heroSection.querySelector(".bg-tint");
+  const heroSection = document.querySelector('.section-hero')!;
 
-      if (background) {
-        let heroTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".section-hero",
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
+  function initHeroSection() {
+    const streamButton = heroSection?.querySelector('button.button--display');
+    const streamModal = heroSection?.querySelector('dialog');
+    
+    if (streamButton) {
+      streamButton.addEventListener("click", () => {
+        streamModal?.showModal();
+      })
+    }
+    
+    // Hero Background Parallax
+    function heroParallax() {
+      const heroSection = document.querySelector(".section-hero");
+      if (heroSection) {
+        const background = heroSection.querySelector(".bg-content");
+        const tint = heroSection.querySelector(".bg-tint");
 
-        heroTimeline
-          .to(
-            background,
-            {
-              y: "-25vh",
-              ease: "none",
+        if (background) {
+          let heroTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: ".section-hero",
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
             },
-            0
-          )
-          .to(
-            tint,
-            {
-              opacity: 1,
-              ease: "none",
-              immediateRender: false,
-            },
-            0
-          );
+          });
+
+          heroTimeline
+            .to(
+              background,
+              {
+                y: "-25vh",
+                ease: "none",
+              },
+              0
+            )
+            .to(
+              tint,
+              {
+                opacity: 1,
+                ease: "none",
+                immediateRender: false,
+              },
+              0
+            );
+        }
       }
     }
+    heroParallax();
   }
-  heroParallax();
+  initHeroSection();
+
+  function animateHeroSection() {
+    const homepageVisited = sessionStorage.getItem("homepageVisited");
+
+    // Setup Heading for Animation 
+      const heading = heroSection.querySelector("h2")!;
+      const splitHeading = SplitType.create(heading);
+      gsap.set(splitHeading.words, {
+        y: "0.75rem",
+        opacity: 0,
+      });
+
+      function animateHeading() {
+        gsap.to(splitHeading.words, {
+          duration: 0.9,
+          y: 0,
+          opacity: 1,
+          ease: easingSmall,
+          stagger: {
+            each: 0.2
+          }
+        })
+      }
+
+      // Setup Divider for Animation
+      const divider = heroSection.querySelector(".divider-bg")! as HTMLElement;
+      gsap.set(divider, {
+        width: 0,
+      });
+
+      function animateDivider() {
+        const dividerAnimationSpeed = window.innerWidth / 1120 + 1.2;
+        gsap.to(divider, {
+          duration: dividerAnimationSpeed,
+          width: "100%",
+          ease: easingLarge,
+        })
+      }
+
+      // Setup Supporting Info for Animation
+      const metaWrapper = heroSection.querySelector(".meta-w")!;
+      const metaWrapperItems = metaWrapper.querySelectorAll("div")!;
+      gsap.set(metaWrapperItems, {
+        y: "0.5rem",
+        opacity: 0,
+      });
+
+      function animateMetaWrapper() {
+        gsap.to(metaWrapperItems, {
+          duration: 0.8,
+          y: 0,
+          opacity: 1,
+          ease: easingSmall,
+          stagger: {
+            each: 0.3
+          }
+        })
+      }
+
+      // Setup Button for Animation
+      const button = heroSection.querySelector('.button--display')! as HTMLElement;
+      gsap.set(button, {
+        opacity: 0
+      })
+
+      function animateButton() {
+        gsap.to(button, {
+          y: 0,
+          opacity: 1,
+          duration: 0.15,
+        })
+      }
+
+      // Setup Scroll Nudge for Animation
+      const scrollNudge = heroSection.querySelector(".scroll-nudge")! as HTMLElement;
+      const splitScrollNudge = SplitType.create(scrollNudge);
+      gsap.set(splitScrollNudge.words, {
+        y: "0.25rem",
+        opacity: 0,
+      });
+
+      function animateScrollNudge() {
+        gsap.to(splitScrollNudge.words, {
+          duration: 1.5,
+          y: 0,
+          opacity: 1,
+          ease: easingSmall,
+          stagger: {
+            each: 0.2,
+          }
+        });
+      }
+
+      // Hide Scrollnudge on scroll
+      function hideScrollNudge() {
+        if (window.scrollY >= 400) {
+          gsap.to(scrollNudge, {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+              window.removeEventListener('scroll', hideScrollNudge)
+            }
+          })
+        }
+      }
+      window.addEventListener('scroll', hideScrollNudge)
+
+      // Setup GSAP Timeline
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSection,
+          start: "top 98%",
+          end: "bottom 2%",
+          once: true,
+        },
+      });
+
+      if (window.innerWidth > 991) {
+        // Desktop Layout
+        tl.add(animateHeading, 1);
+        tl.add(animateDivider, 1.5);
+        tl.add(animateMetaWrapper, 2.25);
+        tl.add(animateButton, 3);
+        tl.add(animateScrollNudge, 4.75);
+      } else {
+        // Tablet/Mobile Layout
+        tl.add(animateHeading, 1);
+        tl.add(animateMetaWrapper, 2);
+        tl.add(animateDivider, 2.25);
+        tl.add(animateButton, 3.25);
+        tl.add(animateScrollNudge, 5);
+      }
+
+    // Set Session Storage Flag
+    sessionStorage.setItem("homepageVisited", "true");
+  }
+  animateHeroSection();
+
 </script>

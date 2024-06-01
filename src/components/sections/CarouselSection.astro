@@ -62,6 +62,10 @@ const { title, subtitle } = Astro.props;
 			gap: 0.75rem;
 			display: flex;
 
+			h2 {
+				overflow: hidden;
+			}
+
 			.heading-600 {
 				margin-top: -0.15rem;
 			}
@@ -92,3 +96,39 @@ const { title, subtitle } = Astro.props;
 		}
 	}
 </style>
+
+<script>
+	import gsap from "gsap";
+	import { easingLarge } from "../../scripts/init";
+
+	const section = document.querySelector(".carousel-section")! as HTMLElement;
+	const productCards = section.querySelectorAll(".product-card");
+
+	const tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: section,
+			start: "top 90%",
+			end: "bottom 10%",
+			once: true,
+		},
+	});
+
+	gsap.set(productCards, {
+		y: "1rem",
+		opacity: 0.05,
+	});
+
+	function animateProductCards() {
+		gsap.to(productCards, {
+			duration: 0.75,
+			y: 0,
+			opacity: 1,
+			ease: easingLarge,
+			stagger: {
+				each: 0.2,
+			},
+		});
+	}
+
+	tl.add(animateProductCards, 0.25);
+</script>

@@ -281,43 +281,26 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 	updateItemCount();
 
 	// Menu Variable Declarations
-	const navigation = document.getElementById("navigation") as HTMLElement;
-	const navigationMenu = document.getElementById(
-		"navigation-menu"
-	) as HTMLElement;
+	const navigation: HTMLElement = document.getElementById("navigation")!;
+	const navigationMenu: HTMLElement =
+		document.getElementById("navigation-menu")!;
 
 	let navTheme: string | null = null;
 
 	const navBackgroundTint = navigation.querySelector(".navigation-bg-tint")!;
-	let navDesktopLinks = navigation?.querySelector(
-		".desktop-links"
-	) as HTMLElement;
-	let navMobileLinks = navigation?.querySelector(
-		".mobile-links"
-	) as HTMLElement;
-	let navMenuButton = document.getElementById("menu-button") as HTMLElement;
-	let menuButtonIcon: HTMLElement | null = navMenuButton?.querySelector(
-		".menu-icon"
-	) as HTMLElement;
-	let menuIconLineOne = navMenuButton?.querySelector(
-		".line:nth-child(1)"
-	) as HTMLElement;
-	let menuIconLineTwo = navMenuButton?.querySelector(
-		".line:nth-child(2)"
-	) as HTMLElement;
-	let navImageColumn = navigationMenu?.querySelector(
-		".image-col"
-	) as HTMLElement;
-	let navImageBack = navImageColumn?.querySelector(
-		".img-w:nth-child(1)"
-	) as HTMLElement;
-	let navImageFront = navImageColumn?.querySelector(
-		".img-w:nth-child(2)"
-	) as HTMLElement;
-	let primaryLinksWrapper = navigationMenu?.querySelector(".primary-links-w");
-	let primaryLinkLabels = primaryLinksWrapper?.querySelectorAll(
-		".label"
-	) as NodeListOf<HTMLElement>;
+	let navDesktopLinks = navigation.querySelector(".desktop-links")!;
+	let navMobileLinks = navigation.querySelector(".mobile-links")!;
+
+	let navMenuButton = document.getElementById("menu-button")!;
+	let menuButtonIcon = navMenuButton.querySelector(".menu-icon")!;
+	let menuIconLineOne = navMenuButton.querySelector(".line:nth-child(1)")!;
+	let menuIconLineTwo = navMenuButton.querySelector(".line:nth-child(2)");
+	let navImageColumn = navigationMenu.querySelector(".image-col")!;
+	let navImageBack = navImageColumn.querySelector(".img-w:nth-child(1)")!;
+	let navImageFront = navImageColumn.querySelector(".img-w:nth-child(2)")!;
+	let primaryLinksWrapper = navigationMenu.querySelector(".primary-links-w")!;
+	let primaryLinkLabels: NodeListOf<HTMLElement> =
+		primaryLinksWrapper.querySelectorAll(".label")!;
 	let secondaryLinksWrapper =
 		navigationMenu?.querySelector(".secondary-links-w");
 
@@ -425,10 +408,9 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 					},
 					0
 				);
-			} else {
-				console.log("Unable to locate navDesktopLinks");
 			}
 
+			// Stagger In/Out Mobile Items
 			if (navMobileLinks) {
 				tl.to(
 					navMobileLinks.children,
@@ -441,7 +423,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 					},
 					0
 				);
-			} else "Unable to locate navMobileLinks";
+			}
 
 			// Open Navigation Menu
 			tl.to(
@@ -467,7 +449,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 				isOpening ? 0 : 0.2
 			);
 
-			// Reveal Image Cards
+			// Reveal Image Cards - Front
 			tl.to(
 				navImageFront,
 				{
@@ -478,6 +460,7 @@ const mobileLinks = data.data.attributes.navbar_links_mobile;
 				isOpening ? 0.25 : 0
 			);
 
+			// Reveal Image Cards - Back
 			tl.to(
 				navImageBack,
 				{

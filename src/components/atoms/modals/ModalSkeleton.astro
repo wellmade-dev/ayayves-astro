@@ -39,211 +39,211 @@ const { title, subtitle, type } = Astro.props as Props;
 			<slot />
 		</div>
 	</div>
+</dialog>
 
-	<style lang="scss" is:global>
-		@use "../../../styles/vars" as *;
-		@use "../../../styles/modal" as *;
+<style lang="scss" is:global>
+	@use "../../../styles/vars" as *;
+	@use "../../../styles/modal" as *;
 
-		// Mix-ins are used on modals instead of class rules because these same rules need to be applied to classes on the CDN based Snipcart Cart Modal.
-		.modal {
-			@include modal;
-			&::-webkit-scrollbar {
-				width: 1.5rem;
+	// Mix-ins are used on modals instead of class rules because these same rules need to be applied to classes on the CDN based Snipcart Cart Modal.
+	.modal {
+		@include modal;
+		&::-webkit-scrollbar {
+			width: 1.5rem;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: var(--bg);
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-right: 1rem solid transparent;
+			border-top: 1.5rem solid transparent;
+			border-bottom: 1.5rem solid transparent;
+			border-left: none;
+			background: var(--almostblack-25);
+			background-clip: padding-box;
+
+			&:hover {
+				background-color: var(--almostblack-50);
 			}
+		}
 
-			&::-webkit-scrollbar-track {
-				background: var(--bg);
-			}
+		&::backdrop {
+			@include modal-backdrop;
+		}
 
-			&::-webkit-scrollbar-thumb {
-				border-right: 1rem solid transparent;
-				border-top: 1.5rem solid transparent;
-				border-bottom: 1.5rem solid transparent;
-				border-left: none;
-				background: var(--almostblack-25);
-				background-clip: padding-box;
-
-				&:hover {
-					background-color: var(--almostblack-50);
-				}
-			}
+		&[open] {
+			@include modal-open-animation;
 
 			&::backdrop {
-				@include modal-backdrop;
-			}
-
-			&[open] {
-				@include modal-open-animation;
-
-				&::backdrop {
-					@include modal-open-backdrop-animation;
-				}
-			}
-
-			&[closing] {
-				@include modal-close-animation;
-
-				&::backdrop {
-					@include modal-close-backdrop-animation;
-				}
-			}
-
-			.modal-inner {
-				@include modal-inner;
-				overflow-y: auto;
-				width: 100%;
+				@include modal-open-backdrop-animation;
 			}
 		}
 
-		.header {
+		&[closing] {
+			@include modal-close-animation;
+
+			&::backdrop {
+				@include modal-close-backdrop-animation;
+			}
+		}
+
+		.modal-inner {
+			@include modal-inner;
+			overflow-y: auto;
 			width: 100%;
+		}
+	}
+
+	.header {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+
+		.heading-w {
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.325rem;
+			letter-spacing: -0.02em;
+			margin-bottom: 0.32rem;
+
+			.heading {
+				font-size: 1.875rem;
+				font-weight: 500 !important;
+			}
+
+			.p2 {
+				color: var(--text-secondary);
+			}
+		}
+
+		button {
+			padding: 0.45rem 0.125rem;
+			opacity: 0.5;
+			cursor: pointer;
+
+			svg {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			&:hover {
+				opacity: 0.75;
+			}
+		}
+	}
+
+	.content {
+		.button {
+			margin-top: 0.925rem;
+			height: 2.5rem;
+			width: 100%;
+		}
+
+		.stream-links {
 			display: flex;
 			flex-direction: column;
+			padding-top: 0.25rem;
 
-			.heading-w {
-				display: flex;
-				flex-direction: row;
-				width: 100%;
-				justify-content: space-between;
-				align-items: center;
-				gap: 0.325rem;
-				letter-spacing: -0.02em;
-				margin-bottom: 0.32rem;
-
-				.heading {
-					font-size: 1.875rem;
-					font-weight: 500 !important;
-				}
-
-				.p2 {
-					color: var(--text-secondary);
-				}
-			}
-
-			button {
-				padding: 0.45rem 0.125rem;
-				opacity: 0.5;
-				cursor: pointer;
-
-				svg {
-					display: flex;
-					justify-content: center;
-					align-items: center;
-				}
-
-				&:hover {
-					opacity: 0.75;
-				}
-			}
-		}
-
-		.content {
-			.button {
-				margin-top: 0.925rem;
-				height: 2.5rem;
-				width: 100%;
-			}
-
-			.stream-links {
+			.stream-link-w {
 				display: flex;
 				flex-direction: column;
-				padding-top: 0.25rem;
+			}
 
-				.stream-link-w {
-					display: flex;
-					flex-direction: column;
-				}
+			.stream-link {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				padding: 1.75rem 0.375rem 0.825rem 0.05rem;
+			}
 
-				.stream-link {
-					display: flex;
-					flex-direction: row;
-					justify-content: space-between;
-					align-items: center;
-					padding: 1.75rem 0.375rem 0.825rem 0.05rem;
-				}
-
-				.platform-title {
-					font-size: 1.05rem;
-					font-weight: 400;
-				}
+			.platform-title {
+				font-size: 1.05rem;
+				font-weight: 400;
 			}
 		}
+	}
 
-		// Animation Keyframes
-		@keyframes reveal-modal {
-			0% {
-				transform: translateY(130%);
-			}
-			100% {
-				transform: translateY(0%);
-			}
+	// Animation Keyframes
+	@keyframes reveal-modal {
+		0% {
+			transform: translateY(130%);
 		}
-
-		@keyframes dismiss-modal {
-			0% {
-				transform: translateY(0%);
-			}
-			100% {
-				transform: translateY(130%);
-			}
+		100% {
+			transform: translateY(0%);
 		}
+	}
 
-		@keyframes fade-in {
-			0% {
-				background-color: rgba(0, 0, 0, 0);
-				backdrop-filter: blur(0px);
-			}
-			100% {
-				background-color: rgba(0, 0, 0, 0.5);
-				backdrop-filter: blur(7.5px);
-			}
+	@keyframes dismiss-modal {
+		0% {
+			transform: translateY(0%);
 		}
-
-		@keyframes fade-out {
-			0% {
-				background-color: rgba(0, 0, 0, 0.5);
-				backdrop-filter: blur(7.5px);
-			}
-			100% {
-				background-color: rgba(0, 0, 0, 0);
-				backdrop-filter: blur(0px);
-			}
+		100% {
+			transform: translateY(130%);
 		}
-	</style>
+	}
 
-	<script>
-		import { togglePageScroll } from "../../../scripts/utils";
-		const modals = document.querySelectorAll("dialog");
-
-		function dismissModal(modal: HTMLDialogElement) {
-			modal.setAttribute("closing", "");
-			modal.addEventListener(
-				"animationend",
-				() => {
-					modal.close();
-					modal.removeAttribute("closing");
-					togglePageScroll(true);
-				},
-				{ once: true }
-			);
+	@keyframes fade-in {
+		0% {
+			background-color: rgba(0, 0, 0, 0);
+			backdrop-filter: blur(0px);
 		}
+		100% {
+			background-color: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(7.5px);
+		}
+	}
 
-		modals.forEach((modal) => {
-			const closeButton = modal.querySelector(".close-button");
-			closeButton?.addEventListener("click", () => {
-				dismissModal(modal);
-			});
+	@keyframes fade-out {
+		0% {
+			background-color: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(7.5px);
+		}
+		100% {
+			background-color: rgba(0, 0, 0, 0);
+			backdrop-filter: blur(0px);
+		}
+	}
+</style>
 
-			modal.addEventListener("cancel", (event) => {
-				event.preventDefault();
-				dismissModal(modal);
-			});
+<script>
+	import { togglePageScroll } from "../../../scripts/utils";
+	const modals = document.querySelectorAll("dialog");
 
-			modal.addEventListener("click", (event) => {
-				if ((event.target as Element).nodeName === "DIALOG") {
-					dismissModal(modal);
-				}
-			});
+	function dismissModal(modal: HTMLDialogElement) {
+		modal.setAttribute("closing", "");
+		modal.addEventListener(
+			"animationend",
+			() => {
+				modal.close();
+				modal.removeAttribute("closing");
+				togglePageScroll(true);
+			},
+			{ once: true }
+		);
+	}
+
+	modals.forEach((modal) => {
+		const closeButton = modal.querySelector(".close-button");
+		closeButton?.addEventListener("click", () => {
+			dismissModal(modal);
 		});
-	</script>
-</dialog>
+
+		modal.addEventListener("cancel", (event) => {
+			event.preventDefault();
+			dismissModal(modal);
+		});
+
+		modal.addEventListener("click", (event) => {
+			if ((event.target as Element).nodeName === "DIALOG") {
+				dismissModal(modal);
+			}
+		});
+	});
+</script>

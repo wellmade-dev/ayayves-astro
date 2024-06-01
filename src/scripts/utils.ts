@@ -74,7 +74,7 @@ export function handleFormError(error: Error, errorCount: number) {
 	}
 
 	console.error("Form submission error:", error);
-	displayModalMessage(errorMessage, "error");
+	/* displayModalMessage(errorMessage, "error"); */
 
 	return errorCount + 1; // Return the incremented errorCount
 }

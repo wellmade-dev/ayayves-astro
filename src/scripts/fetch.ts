@@ -5,6 +5,7 @@ import type {
 	EventAPI,
 	ProductData,
 	VariantGroupData,
+	CatalogueData,
 } from "../types/strapi-attributes";
 
 import { format } from "date-fns";
@@ -187,7 +188,7 @@ export function createReleaseObject(object: CatalogueAPI) {
 		);
 	}
 
-	const release = {
+	const release: CatalogueData = {
 		id: object.id,
 		title: attributes.title,
 		slug: attributes.slug,
@@ -195,11 +196,11 @@ export function createReleaseObject(object: CatalogueAPI) {
 		coverImage: createImageObject(attributes.cover_image),
 		keyImage: attributes.key_image.data
 			? createImageObject(attributes.key_image)
-			: null,
+			: undefined,
 		secondaryImages: secondaryImages,
 		musicVideo: attributes.music_video_clip?.data
 			? createVideoObject(attributes.music_video_clip)
-			: null,
+			: undefined,
 		releaseType: attributes.release_type,
 		released: currentDate > releaseDate,
 		releaseDate: releaseDate,

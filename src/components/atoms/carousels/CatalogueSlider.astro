@@ -5,7 +5,7 @@ import { fetchCatalogue } from "../../../scripts/fetch";
 import ReleaseCard from "../cards/ReleaseCard.astro";
 
 interface Props {
-  isDisplayCarousel?: boolean;
+	isDisplayCarousel?: boolean;
 }
 
 const { isDisplayCarousel } = Astro.props as Props;
@@ -14,189 +14,171 @@ const catalogue = await fetchCatalogue();
 ---
 
 <div class="slider swiper">
-  <div
-    class={`slider-rail swiper-wrapper ${isDisplayCarousel ? "display-carousel" : ""}`}
-  >
-    {
-      catalogue.map((release) => (
-        <div
-          class={`slider-w swiper-slide ${isDisplayCarousel ? "display-carousel" : ""}`}
-        >
-          <ReleaseCard release={release} />
-        </div>
-      ))
-    }
-  </div>
+	<div
+		class={`slider-rail swiper-wrapper ${isDisplayCarousel ? "display-carousel" : ""}`}
+	>
+		{
+			catalogue.map((release) => (
+				<div
+					class={`slider-w swiper-slide ${isDisplayCarousel ? "display-carousel" : ""}`}
+				>
+					<ReleaseCard release={release} />
+				</div>
+			))
+		}
+	</div>
 </div>
 
 <style lang="scss">
-  @use "../../../styles/vars" as *;
+	@use "../../../styles/vars" as *;
 
-  .slider {
-    width: 100%;
-    overflow: visible;
+	.slider {
+		width: 100%;
+		overflow: visible;
 
-    .slider-rail {
-      width: auto;
-      margin-right: calc(var(--padding-400) * -1);
+		.slider-rail {
+			width: auto;
+			margin-right: calc(var(--padding-400) * -1);
 
-      @media (max-width: $mobile) {
-        &.display-carousel {
-          flex-direction: column;
-          gap: var(--page-margin);
-          margin-right: 0;
-        }
-      }
+			@media (max-width: $mobile) {
+				&.display-carousel {
+					flex-direction: column;
+					gap: var(--page-margin);
+					margin-right: 0;
+				}
+			}
 
-      .slider-w {
-        width: auto;
-        padding-right: var(--padding-400);
-        transition: 0.5s all;
-        height: clamp(27.5rem, 35vw, 30rem);
-        aspect-ratio: 1 / 1.35;
-        padding-bottom: 2rem;
-        transition: all 0.5s;
+			.slider-w {
+				width: auto;
+				padding-right: var(--padding-400);
+				height: clamp(27.5rem, 35vw, 30rem);
+				aspect-ratio: 1 / 1.35;
+				padding-bottom: 2rem;
+				transition: padding 0.5s;
 
-        @media (max-width: $mobile) {
-          &.display-carousel {
-            height: unset;
-            width: 100%;
-            padding-right: 0;
-            padding-bottom: 0;
-            aspect-ratio: 1/ 1.4;
-          }
-        }
+				@media (max-width: $mobile) {
+					&.display-carousel {
+						height: unset;
+						width: 100%;
+						padding-right: 0;
+						padding-bottom: 0;
+						aspect-ratio: 1/ 1.4;
+					}
+				}
 
-        &.swiper-slide-active {
-          padding-bottom: 0rem;
-        }
+				&.swiper-slide-active {
+					padding-bottom: 0rem;
+				}
 
-        .release-slider.disabled & {
-          opacity: 0.25;
-        }
-      }
-    }
-  }
+				.release-slider.disabled & {
+					opacity: 0.25;
+				}
+			}
+		}
+	}
 
-  .display-carousel-section > .slider-w {
-    width: 100%;
-    max-width: unset;
-    height: unset;
-    width: 100%;
-    padding-bottom: 0rem;
-    padding-right: 0;
-    box-shadow: 0 1rem 6rem 0 rgba(0, 0, 0, 0.25);
-  }
+	.display-carousel-section > .slider-w {
+		width: 100%;
+		max-width: unset;
+		height: unset;
+		width: 100%;
+		padding-bottom: 0rem;
+		padding-right: 0;
+		box-shadow: 0 1rem 6rem 0 rgba(0, 0, 0, 0.25);
+	}
 
-  .swiper-free-mode > .swiper-wrapper {
-    transition-timing-function: cubic-bezier(0.368, 0.98, 0.415, 0.985);
-  }
-
-  /*         .release-card {
-            height: 100%;
-            width: 100%;
-
-            img {
-                height: 100%;
-            }
-
-            @media (max-width: $phablet) {
-                padding: 1.25rem 1.125rem;
-            }
-
-            @media (max-width: $mobile) {
-                aspect-ratio: 1 / 1.35;
-            }
-        } */
+	.swiper-free-mode > .swiper-wrapper {
+		transition-timing-function: cubic-bezier(0.368, 0.98, 0.415, 0.985);
+	}
 </style>
 
 <script>
-  import { Swiper } from "swiper";
-  import { Navigation, Pagination } from "swiper/modules";
-  import type { SwiperClass } from "swiper/react";
-  import type { SwiperOptions } from "swiper/types";
+	import { Swiper } from "swiper";
+	import { Navigation, Pagination } from "swiper/modules";
+	import type { SwiperClass } from "swiper/react";
+	import type { SwiperOptions } from "swiper/types";
 
-  // Disables Swiper on Mobile Breakpoint
-  function toggleSwiperOnBreakpoint(
-    swiper: SwiperClass,
-    slider: HTMLElement | null,
-    arrowWrapper: HTMLElement | null | undefined
-  ): void {
-    if (swiper && slider && arrowWrapper) {
-      const breakpoint = 520;
-      if (window.innerWidth > breakpoint) {
-        // Larger than breakpoints
-        if ((arrowWrapper.style.display = "none")) {
-          swiper.enable();
-          arrowWrapper.style.display = "flex";
-          slider.classList.remove("disabled");
-        }
-      } else {
-        // Smaller than breakpoint
-        swiper.setProgress(0, 0);
-        swiper.disable();
-        slider.classList.add("disabled");
-        arrowWrapper.style.display = "none";
-      }
-    }
-  }
+	// Disables Swiper on Mobile Breakpoint
+	function toggleSwiperOnBreakpoint(
+		swiper: SwiperClass,
+		slider: HTMLElement | null,
+		arrowWrapper: HTMLElement | null | undefined
+	): void {
+		if (swiper && slider && arrowWrapper) {
+			const breakpoint = 520;
+			if (window.innerWidth > breakpoint) {
+				// Larger than breakpoints
+				if ((arrowWrapper.style.display = "none")) {
+					swiper.enable();
+					arrowWrapper.style.display = "flex";
+					slider.classList.remove("disabled");
+				}
+			} else {
+				// Smaller than breakpoint
+				swiper.setProgress(0, 0);
+				swiper.disable();
+				slider.classList.add("disabled");
+				arrowWrapper.style.display = "none";
+			}
+		}
+	}
 
-  const isDisplayCarousel = document.querySelector(".display-carousel");
+	const isDisplayCarousel = document.querySelector(".display-carousel");
 
-  let swiperConfig: SwiperOptions = {
-    modules: [Navigation, Pagination],
-    slidesPerView: "auto",
-    keyboard: true,
-    speed: 680,
-    followFinger: true,
-    mousewheel: {
-      forceToAxis: true,
-      sensitivity: 1.5,
-    },
-    navigation: {
-      nextEl: ".swiper-next",
-      prevEl: ".swiper-prev",
-      disabledClass: "is--disabled",
-    },
-  };
+	let swiperConfig: SwiperOptions = {
+		modules: [Navigation, Pagination],
+		slidesPerView: "auto",
+		keyboard: true,
+		speed: 680,
+		followFinger: true,
+		mousewheel: {
+			forceToAxis: true,
+			sensitivity: 1.5,
+		},
+		navigation: {
+			nextEl: ".swiper-next",
+			prevEl: ".swiper-prev",
+			disabledClass: "is--disabled",
+		},
+	};
 
-  // From here, everything is for the Display Carousel on Product and Catalogue pages
-  if (isDisplayCarousel) {
-    const carousel: Element | null = document.querySelector(".carousel-w");
-    const slider: HTMLElement | null = document.querySelector(".slider");
-    const arrowWrapper: HTMLElement | null | undefined =
-      carousel?.querySelector(".arrow-counter-w");
+	// From here, everything is for the Display Carousel on Product and Catalogue pages
+	if (isDisplayCarousel) {
+		const carousel: Element | null = document.querySelector(".carousel-w");
+		const slider: HTMLElement | null = document.querySelector(".slider");
+		const arrowWrapper: HTMLElement | null | undefined =
+			carousel?.querySelector(".arrow-counter-w");
 
-    swiperConfig = {
-      ...swiperConfig,
-      loop: true,
-      loopPreventsSliding: false,
-      pagination: {
-        el: ".counter",
-        type: "custom",
-        renderCustom: function (swiper, current, total) {
-          return "(" + current + " of " + total + ")";
-        },
-      },
-      freeMode: {
-        enabled: true,
-        sticky: true,
-        momentumRatio: 0.25,
-        momentumVelocityRatio: 0.6,
-      },
-      observer: true,
-      observeParents: true,
-      on: {
-        init: function (this: Swiper) {
-          toggleSwiperOnBreakpoint(this, slider, arrowWrapper);
-        },
-        resize: function (this: Swiper) {
-          toggleSwiperOnBreakpoint(this, slider, arrowWrapper);
-        },
-      },
-    };
-  }
+		swiperConfig = {
+			...swiperConfig,
+			loop: true,
+			loopPreventsSliding: false,
+			pagination: {
+				el: ".counter",
+				type: "custom",
+				renderCustom: function (swiper, current, total) {
+					return "(" + current + " of " + total + ")";
+				},
+			},
+			freeMode: {
+				enabled: true,
+				sticky: true,
+				momentumRatio: 0.25,
+				momentumVelocityRatio: 0.6,
+			},
+			observer: true,
+			observeParents: true,
+			on: {
+				init: function (this: Swiper) {
+					toggleSwiperOnBreakpoint(this, slider, arrowWrapper);
+				},
+				resize: function (this: Swiper) {
+					toggleSwiperOnBreakpoint(this, slider, arrowWrapper);
+				},
+			},
+		};
+	}
 
-  // Initialise Swiper
-  new Swiper(".swiper", swiperConfig);
+	// Initialise Swiper
+	new Swiper(".swiper", swiperConfig);
 </script>

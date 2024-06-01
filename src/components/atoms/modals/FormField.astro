@@ -2,103 +2,108 @@
 import Divider from "../Divider.astro";
 
 interface Props {
-  type: "text" | "textarea" | "email" | "number";
-  name: string;
-  placeholder: string;
-  id?: string;
-  required?: boolean;
+	type: "text" | "textarea" | "email" | "number";
+	name: string;
+	placeholder: string;
+	id?: string;
+	required?: boolean;
 }
 
 const { type, name, placeholder, id, required } = Astro.props as Props;
 ---
 
 <div class="field-w">
-  {
-    type === "textarea" ? (
-      <textarea name={name} placeholder={placeholder} required={required} />
-    ) : (
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        id={id}
-        required={required}
-      />
-    )
-  }
-  <Divider />
+	{
+		type === "textarea" ? (
+			<textarea
+				name={name}
+				placeholder={placeholder}
+				required={required}
+			/>
+		) : (
+			<input
+				type={type}
+				name={name}
+				placeholder={placeholder}
+				id={id}
+				required={required}
+			/>
+		)
+	}
+	<Divider />
 </div>
 
 <style lang="scss">
-  .field-w {
-    padding-top: 0.375rem;
+	.field-w {
+		padding-top: 0.375rem;
 
-    &:hover,
-    &:focus {
-      --divider-fill: 100%;
-      --divider-fill-speed: 0.5s;
-    }
+		&:hover,
+		&:focus {
+			--divider-fill: 100%;
+			--divider-fill-speed: 0.5s;
+		}
 
-    input[type="text"],
-    input[type="email"],
-    input[type="number"] {
-      background-color: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: var(--neue-montreal);
-      font-size: 1rem;
-      min-height: 0rem;
-      vertical-align: top;
-      width: 100%;
-      padding: 0.75rem 0;
+		input[type="text"],
+		input[type="email"],
+		input[type="number"] {
+			background-color: transparent;
+			border: none;
+			outline: none;
+			color: var(--text);
+			font-family: var(--neue-montreal);
+			font-size: 1rem;
+			min-height: 0rem;
+			vertical-align: top;
+			width: 100%;
+			padding: 0.75rem 0;
 
-      &::placeholder {
-        color: var(--text);
-        opacity: 0.25;
-        -webkit-transition: opacity 0.3s;
-        -o-transition: opacity 0.3s;
-        transition: opacity 0.3s;
-      }
+			&::placeholder {
+				color: var(--text);
+				opacity: 0.25;
+				-webkit-transition: opacity 0.3s;
+				-o-transition: opacity 0.3s;
+				transition: opacity 0.3s;
+			}
 
-      &:hover {
-        &::placeholder {
-          opacity: 1;
-        }
-      }
-    }
+			&:hover {
+				&::placeholder {
+					opacity: 1;
+				}
+			}
+		}
 
-    textarea {
-      $padding: 0.875rem;
-      background-color: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: var(--neue-montreal);
-      font-size: 1rem;
-      vertical-align: top;
-      width: 100%;
-      padding: 0;
-      overflow-y: hidden;
-      resize: none;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-      line-height: 1.25;
-      height: 2.75rem;
+		textarea {
+			$padding: 0.875rem;
+			background-color: transparent;
+			border: none;
+			outline: none;
+			color: var(--text);
+			font-family: var(--neue-montreal);
+			font-size: 1rem;
+			vertical-align: top;
+			width: 100%;
+			padding: 0;
+			overflow-y: hidden;
+			resize: none;
+			padding-top: 0.75rem;
+			padding-bottom: 0.75rem;
+			line-height: 1.25;
+			height: 2.75rem;
+			field-sizing: content;
 
-      &::placeholder {
-        color: var(--text);
-        opacity: 0.25;
-        -webkit-transition: opacity 0.3s;
-        -o-transition: opacity 0.3s;
-        transition: opacity 0.3s;
-      }
+			&::placeholder {
+				color: var(--text);
+				opacity: 0.25;
+				-webkit-transition: opacity 0.3s;
+				-o-transition: opacity 0.3s;
+				transition: opacity 0.3s;
+			}
 
-      &:hover {
-        &::placeholder {
-          opacity: 1;
-        }
-      }
-    }
-  }
+			&:hover {
+				&::placeholder {
+					opacity: 1;
+				}
+			}
+		}
+	}
 </style>
