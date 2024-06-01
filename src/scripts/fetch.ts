@@ -108,6 +108,21 @@ export async function fetchSingleTypeObject(
 	}
 }
 
+export async function fetchPageMetaInformation(singleType: string) {
+	const data = await fetchStrapiData(
+		`${singleType}?populate[meta][populate]=image`
+	);
+
+	// Clean the image object
+	const image = createImageObject(data.data.attributes.meta.image);
+
+	const meta = {
+		description: data.data.attributes.meta.description,
+		imageURL: image.src,
+	};
+	return meta;
+}
+
 export async function fetchProducts() {
 	const strapiResponse = await fetchStrapiData(
 		"products?populate[0]=variants&populate=product_image&populate[1]=variants.variant"

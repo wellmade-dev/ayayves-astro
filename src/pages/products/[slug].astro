@@ -8,6 +8,7 @@ import Accordion from "../../components/atoms/Accordion.astro";
 import ButtonMarquee from "../../components/atoms/buttons/ButtonMarquee.astro";
 import CarouselSection from "../../components/sections/CarouselSection.astro";
 import ProductSlider from "../../components/atoms/carousels/ProductSlider.astro";
+import { titleCase } from "title-case";
 
 export async function getStaticPaths() {
 	const products = await fetchProducts();
@@ -19,6 +20,8 @@ export async function getStaticPaths() {
 
 const product = Astro.props;
 const variantGroups = product.variants;
+const productNameTitleCase = titleCase(product.name);
+const pageDescription = `${productNameTitleCase}, ${product.collection}. ${product.long_desription}`;
 
 // Set variant attributes on button for Snipcart
 const variantAttributes: any = {};
@@ -32,7 +35,13 @@ if (variantGroups && variantGroups.length > 0) {
 }
 ---
 
-<Layout title={product.name} compactNavBar>
+<Layout
+	title={product.name}
+	description={pageDescription}
+	slug={product.slug}
+	imageURL={product.image.src}
+	compactNavBar
+>
 	<section class="product-template">
 		<div class="product-gallery">
 			<div class="product-img-w">
