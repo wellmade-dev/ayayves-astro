@@ -11,7 +11,7 @@ const buttonLabel = "Send Message";
 
 <ModalSkeleton type="contact" title={title} subtitle={subtitle} ,>
 	<ModalForm
-		actionURL=`${PUBLIC_STRAPI_API_URL}contact/send`
+		actionURL=`https://formspree.io/f/xldrgere`
 		buttonLabel={buttonLabel}
 	>
 		<FormField
@@ -65,16 +65,13 @@ const buttonLabel = "Send Message";
 	const form = contactModal.querySelector("form")!;
 	form.addEventListener("submit", submitForm);
 
-	function submitForm(event: SubmitEvent): void {
+	function submitForm(event: any) {
 		// Prevent default form submission
 		event.preventDefault();
 
-		const form = event.target as HTMLFormElement;
-		const honeypotField =
-			form.querySelector<HTMLInputElement>('[name="honeypot"]');
-		const submitButton = form.querySelector<HTMLButtonElement>(
-			'button[type="submit"]'
-		)!;
+		const form = event.target;
+		const honeypotField = form.querySelector('[name="honeypot"]');
+		const submitButton = form.querySelector('button[type="submit"]');
 
 		if (honeypotField && honeypotField.value.trim() !== "") {
 			console.log("I see you.");
@@ -82,17 +79,17 @@ const buttonLabel = "Send Message";
 		}
 
 		// Store original button text then send
-		const originalSubmitLabel = submitButton.textContent!;
+		const originalSubmitLabel = submitButton.textContent;
 		submitButton.textContent = "Sending...";
 
 		// Create a JSON object from form data
 		const formData = new FormData(form);
 		const jsonData = {
-			EMAIL: formData.get("EMAIL"),
-			MCFNAME: formData.get("MCFNAME"),
-			MCLNAME: formData.get("MCLNAME"),
-			MCCITY: formData.get("MCCITY"),
-			honeypot: formData.get("honeypot"),
+			Name: formData.get("name"),
+			Business: formData.get("business"),
+			Email: formData.get("email"),
+			Phone: formData.get("phone"),
+			Message: formData.get("message"),
 		};
 
 		axios
@@ -106,7 +103,7 @@ const buttonLabel = "Send Message";
 				handleFormSuccess({
 					formElement: form,
 					successMessage:
-						"Thanks so much for subscribing. I'll be touch soon.",
+						"Thanks so much for your message. I'll be in touch soon.",
 					buttonLabel: originalSubmitLabel,
 					clearForm: true,
 					hideForm: true,
@@ -114,38 +111,11 @@ const buttonLabel = "Send Message";
 			})
 			.catch((error) => {
 				console.log("Error:", error);
-
-				if (error.response && error.response.data) {
-					const errorData = error.response.data;
-					if (
-						errorData.details &&
-						errorData.details.title === "Member Exists"
-					) {
-						// If user already exists in MC, then handle as a success despite technical error
-						handleFormSuccess({
-							formElement: form,
-							successMessage:
-								"Thank you for signing up but it looks like you're already subscribed.",
-							buttonLabel: originalSubmitLabel,
-							clearForm: true,
-							hideForm: true,
-						});
-					} else {
-						handleFormError({
-							formElement: form,
-							errorMessage:
-								"Something's gone wrong, please try again.",
-							buttonLabel: "Try Again",
-						});
-					}
-				} else {
-					handleFormError({
-						formElement: form,
-						errorMessage:
-							"Something's gone wrong, please try again.",
-						buttonLabel: "Try Again",
-					});
-				}
+				handleFormError({
+					formElement: form,
+					errorMessage: "Something's gone wrong, please try again.",
+					buttonLabel: "Try Again",
+				});
 			});
 	}
 </script>
