@@ -308,7 +308,9 @@ if (variantGroups && variantGroups.length > 0) {
 <script>
 	import type { SnipcartProductStockData } from "../../types/strapi-attributes";
 
-	const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
+	const PUBLIC_CLOUDFLARE_WORKER_URL = import.meta.env
+		.PUBLIC_CLOUDFLARE_WORKER_URL;
+
 	// Declaring Variables
 	const atcButton = document.getElementById(
 		"product-atc"
@@ -372,7 +374,7 @@ if (variantGroups && variantGroups.length > 0) {
 			if (productID) {
 				// Fetch Product Data from Snipcart
 				const response = await fetch(
-					`${PUBLIC_STRAPI_API_URL}snipcart/product/stock/${productID}`
+					`${PUBLIC_CLOUDFLARE_WORKER_URL}/snipcart-product/${productID}`
 				);
 
 				// Check if the response status code is 200 (OK)
