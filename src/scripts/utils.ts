@@ -40,18 +40,16 @@ export function togglePageScroll(enable: boolean) {
 	}
 }
 
-export function validateForm(form: HTMLFormElement) {
-	const submitButton: HTMLButtonElement | null = form?.querySelector(
+export function validateForm(formElement: HTMLFormElement) {
+	const submitButton = formElement.querySelector<HTMLButtonElement>(
 		'button[type="submit"]'
-	);
-
-	if (!submitButton) return;
+	)!;
 
 	let isValid = true;
 
-	const formFields: NodeListOf<HTMLInputElement> = form.querySelectorAll(
-		"input[required], select[required], textarea[required]"
-	);
+	const formFields = formElement.querySelectorAll<
+		HTMLInputElement | HTMLTextAreaElement
+	>("input[required], select[required], textarea[required]");
 	formFields.forEach((input) => {
 		if (!input.value.trim()) {
 			isValid = false;
@@ -61,20 +59,87 @@ export function validateForm(form: HTMLFormElement) {
 	submitButton.disabled = !isValid;
 }
 
-export function handleFormError(error: Error, errorCount: number) {
-	let errorMessage;
+interface FormSuccessProps {
+	formElement: HTMLFormElement;
+	successMessage: string;
+	buttonLabel?: string;
+	clearForm?: boolean;
+	hideForm?: boolean;
+}
 
-	if (errorCount >= 1) {
-		errorMessage =
-			"Something is still wrong, maybe try emailing me. My email address is <a href='mailto:ayayves@gmail.com'>ayayves@gmail.com</a>.";
-	} else {
-		// Increment error count in the parent document
-		errorMessage =
-			"Something’s gone wrong in submitting the form. Please try again.";
+export function handleFormSuccess(props: FormSuccessProps) {
+	const { formElement, successMessage, buttonLabel, clearForm, hideForm } =
+		props;
+
+	const feedbackMessage = formElement.querySelector(".feedback-message")!;
+	feedbackMessage.textContent = successMessage;
+	feedbackMessage.classList.remove("error");
+	feedbackMessage.classList.add("success");
+
+	if (buttonLabel) {
+		const submitButton = formElement.querySelector<HTMLButtonElement>(
+			'button[type="submit"]'
+		)!;
+		submitButton.textContent = buttonLabel;
 	}
 
-	console.error("Form submission error:", error);
-	/* displayModalMessage(errorMessage, "error"); */
+	if (hideForm) {
+		const fields = formElement.querySelectorAll<HTMLElement>(".field-w");
+		fields.forEach((field) => {
+			field.classList.add("success");
+		});
 
-	return errorCount + 1; // Return the incremented errorCount
+		const submitButton = formElement.querySelector<HTMLButtonElement>(
+			'button[type="submit"]'
+		)!;
+		submitButton.style.display = "none";
+	}
+
+	if (clearForm) {
+		const fields = formElement.querySelectorAll<
+			HTMLInputElement | HTMLTextAreaElement
+		>("input, textarea");
+		fields.forEach((field) => {
+			field.value = "";
+		});
+	}
+}
+
+interface FormErrorProps {
+	formElement: HTMLFormElement;
+	errorMessage: string;
+	buttonLabel: string;
+}
+
+export function handleFormError(props: FormErrorProps) {
+	const { formElement, errorMessage, buttonLabel } = props;
+
+	const feedbackMessage = formElement.querySelector(".feedback-message")!;
+	feedbackMessage.textContent = errorMessage;
+	feedbackMessage.classList.remove("success");
+	feedbackMessage.classList.add("error");
+
+	const submitButton = formElement.querySelector<HTMLButtonElement>(
+		'button[type="submit"]'
+	)!;
+	submitButton.textContent = buttonLabel;
+}
+
+export function cleanForm(formElement: HTMLFormElement) {
+	const feedbackMessage = formElement.querySelector(".feedback-message")!;
+	feedbackMessage.textContent = "";
+	feedbackMessage.classList.remove("success");
+	feedbackMessage.classList.remove("error");
+
+	const fields = formElement.querySelectorAll<HTMLElement>(".field-w");
+	fields.forEach((field) => {
+		field.classList.remove("success");
+	});
+
+	const submitButton = formElement.querySelector<HTMLButtonElement>(
+		'button[type="submit"]'
+	)!;
+	submitButton.style.display = "block";
+
+	console.log("Form cleaned");
 }

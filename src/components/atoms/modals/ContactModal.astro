@@ -11,7 +11,7 @@ const buttonLabel = "Send Message";
 
 <ModalSkeleton type="contact" title={title} subtitle={subtitle} ,>
 	<ModalForm
-		actionURL=`${PUBLIC_STRAPI_API_URL}contact/send`
+		actionURL=`https://formspree.io/f/xldrgere`
 		buttonLabel={buttonLabel}
 	>
 		<FormField
@@ -38,12 +38,17 @@ const buttonLabel = "Send Message";
 </ModalSkeleton>
 
 <script>
-	import { togglePageScroll } from "../../../scripts/utils";
+	import axios from "axios";
+	import {
+		togglePageScroll,
+		handleFormSuccess,
+		handleFormError,
+	} from "../../../scripts/utils";
 
 	// Variable Declarations
-	const contactModal: HTMLDialogElement | null = document.querySelector(
+	const contactModal = document.querySelector<HTMLDialogElement>(
 		'dialog[data-modal="contact"]'
-	);
+	)!;
 	const contactButtons = document.querySelectorAll(
 		'button[data-modal="contact"]'
 	);
@@ -55,4 +60,62 @@ const buttonLabel = "Send Message";
 			contactModal?.showModal();
 		});
 	});
+
+	// Handle Contact Form Submission
+	const form = contactModal.querySelector("form")!;
+	form.addEventListener("submit", submitForm);
+
+	function submitForm(event: any) {
+		// Prevent default form submission
+		event.preventDefault();
+
+		const form = event.target;
+		const honeypotField = form.querySelector('[name="honeypot"]');
+		const submitButton = form.querySelector('button[type="submit"]');
+
+		if (honeypotField && honeypotField.value.trim() !== "") {
+			console.log("I see you.");
+			return;
+		}
+
+		// Store original button text then send
+		const originalSubmitLabel = submitButton.textContent;
+		submitButton.textContent = "Sending...";
+
+		// Create a JSON object from form data
+		const formData = new FormData(form);
+		const jsonData = {
+			Name: formData.get("name"),
+			Business: formData.get("business"),
+			Email: formData.get("email"),
+			Phone: formData.get("phone"),
+			Message: formData.get("message"),
+		};
+
+		axios
+			.post(form.action, jsonData, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((response) => {
+				// Set all fields to hidden and wipe
+				handleFormSuccess({
+					formElement: form,
+					successMessage:
+						"Thanks so much for your message. I'll be in touch soon.",
+					buttonLabel: originalSubmitLabel,
+					clearForm: true,
+					hideForm: true,
+				});
+			})
+			.catch((error) => {
+				console.log("Error:", error);
+				handleFormError({
+					formElement: form,
+					errorMessage: "Something's gone wrong, please try again.",
+					buttonLabel: "Try Again",
+				});
+			});
+	}
 </script>

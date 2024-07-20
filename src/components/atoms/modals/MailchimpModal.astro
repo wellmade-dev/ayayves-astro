@@ -2,16 +2,17 @@
 import ModalSkeleton from "./ModalSkeleton.astro";
 import FormField from "./FormField.astro";
 import ModalForm from "./ModalForm.astro";
-const PUBLIC_STRAPI_API_URL = import.meta.env.PUBLIC_STRAPI_API_URL;
+const PUBLIC_CLOUDFLARE_WORKER_URL = import.meta.env
+	.PUBLIC_CLOUDFLARE_WORKER_URL;
 
 const title = "Stay in the Loop";
 const subtitle = "Get updates on new music and upcoming gigs.";
-const buttonLabel = "Sign Up";
+const buttonLabel = "Submit";
 ---
 
 <ModalSkeleton type="mailchimp" title={title} subtitle={subtitle}>
 	<ModalForm
-		actionURL=`${PUBLIC_STRAPI_API_URL}mailchimp/submit`
+		actionURL=`${PUBLIC_CLOUDFLARE_WORKER_URL}/mailchimp`
 		buttonLabel={buttonLabel}
 	>
 		<FormField
@@ -40,7 +41,12 @@ const buttonLabel = "Sign Up";
 </ModalSkeleton>
 
 <script>
-	import { togglePageScroll } from "../../../scripts/utils";
+	import axios from "axios";
+	import {
+		togglePageScroll,
+		handleFormSuccess,
+		handleFormError,
+	} from "../../../scripts/utils";
 
 	// Variable Declarations
 	const mailchimpModal: HTMLDialogElement | null = document.querySelector(
@@ -57,4 +63,98 @@ const buttonLabel = "Sign Up";
 			mailchimpModal?.showModal();
 		});
 	});
+
+	// Submit Mailchimp form
+	const form = mailchimpModal?.querySelector("form")!;
+
+	// Add function to submit button
+	form.addEventListener("submit", submitForm);
+
+	function submitForm(event: SubmitEvent): void {
+		// Prevent default form submission
+		event.preventDefault();
+
+		const form = event.target as HTMLFormElement;
+		const honeypotField = form.querySelector(
+			'[name="honeypot"]'
+		) as HTMLInputElement;
+		const feedbackMessage = form.querySelector(
+			".feedback-message"
+		) as HTMLElement;
+		const submitButton = form.querySelector(
+			'button[type="submit"]'
+		) as HTMLButtonElement;
+
+		if (honeypotField && honeypotField.value.trim() !== "") {
+			console.log("I see you.");
+			return;
+		}
+
+		// Store original button text then send
+		const originalSubmitLabel = submitButton.textContent!;
+		submitButton.textContent = "Sending...";
+
+		// Create a JSON object from form data
+		const formData = new FormData(form);
+		const jsonData = {
+			EMAIL: formData.get("EMAIL"),
+			MCFNAME: formData.get("MCFNAME"),
+			MCLNAME: formData.get("MCLNAME"),
+			MCCITY: formData.get("MCCITY"),
+			honeypot: formData.get("honeypot"),
+		};
+
+		axios
+			.post(form.action, jsonData, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((response) => {
+				// Set all fields to hidden and wipe
+				handleFormSuccess({
+					formElement: form,
+					successMessage:
+						"Thanks so much for subscribing. I'll be touch soon.",
+					buttonLabel: originalSubmitLabel,
+					clearForm: true,
+					hideForm: true,
+				});
+			})
+			.catch((error) => {
+				console.log("Error:", error);
+
+				if (error.response && error.response.data) {
+					const errorData = error.response.data;
+					if (
+						errorData.details &&
+						errorData.details.title === "Member Exists"
+					) {
+						// If user already exists in MC, then handle as a success despite technical error
+						handleFormSuccess({
+							formElement: form,
+							successMessage:
+								"Thank you for signing up but it looks like you're already subscribed.",
+							buttonLabel: originalSubmitLabel,
+							clearForm: true,
+							hideForm: true,
+						});
+					} else {
+						handleFormError({
+							formElement: form,
+							errorMessage:
+								"Something's gone wrong, please try again.",
+							buttonLabel: "Try Again",
+						});
+					}
+				} else {
+					handleFormError({
+						formElement: form,
+						errorMessage:
+							"Something's gone wrong, please try again.",
+						buttonLabel: "Try Again",
+					});
+				}
+			});
+	}
 </script>

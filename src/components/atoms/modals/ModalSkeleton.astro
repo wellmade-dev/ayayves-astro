@@ -213,7 +213,7 @@ const { title, subtitle, type } = Astro.props as Props;
 </style>
 
 <script>
-	import { togglePageScroll } from "../../../scripts/utils";
+	import { togglePageScroll, cleanForm } from "../../../scripts/utils";
 	const modals = document.querySelectorAll("dialog");
 
 	function dismissModal(modal: HTMLDialogElement) {
@@ -224,6 +224,19 @@ const { title, subtitle, type } = Astro.props as Props;
 				modal.close();
 				modal.removeAttribute("closing");
 				togglePageScroll(true);
+
+				// Clear fields if form has been successfully submitted
+				const formElement = modal.querySelector("form");
+				const feedbackMessage =
+					formElement?.querySelector(".feedback-message");
+
+				if (
+					formElement &&
+					feedbackMessage &&
+					feedbackMessage.classList.contains("success")
+				) {
+					cleanForm(formElement);
+				}
 			},
 			{ once: true }
 		);

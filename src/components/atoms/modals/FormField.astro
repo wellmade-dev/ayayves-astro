@@ -43,6 +43,10 @@ const { type, name, placeholder, id, required } = Astro.props as Props;
 			--divider-fill-speed: 0.5s;
 		}
 
+		&.success {
+			display: none;
+		}
+
 		input[type="text"],
 		input[type="email"],
 		input[type="number"] {
